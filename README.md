@@ -19,8 +19,8 @@ Howto
 * Change directory: ``cd node-boilerplate``
 * Install dependencies: ``npm install``
 * Create a settings file, and remember to edit it: ``cp server/settings.example.js server/settings.js``
-* See that everything works on your side: ``make test``
-* Run: ``node cluster``
+* See that everything works on your side: ``npm test``
+* Run: ``npm start``
 * Open browser at localhost:3000
 
 Developers howto
