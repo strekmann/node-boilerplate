@@ -1,3 +1,5 @@
+/* remember that file paths need to be full, or it will only work in dev, not in prod */
+
 module.exports = {
     uri: 'http://localhost:3000/',
     sessionSecret: 'sessionSecretString',
