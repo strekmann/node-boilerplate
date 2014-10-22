@@ -4,6 +4,7 @@ module.exports = {
     uri: 'http://localhost:3000/',
     sessionSecret: 'sessionSecretString',
     trust_proxy: false,
+    logfile: './app.log',
     auth: {
         google: {
             clientId: 'googleClientId',

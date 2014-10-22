@@ -4,6 +4,7 @@ var http = require('http'),
     cluster = require('cluster'),
     numCPU = Math.floor(require('os').cpus().length / 2),
     env = process.env.NODE_ENV || 'development',
+    logfile = require('./server/settings').logfile || undefined,
     i = 0,
     stamp = new Date().getTime();
 
@@ -12,6 +13,25 @@ if (numCPU < 2) { numCPU = 2; }
 
 // We only need 2 workers in development mode.
 if (env === 'development') { numCPU = 2; }
+
+// Set up logging
+if (logfile){
+    var winston = require('winston');
+    winston.add(winston.transports.File, {filename: logfile, timestamp: true}).remove(winston.transports.Console);
+
+    var $out = process.stdout.write,
+        $err = process.stderr.write;
+
+    process.stdout.write = function(buffer){
+        winston.info(buffer);
+        $out.call(process.stdout, buffer);
+    };
+
+    process.stderr.write = function(buffer){
+        winston.warn(buffer);
+        $err.call(process.stderr, buffer);
+    };
+}
 
 if (cluster.isMaster){
     for (i; i<numCPU; i++){

@@ -31,7 +31,8 @@
     "passport-google-oauth": "0.1.x",
     "redis": "0.10.x",
     "underscore": "1.6.x",
-    "uslug": "1.0.x"
+    "uslug": "1.0.x",
+    "winston": "^0.8.1"
   },
   "devDependencies": {
     "bower": "",
