@@ -62,7 +62,7 @@ app.use(function(err, req, res, next){
         },
 
         json: function(){
-            res.json(500, {
+            res.status(500).json({
                 error: err.message,
                 status: err.status || 500
             });
@@ -83,7 +83,7 @@ app.use(function(req, res, next){
         },
 
         json: function(){
-            res.json(404, {
+            res.status(404).json({
                 status: '404',
                 error: 'file not found',
                 url: req.url
