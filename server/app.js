@@ -1,7 +1,15 @@
-var express     = require('express'),
-    path        = require('path'),
-    settings    = require('./settings'),
-    app         = require('libby')(express, settings);
+var express = require('express'),
+    path = require('path'),
+    fs = require('fs');
+
+if (fs.exists('./settings.js')) {
+    settings = require('./settings');
+}
+else {
+    settings = {};
+}
+
+var app = require('libby')(express, settings);
 
 // # Application setup
 // Add passport to application.

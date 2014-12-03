@@ -1,12 +1,17 @@
 #!/usr/bin/env node
 
 var http = require('http'),
+    fs = require('fs'),
     cluster = require('cluster'),
     numCPU = Math.floor(require('os').cpus().length / 2),
     env = process.env.NODE_ENV || 'development',
-    logfile = require('./server/settings').logfile || undefined,
     i = 0,
-    stamp = new Date().getTime();
+    stamp = new Date().getTime(),
+    logfile;
+
+if (fs.exists('./server/settings.js')) {
+    logfile = require('./server/settings').logfile;
+}
 
 // Make sure we always have at least 2 workers.
 if (numCPU < 2) { numCPU = 2; }
@@ -49,8 +54,8 @@ if (cluster.isMaster){
 } else {
     // -- database
     var mongoose = require('mongoose'),
-        settings = require('./server/settings'),
-        app = require('./server/app');
+        app = require('./server/app'),
+        settings = app.conf;
 
     app.db = mongoose.connect(settings.mongo.servers.join(','), {replSet: {rs_name: settings.mongo.replset}});
     app.stamp = stamp;
