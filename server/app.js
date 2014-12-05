@@ -1,6 +1,8 @@
 var express = require('express'),
     path = require('path'),
-    fs = require('fs');
+    fs = require('fs'),
+    log = require('./lib/logger').getLogger(),
+    express_bunyan = require('express-bunyan-logger');
 
 if (fs.exists('./settings.js')) {
     settings = require('./settings');
@@ -9,9 +11,21 @@ else {
     settings = {};
 }
 
+settings.noLogging = true;
 var app = require('libby')(express, settings);
 
 // # Application setup
+
+// Set up bunyan logger
+var bunyan_opts = {
+    logger: log,
+    excludes: ['req', 'res', 'req-headers', 'res-headers']
+}
+if (app.settings.env === 'development' || app.settings.env === 'production'){
+    app.use(express_bunyan(bunyan_opts));
+    app.use(express_bunyan.errorLogger(bunyan_opts));
+}
+
 // Add passport to application.
 app.passport = require('./lib/passport')(app);
 
@@ -57,8 +71,8 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Internal server error - 500 status
 app.use(function(err, req, res, next){
-    console.error("ERROR: %s [%s] %s", req.ip, new Date().toString(), err.message);
-    console.error(err.stack);
+    log.error(err.message);
+    log.error(err.stack);
 
     res.status(500);
     res.format({

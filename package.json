@@ -24,7 +24,7 @@
     "hiredis": "",
     "i18n-abide": "",
     "jade": "^1.5.0",
-    "libby": "^2.0.0",
+    "libby": "strekmann/libby",
     "moment": "2.x",
     "mongoose": "3.8.x",
     "passport": "0.2.x",
@@ -32,7 +32,10 @@
     "redis": "0.10.x",
     "underscore": "1.6.x",
     "uslug": "1.0.x",
-    "winston": "^0.8.1"
+    "winston": "^0.8.1",
+    "express-bunyan-logger": "^1.1.0",
+    "bunyan": "^1.2.3",
+    "bunyan-request-logger": "^0.2.3"
   },
   "devDependencies": {
     "bower": "",
