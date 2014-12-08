@@ -5,7 +5,7 @@ var express = require('express'),
     settings = {};
 
 try {
-    settings = require('./server/settings');
+    settings = require('./settings');
 } catch(e) {}
 
 var app = require('libby')(express, settings);
