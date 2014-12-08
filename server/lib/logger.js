@@ -44,6 +44,9 @@ if (settings.useBunyan){
     module.exports = function(config){
         logger = console;
         logger.fatal = console.error;
+        logger.child = function(){
+            return logger;
+        };
         return logger;
     };
 }
