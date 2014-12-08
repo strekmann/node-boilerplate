@@ -4,23 +4,28 @@ var http = require('http'),
     fs = require('fs'),
     cluster = require('cluster'),
     util = require('util'),
-    bunyan = require('bunyan'),
     logger = require('./server/lib/logger'),
     numCPU = Math.floor(require('os').cpus().length / 2),
     env = process.env.NODE_ENV || 'development',
     i = 0,
-    stamp = new Date().getTime();
+    stamp = new Date().getTime(),
+    settings = {};
 
+try {
+    settings = require('./server/settings');
+} catch(e) {}
 
-// Logging
-var logOpts = {
-    name: 'app',
-    overrideConsole: true,
-    serializers: {
-        req: bunyan.stdSerializers.req
-    }
-};
-if (env === 'development'){ logOpts.level = 'debug'; }
+if (settings.useBunyan){
+    var bunyan = require('bunyan');
+    var logOpts = {
+        name: require('./package').name,
+        overrideConsole: true,
+        serializers: {
+            req: bunyan.stdSerializers.req
+        }
+    };
+    if (env === 'development'){ logOpts.level = 'debug'; }
+}
 var log = logger(logOpts);
 
 // Make sure we always have at least 2 workers.

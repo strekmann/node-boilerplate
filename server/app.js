@@ -2,28 +2,27 @@ var express = require('express'),
     path = require('path'),
     fs = require('fs'),
     log = require('./lib/logger').getLogger(),
-    express_bunyan = require('express-bunyan-logger');
-
-if (fs.exists('./settings.js')) {
-    settings = require('./settings');
-}
-else {
     settings = {};
-}
 
-settings.noLogging = true;
+try {
+    settings = require('./server/settings');
+} catch(e) {}
+
 var app = require('libby')(express, settings);
 
 // # Application setup
 
 // Set up bunyan logger
-var bunyan_opts = {
-    logger: log,
-    excludes: ['req', 'res', 'req-headers', 'res-headers']
-}
-if (app.settings.env === 'development' || app.settings.env === 'production'){
-    app.use(express_bunyan(bunyan_opts));
-    app.use(express_bunyan.errorLogger(bunyan_opts));
+if (settings.useBunyan){
+    var express_bunyan = require('express-bunyan-logger');
+    var bunyan_opts = {
+        logger: log,
+        excludes: ['req', 'res', 'req-headers', 'res-headers']
+    };
+    if (app.settings.env === 'development' || app.settings.env === 'production'){
+        app.use(express_bunyan(bunyan_opts));
+        app.use(express_bunyan.errorLogger(bunyan_opts));
+    }
 }
 
 // Add passport to application.

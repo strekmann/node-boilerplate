@@ -1,33 +1,51 @@
 var bunyan = require('bunyan'),
-    util = require('util');
+    util = require('util'),
+    fs = require('fs'),
+    settings = {};
 
-var opts = {name:'unnamed'};
+try {
+    settings = require('../settings');
+} catch(e) {}
+
 var logger;
 
+if (settings.useBunyan){
+    var bunyan = require('bunyan');
 
-module.exports = function(config){
-    if (logger){ return logger; }
+    var opts = {name:'unnamed'};
 
-    var override = false;
-    opts = config || opts;
 
-    if (opts.overrideConsole){
-        override = true;
-        delete opts['overrideConsole'];
-    }
+    module.exports = function(config){
+        if (logger){ return logger; }
 
-    logger = bunyan.createLogger(opts);
+        var override = false;
+        opts = config || opts;
 
-    if (override){
-        var consoleLog = logger.child({console: true});
-        console.log   = function(){ consoleLog.debug(null, util.format.apply(this, arguments)); };
-        console.debug = function(){ consoleLog.debug(null, util.format.apply(this, arguments)); };
-        console.info  = function(){ consoleLog.info (null, util.format.apply(this, arguments)); };
-        console.warn  = function(){ consoleLog.warn (null, util.format.apply(this, arguments)); };
-        console.error = function(){ consoleLog.error(null, util.format.apply(this, arguments)); };
-    }
+        if (opts.overrideConsole){
+            override = true;
+            delete opts.overrideConsole;
+        }
 
-    return logger;
-};
+        logger = bunyan.createLogger(opts);
+
+        if (override){
+            var consoleLog = logger.child({console: true});
+            console.log   = function(){ consoleLog.debug(null, util.format.apply(this, arguments)); };
+            console.debug = function(){ consoleLog.debug(null, util.format.apply(this, arguments)); };
+            console.info  = function(){ consoleLog.info (null, util.format.apply(this, arguments)); };
+            console.warn  = function(){ consoleLog.warn (null, util.format.apply(this, arguments)); };
+            console.error = function(){ consoleLog.error(null, util.format.apply(this, arguments)); };
+        }
+
+        return logger;
+    };
+
+} else {
+    module.exports = function(config){
+        logger = console;
+        logger.fatal = console.error;
+        return logger;
+    };
+}
 
 module.exports.getLogger = function(){ return logger; };
