@@ -1,6 +1,7 @@
 var express = require('express'),
     path = require('path'),
     fs = require('fs'),
+    db = require('./lib/db'),
     log = require('./lib/logger').getLogger(),
     settings = {};
 
@@ -8,7 +9,7 @@ try {
     settings = require('./settings');
 } catch(e) {}
 
-var app = require('libby')(express, settings);
+var app = require('libby')(express, settings, db);
 
 // # Application setup
 
@@ -70,8 +71,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Internal server error - 500 status
 app.use(function(err, req, res, next){
-    log.error(err.message);
-    log.error(err.stack);
+    log.error(err);
 
     res.status(500);
     res.format({

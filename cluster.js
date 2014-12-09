@@ -48,13 +48,9 @@ if (cluster.isMaster){
         cluster.fork();
     });
 } else {
-    // -- database
-    var mongoose = require('mongoose'),
-        app = require('./server/app'),
-        settings = app.conf;
-    settings.mongo = settings.mongo || {servers: ['localhost'], replSet: null};
-
-    app.db = mongoose.connect(settings.mongo.servers.join(','), {replSet: {rs_name: settings.mongo.replset}});
+    var db = require('./server/lib/db'),
+        app = require('./server/app');
+    app.db = db;
     app.stamp = stamp;
 
     // -- handle node exceptions
