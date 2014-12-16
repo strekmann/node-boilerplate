@@ -2,7 +2,7 @@
   "author": "strekmann",
   "name": "boilerplate",
   "description": "project",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "homepage": "",
   "private": true,
   "repository": {
@@ -17,22 +17,21 @@
     "test": "NODE_ENV=test ./node_modules/.bin/mocha"
   },
   "dependencies": {
-    "async": "0.2.x",
-    "connect-redis": "1.x",
-    "express": "4.x",
-    "express-validator": "2.x",
+    "async": "^0.9.0",
+    "connect-redis": "^2.1.0",
+    "express": "^4.8.3",
+    "express-validator": "^2.3.0",
     "hiredis": "",
     "i18n-abide": "",
-    "jade": "^1.5.0",
-    "libby": "strekmann/libby",
-    "moment": "2.x",
-    "mongoose": "3.8.x",
-    "passport": "0.2.x",
-    "passport-google-oauth": "0.1.x",
-    "redis": "0.10.x",
-    "underscore": "1.6.x",
-    "uslug": "1.0.x",
-    "winston": "^0.8.1",
+    "jade": "^1.8.2",
+    "libby": "~2.2.2",
+    "moment": "^2.8.4",
+    "mongoose": "^3.8.0",
+    "passport": "^0.2.0",
+    "passport-google-oauth": "^0.1.0",
+    "redis": "^0.12.1",
+    "underscore": "^1.7.0",
+    "uslug": "^1.0.0",
     "express-bunyan-logger": "^1.1.0",
     "bunyan": "^1.2.3",
     "bunyan-request-logger": "^0.2.3"
@@ -55,6 +54,7 @@
     "mocha": "",
     "supertest": "",
     "through": "",
-    "uglify-js": ""
+    "uglify-js": "",
+    "passport-stub": "^1.0.1"
   }
 }

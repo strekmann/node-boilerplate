@@ -4,6 +4,8 @@ build:
 	@./node_modules/.bin/grunt
 
 production:
+	npm install
+	./node_modules/.bin/bower install
 	@./node_modules/.bin/grunt prod
 
 watch:

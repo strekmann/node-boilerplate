@@ -1,4 +1,4 @@
-var bunyan = require('bunyan'),
+var bunyan,
     util = require('util'),
     fs = require('fs'),
     settings = {};
@@ -9,7 +9,7 @@ try {
 
 var logger;
 
-if (settings.useBunyan){
+if (settings.useBunyan && process.env.NODE_ENV !== 'test'){
     var bunyan = require('bunyan');
 
     var opts = {name:'unnamed'};

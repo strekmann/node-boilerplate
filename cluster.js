@@ -4,7 +4,9 @@ var http = require('http'),
     fs = require('fs'),
     cluster = require('cluster'),
     util = require('util'),
+    _ = require('underscore'),
     logger = require('./server/lib/logger'),
+    db = require('./server/lib/db'),
     numCPU = Math.floor(require('os').cpus().length / 2),
     env = process.env.NODE_ENV || 'development',
     i = 0,
@@ -21,7 +23,25 @@ if (settings.useBunyan){
         name: require('./package').name,
         overrideConsole: true,
         serializers: {
-            req: bunyan.stdSerializers.req
+            res: function(res){
+                if (!_.isObject(res)) { return res; }
+                return {
+                    statusCode: res.statusCode,
+                    header: res._header
+                };
+            },
+            req: function(req){
+                if (!_.isObject(req)) { return req; }
+
+                var connection = req.connection || {};
+                return {
+                    method: req.method,
+                    url: req.url,
+                    headers: req.headers,
+                    remoteAdress: connection.remoteAddress,
+                    remotePort: connection.remotePort
+                };
+            }
         }
     };
     if (env === 'development'){ logOpts.level = 'debug'; }
@@ -48,8 +68,7 @@ if (cluster.isMaster){
         cluster.fork();
     });
 } else {
-    var db = require('./server/lib/db'),
-        app = require('./server/app');
+    var app = require('./server/app');
     app.db = db;
     app.stamp = stamp;
 

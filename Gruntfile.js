@@ -149,7 +149,10 @@ module.exports = function(grunt) {
         abideExtract: {
             js: {
                 src: 'server/**/*.js',
-                dest: 'server/locale/templates/LC_MESSAGES/messages.pot'
+                dest: 'server/locale/templates/LC_MESSAGES/messages.pot',
+                options: {
+                    keyword: '__'
+                }
             },
             jade: {
                 src: 'server/views/**/*.jade',
