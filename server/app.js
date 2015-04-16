@@ -3,11 +3,16 @@ var express = require('express'),
     fs = require('fs'),
     db = require('./lib/db'),
     log = require('./lib/logger').getLogger(),
+    package = require('../package'),
     settings = {};
 
 try {
     settings = require('./settings');
-} catch(e) {}
+} catch(ignore) {}
+
+if (!settings.session_name){
+    settings.session_name = package.name || 'connect.sid';
+}
 
 var app = require('libby')(express, settings, db);
 
