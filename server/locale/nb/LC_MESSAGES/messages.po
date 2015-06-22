@@ -1,0 +1,69 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Boilerplate\n"
+"POT-Creation-Date: 2014-05-23 23:32+0000\n"
+"PO-Revision-Date: 2014-05-24 01:33+0100\n"
+"Last-Translator: bergquis <jorgen.bergquist@ntnu.no>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: server/views/layout.jade:22
+msgid "Boilerplate"
+msgstr ""
+
+#: server/views/layout.jade:28
+msgid "Account"
+msgstr "Konto"
+
+#: server/views/layout.jade:30
+msgid "Logout"
+msgstr "Logg ut"
+
+#: server/views/layout.jade:33
+msgid "Login"
+msgstr "Logg inn"
+
+#: server/views/login.jade:9
+msgid "Login with Google"
+msgstr "Logg inn med Google"
+
+#: server/views/account.jade:19
+msgid "User data"
+msgstr "Brukerinformasjon"
+
+#: server/views/account.jade:32
+msgid "Username"
+msgstr "Brukernavn"
+
+#: server/views/account.jade:38
+msgid "Name"
+msgstr "Navn"
+
+#: server/views/account.jade:44
+msgid "E-mail"
+msgstr "E-post"
+
+#: server/views/account.jade:50
+msgid "Active"
+msgstr "Aktiv"
+
+#: server/views/account.jade:56
+msgid "Admin"
+msgstr ""
+
+#: server/views/account.jade:62
+msgid "Created"
+msgstr "Opprettet"
+
+#: server/views/account.jade:69
+msgid "Google data"
+msgstr ""
+
+#: server/views/account.jade:67
+msgid "Save"
+msgstr "Lagre"
