@@ -17,5 +17,5 @@ var HomePage = React.createClass({
   }
 });
 
-require('../setpage')(HomePage);
+require('../bootstrap')(HomePage);
 module.exports = HomePage;

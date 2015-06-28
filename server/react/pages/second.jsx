@@ -20,5 +20,5 @@ var SecondPage = React.createClass({
   }
 });
 
-require('../setpage')(SecondPage);
+require('../bootstrap')(SecondPage);
 module.exports = SecondPage;

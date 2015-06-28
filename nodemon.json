@@ -1,5 +1,5 @@
 {
     "watch": [
-        "server/*.*"
+        "server/**/*.js"
     ]
 }

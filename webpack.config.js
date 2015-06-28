@@ -15,7 +15,6 @@ module.exports = {
     module: {
         loaders: [
             // required for react jsx
-            { test: require.resolve("react"), loader: "expose?React" },
             { test: /\.js$/,    loader: "jsx-loader" },
             { test: /\.jsx$/,   loader: "jsx-loader?insertPragma=React.DOM" },
         ]

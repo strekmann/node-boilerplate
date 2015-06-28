@@ -1,28 +1,31 @@
 var express = require('express'),
     router = express.Router(),
     React = require('react'),
+    renderReact = require('../lib/helpers').renderReact,
     User = require('../models').User,
     ensureAuthenticated = require('../lib/middleware').ensureAuthenticated;
 
 router.get('/', function(req, res, next){
-    var data = { size: 200 },
-        node = React.createElement(require('../react/pages/home.jsx'), data);
+    var element = require('../react/pages/home.jsx');
+    var data = {
+        // SomeStore: {items: items}
+    };
 
     res.render('react', {
-        html: React.renderToString(node),
-        data: JSON.stringify(data),
-        react_page: 'homepage'
+        html: renderReact(element, data),
+        page: 'homepage'
     });
 });
 
 router.get('/2', function(req, res, next){
-    var data = { size: 50 },
-        node = React.createElement(require('../react/pages/second.jsx'), data);
+    var element = require('../react/pages/second.jsx');
+    var data = {
+        // SomeStore: {items: items}
+    };
 
     res.render('react', {
-        html: React.renderToString(node),
-        data: JSON.stringify(data),
-        react_page: 'secondpage'
+        html: renderReact(element, data),
+        page: 'secondpage'
     });
 });
 
