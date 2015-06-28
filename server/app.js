@@ -75,6 +75,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 // Internal server error - 500 status
 app.use(function(err, req, res, next){
     log.error(err);
+    log.error(err.stack);
 
     res.status(500);
     res.format({

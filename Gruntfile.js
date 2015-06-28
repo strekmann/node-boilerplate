@@ -1,4 +1,7 @@
 module.exports = function(grunt) {
+    var webpack = require("webpack");
+	var webpackConfig = require("./webpack.config.js");
+
     grunt.initConfig({
         jshint: {
             files: ['client/js/**/*.js', 'server/**/*.js', 'test/*.js'],
@@ -35,6 +38,25 @@ module.exports = function(grunt) {
                         'test/*.js'
                     ]
                 }
+            }
+        },
+        webpack: {
+            options: webpackConfig,
+            build: {
+                plugins: webpackConfig.plugins.concat(
+                    new webpack.DefinePlugin({
+                        "process.env": {
+                            // This has effect on the react lib size
+                            "NODE_ENV": JSON.stringify("production")
+                        }
+                    }),
+                    new webpack.optimize.DedupePlugin(),
+                    new webpack.optimize.UglifyJsPlugin()
+                )
+            },
+            "build-dev": {
+                devtool: "sourcemap",
+                debug: true
             }
         },
         browserify: {
@@ -107,7 +129,10 @@ module.exports = function(grunt) {
         watch: {
             clientjs: {
                 files: ['server/react/**/*.jsx'],
-                tasks: ['browserify']
+                tasks: ['webpack:build-dev'],
+                options: {
+                    spawn: false
+                }
             },
             server: {
                 files: ['Gruntfile.js', 'cluster.js', 'server/**/*.js', 'test/**/*.js'],
@@ -162,9 +187,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-i18n-abide');
+    grunt.loadNpmTasks('grunt-webpack');
 
-    grunt.registerTask('default', ['jshint', 'sass', 'concat', 'copy', 'browserify', 'abideCompile']);
-    grunt.registerTask('prod', ['default', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'sass', 'concat', 'copy', 'webpack:build-dev', 'abideCompile']);
+    grunt.registerTask('prod', ['jshint', 'sass', 'concat', 'copy', 'webpack:build', 'abideCompile']);
     grunt.registerTask('hint', ['jshint']);
     grunt.registerTask('locales', ['abideExtract', 'abideMerge']);
 };

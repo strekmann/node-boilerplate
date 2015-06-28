@@ -11,7 +11,18 @@ router.get('/', function(req, res, next){
     res.render('react', {
         html: React.renderToString(node),
         data: JSON.stringify(data),
-        component: 'HomePage'
+        react_page: 'homepage'
+    });
+});
+
+router.get('/2', function(req, res, next){
+    var data = { size: 50 },
+        node = React.createElement(require('../react/pages/second.jsx'), data);
+
+    res.render('react', {
+        html: React.renderToString(node),
+        data: JSON.stringify(data),
+        react_page: 'secondpage'
     });
 });
 

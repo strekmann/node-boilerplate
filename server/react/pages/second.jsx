@@ -3,19 +3,22 @@ var React = require('react');
 var Square = require('../components/square.jsx');
 
 // A very simple page with a square on it.
-var HomePage = React.createClass({
+var SecondPage = React.createClass({
   getDefaultProps: function () {
     return {
-      size: 100
+      size: 50
     }
   },
 
   render: function () {
     return (
-      <Square size={this.props.size} />
+        <div>
+            <Square size={this.props.size} />
+            <span>Second page</span>
+        </div>
     );
   }
 });
 
-require('../setpage')(HomePage);
-module.exports = HomePage;
+require('../setpage')(SecondPage);
+module.exports = SecondPage;

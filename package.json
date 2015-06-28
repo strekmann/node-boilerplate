@@ -42,6 +42,7 @@
     "browserify": "",
     "chai": "",
     "cheerio": "",
+    "expose-loader": "^0.7.0",
     "font-awesome": "^4.3.0",
     "grunt": "",
     "grunt-browserify": "",
@@ -54,11 +55,16 @@
     "grunt-i18n-abide": "",
     "grunt-react": "^0.12.2",
     "grunt-sass": "",
+    "grunt-webpack": "^1.0.10",
+    "jsx-loader": "^0.13.2",
     "mocha": "",
+    "node-libs-browser": "^0.5.2",
     "node.normalize.scss": "^3.0.3",
     "passport-stub": "^1.0.1",
     "supertest": "",
     "through": "",
-    "uglify-js": ""
+    "uglify-js": "",
+    "webpack": "^1.10.0",
+    "webpack-dev-server": "^1.10.1"
   }
 }

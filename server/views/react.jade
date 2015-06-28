@@ -16,8 +16,8 @@ html(lang=lang dir=lang_dir data-locale=locale)
   body
     section#main!= html
 
-    script(src="/js/site.js?"+stamp)
+    script(src="/js/common.js?"+stamp)
+    script(src="/js/"+react_page+".js?"+stamp)
 
     script.
-      var client = require('client');
-      client.React.render(client.React.createElement(client.#{component}, !{data||'null'}), document.getElementById('main'));
+      React.render(React.createElement(s7nPage, !{data||'null'}), document.getElementById('main'));
