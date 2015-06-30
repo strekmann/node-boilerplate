@@ -10,7 +10,7 @@
     "url": ""
   },
   "engines": {
-    "node": "0.10"
+    "node": "0.12"
   },
   "scripts": {
     "start": "node cluster.js",
@@ -37,22 +37,19 @@
     "passport": "^0.2.0",
     "passport-google-oauth": "^0.1.0",
     "react": "^0.13.3",
-    "redis": "^0.12.1",
-    "uslug": "^1.0.0"
+    "redis": "^0.12.1"
   },
   "devDependencies": {
-    "browserify": "",
+    "bootstrap-sass": "^3.3.5",
     "chai": "",
     "cheerio": "",
     "expose-loader": "^0.7.0",
     "font-awesome": "^4.3.0",
     "grunt": "",
-    "grunt-browserify": "",
     "grunt-cli": "",
     "grunt-contrib-concat": "",
     "grunt-contrib-copy": "",
     "grunt-contrib-jshint": "",
-    "grunt-contrib-uglify": "",
     "grunt-contrib-watch": "",
     "grunt-i18n-abide": "",
     "grunt-react": "^0.12.2",
@@ -60,12 +57,8 @@
     "grunt-webpack": "^1.0.10",
     "jsx-loader": "^0.13.2",
     "mocha": "",
-    "node-libs-browser": "^0.5.2",
-    "node.normalize.scss": "^3.0.3",
     "passport-stub": "^1.0.1",
     "supertest": "",
-    "through": "",
-    "uglify-js": "",
     "webpack": "^1.10.0",
     "webpack-dev-server": "^1.10.1"
   }

@@ -59,24 +59,11 @@ module.exports = function(grunt) {
                 debug: true
             }
         },
-        browserify: {
-            options: {
-                transform: [ require('grunt-react').browserify ],
-                alias: {
-                    'client': './server/react/client.jsx'
-                }
-            },
-            build: {
-                src: ['server/react/**/*.jsx'],
-                dest: 'public/js/site.js',
-                expose: 'react'
-            }
-        },
         sass: {
             options: {
                 includePaths: [
-                    'node_modules/node.normalize.scss',
-                    'node_modules/font-awesome/scss'
+                    'node_modules/font-awesome/scss',
+                    'node_modules/bootstrap-sass/assets/stylesheets'
                 ]
             },
             dest: {
@@ -104,6 +91,7 @@ module.exports = function(grunt) {
                 filter: 'isFile',
                 src: [
                     'node_modules/font-awesome/fonts/*',
+                    'node_modules/bootstrap-sass/assets/fonts/bootstrap/*',
                     'client/fonts/*'
                 ],
                 dest: 'public/fonts/'
@@ -113,17 +101,6 @@ module.exports = function(grunt) {
                 cwd: 'client/img',
                 src: ['**'],
                 dest: 'public/img'
-            }
-        },
-        uglify: {
-            options: {
-                mangle: false,
-                compress: true
-            },
-            client: {
-                files: {
-                    'public/js/site.js': ['public/js/site.js']
-                }
             }
         },
         watch: {

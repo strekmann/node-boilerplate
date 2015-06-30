@@ -1,9 +1,8 @@
-@charset "UTF-8";
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700);
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:300,400,500,700);
 
-// normalize lib
-@import "normalize";
+@import 'variables';
+@import 'bootstrap';
+@import 'paper';
 
-// font-awesome
-@import "font-awesome";
-
-// our styles
+// our stuff

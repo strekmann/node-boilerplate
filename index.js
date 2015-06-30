@@ -30,7 +30,7 @@ var log = logger.init(settings);
 
 var app = require('./server/app');
 app.db = db;
-app.stamp = moment().format('YYMMDDHH');
+app.stamp = moment().format('YYMMDDHHmm');
 
 // -- handle node exceptions
 process.on('uncaughtException', function(err){

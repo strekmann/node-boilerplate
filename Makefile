@@ -28,6 +28,6 @@ update:
 	npm update
 
 clean:
-	rm -r ./node_modules ./bower_components ./public
+	rm -r ./node_modules ./public
 
 .PHONY: build production watch test hint locales install update clean
