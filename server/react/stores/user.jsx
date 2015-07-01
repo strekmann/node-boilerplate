@@ -3,11 +3,11 @@ var alt = require('../alt'),
     _ = require('lodash');
 
 function UserStore(){
-    this.bindListeners: {
+    this.bindListeners({
         onUpdateUser: UserActions.updateUser,
         onSaveUser: UserActions.saveUser,
         onUserFailed: UserActions.userFailed
-    };
+    });
 
     this.user = {};
     this.errorMessage = null;

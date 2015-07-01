@@ -7,10 +7,11 @@ function UserActions(){
 }
 
 UserActions.prototype.saveUser = function(user){
+    console.log('action: saveUser');
     var self = this;
     self.dispatch();
 
-    axios.post('/account', user)
+    axios.post('/test', user)
     .then(function(response){
         self.actions.updateUser(response.data);
     })

@@ -10,13 +10,23 @@ var express = require('express'),
 router.get('/', function(req, res, next){
     var element = require('../react/pages/home.jsx');
     var data = {
-        // SomeStore: {items: items}
+        UserStore: {
+            user: {
+                name: 'Testulf',
+                email: 'test@ulf.no'
+            }
+        }
     };
 
     res.render('react', {
         html: renderReact(element, data),
         page: 'homepage'
     });
+});
+
+router.post('/test', function(req, res, next){
+    console.log(req.body);
+    res.json(req.body);
 });
 
 router.get('/2', function(req, res, next){
