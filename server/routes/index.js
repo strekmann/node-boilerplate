@@ -1,4 +1,6 @@
 var express = require('express'),
+    fs = require('fs'),
+    path = require('path'),
     router = express.Router(),
     React = require('react'),
     renderReact = require('../lib/helpers').renderReact,
@@ -29,8 +31,9 @@ router.get('/2', function(req, res, next){
     });
 });
 
-router.get('/foundation', function(req, res, next){
-    res.render('foundation');
+router.get('/kitchen', function(req, res, next){
+    var html = fs.readFileSync(path.join(__dirname, '../views/kitchen.html'));
+    res.render('react', {html: html});
 });
 
 router.get('/login', function(req, res, next){
