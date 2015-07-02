@@ -6,7 +6,6 @@ var React = require('react'),
     UserStore = require('../stores/user.jsx');
 
 var TestNavbar = React.createClass({
-    mixins: [FluxyMixin],
     displayName: 'TestNavbar',
 
     getInitialState: function(){
@@ -26,8 +25,8 @@ var TestNavbar = React.createClass({
         }
 
         return (
-            <Navbar brand="React-Test">
-                <Nav left>
+            <Navbar brand={<a href="/">React-Test</a>}>
+                <Nav right>
                     {userItem}
                 </Nav>
             </Navbar>

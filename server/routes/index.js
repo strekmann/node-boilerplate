@@ -9,14 +9,11 @@ var express = require('express'),
 router.get('/', function(req, res, next){
     var data = {
         UserStore: {
-            user: {
-                name: 'Testulf',
-                email: 'test@ulf.no'
-            }
+            user: req.user
         }
     };
 
-    res.renderReact('home', data);
+    res.renderReact('index', data);
 });
 
 router.get('/login', function(req, res, next){
