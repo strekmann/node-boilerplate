@@ -39,7 +39,8 @@
     "passport-google-oauth": "^0.1.0",
     "react": "^0.13.3",
     "react-bootstrap": "^0.23.5",
-    "redis": "^0.12.1"
+    "redis": "^0.12.1",
+    "shortid": "^2.2.2"
   },
   "devDependencies": {
     "bootstrap-sass": "^3.3.5",
