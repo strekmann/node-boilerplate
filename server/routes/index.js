@@ -3,7 +3,6 @@ var express = require('express'),
     path = require('path'),
     router = express.Router(),
     React = require('react'),
-    renderReact = require('../lib/helpers').renderReact,
     User = require('../models').User,
     ensureAuthenticated = require('../lib/middleware').ensureAuthenticated;
 
@@ -17,7 +16,7 @@ router.get('/', function(req, res, next){
         }
     };
 
-    renderReact(res, 'home', data);
+    res.renderReact('home', data);
 });
 
 router.get('/login', function(req, res, next){
@@ -39,7 +38,7 @@ router.route('/account')
             }
         };
 
-        renderReact(res, 'account', data);
+        res.renderReact('account', data);
     })
     .put(function(req, res, next){
         User.findById(req.user._id, function(err, user){

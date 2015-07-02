@@ -2,6 +2,7 @@ var express = require('express'),
     path = require('path'),
     fs = require('fs'),
     db = require('./lib/db'),
+    helpers = require('./lib/helpers'),
     log = require('./lib/logger')(),
     package = require('../package'),
     settings = {};
@@ -48,6 +49,13 @@ app.set('view engine', 'jade');
 // Initialize passport
 app.use(app.passport.initialize());
 app.use(app.passport.session());
+
+app.use(function(req, res, next) {
+    res.renderReact = function (page, data) {
+        helpers.renderReact(res, page, data);
+    };
+    next();
+});
 
 // Make some variables always available in templates.
 app.use(function(req, res, next){
