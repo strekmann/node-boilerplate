@@ -11,6 +11,7 @@ var Grid = require('react-bootstrap/lib/Grid'),
     Button = require('react-bootstrap/lib/Button'),
     Input = require('react-bootstrap/lib/Input'),
     Alert = require('react-bootstrap/lib/Alert'),
+    TestNavbar = require('../components/navbar.jsx'),
     FormControls = require('react-bootstrap/lib/FormControls');
 
 // A very simple page with a square on it.
@@ -72,73 +73,76 @@ var AccountPage = React.createClass({
         user.created = moment(user.created).format('llll');
 
         return (
-            <Grid>
-                <Row>
-                    <Col xs={12} md={10} mdOffset={1} lg={8} lgOffset={2}>
-                        <h1>User information</h1>
-                        {alert}
-                        <form className="form-horizontal">
-                            <FormControls.Static label="ID" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user._id}/>
-                            <Input
-                                label="Username"
-                                labelClassName="col-md-3"
-                                wrapperClassName="col-md-9"
-                                type="text"
-                                placeholder="Username"
-                                value={user.username}
-                                bsStyle={this.state.formErrors.username ? 'error' : null}
-                                help={this.state.formErrors.username}
-                                onChange={this.userChange}
-                                ref="username" />
-                            <Input
-                                label="Name"
-                                labelClassName="col-md-3"
-                                wrapperClassName="col-md-9"
-                                type="text"
-                                placeholder="Name"
-                                value={user.name}
-                                bsStyle={this.state.formErrors.name ? 'error' : null}
-                                help={this.state.formErrors.name}
-                                onChange={this.userChange}
-                                ref="name" />
-                            <Input
-                                label="Email"
-                                labelClassName="col-md-3"
-                                wrapperClassName="col-md-9"
-                                type="text"
-                                placeholder="Email"
-                                value={user.email}
-                                bsStyle={this.state.formErrors.email ? 'error' : null}
-                                help={this.state.formErrors.email}
-                                onChange={this.userChange}
-                                ref="email" />
-                            <Input
-                                label="Active"
-                                wrapperClassName="col-md-9 col-md-offset-3"
-                                type="checkbox"
-                                checked={user.is_active}
-                                disabled={true} />
-                            <Input
-                                label="Admin"
-                                wrapperClassName="col-md-9 col-md-offset-3"
-                                type="checkbox"
-                                checked={user.is_admin}
-                                disabled={true} />
-                            <FormControls.Static label="Created" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user.created}/>
-                            <Row>
-                                <Col md={9} mdOffset={3}>
-                                    <Button
-                                        bsStyle="primary"
-                                        disabled={this.state.isSaving}
-                                        onClick={!this.state.isSaving ? this.saveUser : null}>
-                                        {this.state.isSaving ? <i className='fa fa-spinner fa-spin fa-lg'></i> : 'Save'}
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </form>
-                    </Col>
-                </Row>
-            </Grid>
+            <div>
+                <TestNavbar />
+                <Grid>
+                    <Row>
+                        <Col xs={12} md={10} mdOffset={1} lg={8} lgOffset={2}>
+                            <h1>User information</h1>
+                            {alert}
+                            <form className="form-horizontal">
+                                <FormControls.Static label="ID" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user._id}/>
+                                <Input
+                                    label="Username"
+                                    labelClassName="col-md-3"
+                                    wrapperClassName="col-md-9"
+                                    type="text"
+                                    placeholder="Username"
+                                    value={user.username}
+                                    bsStyle={this.state.formErrors.username ? 'error' : null}
+                                    help={this.state.formErrors.username}
+                                    onChange={this.userChange}
+                                    ref="username" />
+                                <Input
+                                    label="Name"
+                                    labelClassName="col-md-3"
+                                    wrapperClassName="col-md-9"
+                                    type="text"
+                                    placeholder="Name"
+                                    value={user.name}
+                                    bsStyle={this.state.formErrors.name ? 'error' : null}
+                                    help={this.state.formErrors.name}
+                                    onChange={this.userChange}
+                                    ref="name" />
+                                <Input
+                                    label="Email"
+                                    labelClassName="col-md-3"
+                                    wrapperClassName="col-md-9"
+                                    type="text"
+                                    placeholder="Email"
+                                    value={user.email}
+                                    bsStyle={this.state.formErrors.email ? 'error' : null}
+                                    help={this.state.formErrors.email}
+                                    onChange={this.userChange}
+                                    ref="email" />
+                                <Input
+                                    label="Active"
+                                    wrapperClassName="col-md-9 col-md-offset-3"
+                                    type="checkbox"
+                                    checked={user.is_active}
+                                    disabled={true} />
+                                <Input
+                                    label="Admin"
+                                    wrapperClassName="col-md-9 col-md-offset-3"
+                                    type="checkbox"
+                                    checked={user.is_admin}
+                                    disabled={true} />
+                                <FormControls.Static label="Created" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user.created}/>
+                                <Row>
+                                    <Col md={9} mdOffset={3}>
+                                        <Button
+                                            bsStyle="primary"
+                                            disabled={this.state.isSaving}
+                                            onClick={!this.state.isSaving ? this.saveUser : null}>
+                                            {this.state.isSaving ? <i className='fa fa-spinner fa-spin fa-lg'></i> : 'Save'}
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </form>
+                        </Col>
+                    </Row>
+                </Grid>
+            </div>
         );
     }
 });
