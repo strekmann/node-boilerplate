@@ -20,7 +20,7 @@ router.get('/', function(req, res, next){
 
     res.render('react', {
         html: renderReact(element, data),
-        page: 'homepage'
+        page: 'home'
     });
 });
 
@@ -37,7 +37,7 @@ router.get('/2', function(req, res, next){
 
     res.render('react', {
         html: renderReact(element, data),
-        page: 'secondpage'
+        page: 'second'
     });
 });
 
