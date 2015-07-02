@@ -8,7 +8,6 @@ var express = require('express'),
     ensureAuthenticated = require('../lib/middleware').ensureAuthenticated;
 
 router.get('/', function(req, res, next){
-    var element = require('../react/pages/home.jsx');
     var data = {
         UserStore: {
             user: {
@@ -18,32 +17,7 @@ router.get('/', function(req, res, next){
         }
     };
 
-    res.render('react', {
-        html: renderReact(element, data),
-        page: 'home'
-    });
-});
-
-router.post('/test', function(req, res, next){
-    console.log(req.body);
-    res.json(req.body);
-});
-
-router.get('/2', function(req, res, next){
-    var element = require('../react/pages/second.jsx');
-    var data = {
-        // SomeStore: {items: items}
-    };
-
-    res.render('react', {
-        html: renderReact(element, data),
-        page: 'second'
-    });
-});
-
-router.get('/kitchen', function(req, res, next){
-    var html = fs.readFileSync(path.join(__dirname, '../views/kitchen.html'));
-    res.render('react', {html: html});
+    renderReact(res, 'home', data);
 });
 
 router.get('/login', function(req, res, next){
@@ -59,21 +33,13 @@ router.get('/logout', function(req, res, next){
 router.route('/account')
     .all(ensureAuthenticated)
     .get(function(req, res, next){
-        User.findById(req.user._id, function(err, user){
-            if (err) { return next(err); }
+        var data = {
+            UserStore: {
+                user: req.user
+            }
+        };
 
-            var element = require('../react/pages/account.jsx');
-            var data = {
-                UserStore: {
-                    user: user
-                }
-            };
-
-            res.render('react', {
-                html: renderReact(element, data),
-                page: 'account'
-            });
-        });
+        renderReact(res, 'account', data);
     })
     .put(function(req, res, next){
         User.findById(req.user._id, function(err, user){
