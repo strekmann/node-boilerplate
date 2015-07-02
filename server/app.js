@@ -77,7 +77,6 @@ app.use(function(err, req, res, next){
     log.error(err);
     log.error(err.stack);
 
-    res.status(500);
     res.format({
         html: function(){
             res.render('500', {
@@ -97,7 +96,6 @@ app.use(function(err, req, res, next){
 
 // File not found - 404 status
 app.use(function(req, res, next){
-    res.status(404);
     res.format({
         html: function(){
             res.render('404', {

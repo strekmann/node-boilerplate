@@ -34,7 +34,7 @@ UserStore.prototype.onSaveUser = function(){
 
 UserStore.prototype.onUserFailed = function(data){
     if (data.error){
-        this.errorMessage = error;
+        this.errorMessage = data.error;
     }
     else if(data.errors){
         var errors = _.reduce(data.errors, function(result, obj){

@@ -64,7 +64,7 @@ router.route('/account')
             user.name = req.body.name;
             user.email = req.body.email;
             user.save(function(err){
-                if (err) { next(err); }
+                if (err) { return next(err); }
 
                 return res.json(user);
             });
