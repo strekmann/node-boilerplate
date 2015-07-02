@@ -9,8 +9,10 @@ function UserStore(){
         onUserFailed: UserActions.userFailed
     });
 
+    // component states
     this.user = {};
     this.errorMessage = null;
+    this.formErrors = {};
 
     this.exportPublicMethods({
         hasUser: function(){
@@ -22,15 +24,25 @@ function UserStore(){
 UserStore.prototype.onUpdateUser = function(user){
     this.user = user;
     this.errorMessage = null;
+    this.formErrors = {};
 };
 
 UserStore.prototype.onSaveUser = function(){
-    this.user = {};
     this.errorMessage = null;
+    this.formErrors = {};
 };
 
-UserStore.prototype.onUserFailed = function(error){
-    this.errorMessage = error;
+UserStore.prototype.onUserFailed = function(data){
+    if (data.error){
+        this.errorMessage = error;
+    }
+    else if(data.errors){
+        var errors = _.reduce(data.errors, function(result, obj){
+            result[obj.param] = obj.msg;
+            return result;
+        }, {});
+        this.formErrors = errors;
+    }
 };
 
 module.exports = alt.createStore(UserStore, 'UserStore');

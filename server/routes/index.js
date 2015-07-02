@@ -59,12 +59,26 @@ router.get('/logout', function(req, res, next){
 router.route('/account')
     .all(ensureAuthenticated)
     .get(function(req, res, next){
-        res.render('account');
+        User.findById(req.user._id, function(err, user){
+            if (err) { return next(err); }
+
+            var element = require('../react/pages/account.jsx');
+            var data = {
+                UserStore: {
+                    user: user
+                }
+            };
+
+            res.render('react', {
+                html: renderReact(element, data),
+                page: 'account'
+            });
+        });
     })
     .put(function(req, res, next){
         User.findById(req.user._id, function(err, user){
             if (err) {
-                return res.json(404, {
+                return res.status(404).json({
                     error: 'Could not find user'
                 });
             }
@@ -75,7 +89,7 @@ router.route('/account')
 
             var errors = req.validationErrors();
             if (errors) {
-                return res.json('200', {
+                return res.status(400).json({
                     errors: errors
                 });
             }
@@ -83,12 +97,10 @@ router.route('/account')
             user.username = req.body.username;
             user.name = req.body.name;
             user.email = req.body.email;
-            return user.save(function(err){
+            user.save(function(err){
                 if (err) { next(err); }
 
-                return res.json(200, {
-                    message: 'Changes saved'
-                });
+                return res.json(user);
             });
         });
     });

@@ -7,11 +7,10 @@ function UserActions(){
 }
 
 UserActions.prototype.saveUser = function(user){
-    console.log('action: saveUser');
     var self = this;
     self.dispatch();
 
-    axios.post('/test', user)
+    axios.put('/account', user)
     .then(function(response){
         self.actions.updateUser(response.data);
     })
@@ -20,7 +19,7 @@ UserActions.prototype.saveUser = function(user){
             self.actions.userFailed(response.message);
         }
         else {
-            self.actions.userFailed(response.data.error);
+            self.actions.userFailed(response.data);
         }
     });
 };
