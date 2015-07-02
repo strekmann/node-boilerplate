@@ -14,7 +14,7 @@ var Index = React.createClass({
                 <TestNavbar />
                 <Grid>
                     <Row>
-                        <Col>
+                        <Col xs={12}>
                             <PageHeader>Welcome! <small>Here be dragons</small></PageHeader>
                         </Col>
                     </Row>
