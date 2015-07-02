@@ -10,6 +10,7 @@ var Grid = require('react-bootstrap/lib/Grid'),
     Col = require('react-bootstrap/lib/Col'),
     Button = require('react-bootstrap/lib/Button'),
     Input = require('react-bootstrap/lib/Input'),
+    Alert = require('react-bootstrap/lib/Alert'),
     FormControls = require('react-bootstrap/lib/FormControls');
 
 // A very simple page with a square on it.
@@ -62,11 +63,9 @@ var AccountPage = React.createClass({
 
     render: function(){
         if (this.state.errorMessage){
-            return (
-                <div>
-                    {this.state.errorMessage}
-                </div>
-            );
+            var alert = (<Alert bsStyle='danger'>
+                <strong>{this.state.errorMessage}</strong>
+            </Alert>);
         }
 
         var user = _.clone(this.state.user);
@@ -77,6 +76,7 @@ var AccountPage = React.createClass({
                 <Row>
                     <Col xs={12} md={10} mdOffset={1} lg={8} lgOffset={2}>
                         <h1>User information</h1>
+                        {alert}
                         <form className="form-horizontal">
                             <FormControls.Static label="ID" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user._id}/>
                             <Input
@@ -131,7 +131,7 @@ var AccountPage = React.createClass({
                                         bsStyle="primary"
                                         disabled={this.state.isSaving}
                                         onClick={!this.state.isSaving ? this.saveUser : null}>
-                                        {this.state.isSaving ? '...' : 'Save'}
+                                        {this.state.isSaving ? <i className='fa fa-spinner fa-spin fa-lg'></i> : 'Save'}
                                     </Button>
                                 </Col>
                             </Row>
