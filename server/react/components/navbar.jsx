@@ -2,10 +2,12 @@ var React = require('react'),
     FluxyMixin = require('alt/mixins/FluxyMixin'),
     Navbar = require('react-bootstrap/lib/Navbar'),
     Nav = require('react-bootstrap/lib/Nav'),
+    CollapsibleNav = require('react-bootstrap/lib/CollapsibleNav'),
     NavItem = require('react-bootstrap/lib/NavItem'),
     UserStore = require('../stores/user.jsx');
 
 var TestNavbar = React.createClass({
+    mixins: [FluxyMixin],
     displayName: 'TestNavbar',
 
     getInitialState: function(){
@@ -15,9 +17,22 @@ var TestNavbar = React.createClass({
         };
     },
 
+    // listen to store changes - fluxymixin
+    statics: {
+        storeListeners: {
+            onUserChange: UserStore
+        }
+    },
+
+    onUserChange: function(){
+        this.setState({
+            user: UserStore.getState().user
+        });
+    },
+
     render: function () {
         var userItem;
-        if (this.state.user) {
+        if (UserStore.hasUser()) {
             userItem = (<NavItem href="/account">{this.state.user.name}</NavItem>);
         }
         else {
@@ -25,10 +40,14 @@ var TestNavbar = React.createClass({
         }
 
         return (
-            <Navbar brand={<a href="/">React-Test</a>}>
-                <Nav right>
-                    {userItem}
-                </Nav>
+            <Navbar
+                brand={<a href="/">React-Test</a>}
+                toggleNavKey={0}>
+                <CollapsibleNav eventKey={0}>
+                    <Nav navbar right>
+                        {userItem}
+                    </Nav>
+                </CollapsibleNav>
             </Navbar>
         );
     }

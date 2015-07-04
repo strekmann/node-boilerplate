@@ -19,6 +19,9 @@ function UserStore(){
             return !_.isEmpty(this.getState().user);
         }
     });
+
+    // for debugging - remove me later
+    this.dispatcher.register(console.log.bind(console))
 }
 
 UserStore.prototype.onUpdateUser = function(user){
@@ -45,4 +48,12 @@ UserStore.prototype.onUserFailed = function(data){
     }
 };
 
-module.exports = alt.createStore(UserStore, 'UserStore');
+// Create store
+var Store =  alt.createStore(UserStore, 'UserStore');
+
+// Deep clone state
+Store.config.getState = function(state){
+    return _.cloneDeep(state);
+};
+
+module.exports = Store;

@@ -69,8 +69,8 @@ var AccountPage = React.createClass({
             </Alert>);
         }
 
-        var user = _.clone(this.state.user);
-        user.created = moment(user.created).format('llll');
+        var user = this.state.user;
+        var user_created = moment(user.created).format('llll');
 
         return (
             <div>
@@ -127,7 +127,7 @@ var AccountPage = React.createClass({
                                     type="checkbox"
                                     checked={user.is_admin}
                                     disabled={true} />
-                                <FormControls.Static label="Created" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user.created}/>
+                                <FormControls.Static label="Created" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user_created}/>
                                 <Row>
                                     <Col md={9} mdOffset={3}>
                                         <Button
