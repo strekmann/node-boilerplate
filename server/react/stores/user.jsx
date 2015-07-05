@@ -1,6 +1,7 @@
 var alt = require('../alt'),
     UserActions = require('../actions/user.jsx'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    Immutable = require('immutable');
 
 function UserStore(){
     this.bindListeners({
@@ -15,8 +16,24 @@ function UserStore(){
     this.formErrors = {};
 
     this.exportPublicMethods({
+        getImmutState: function(){
+            return Immutable.fromJS(this.getState());
+        },
+
         hasUser: function(){
             return !_.isEmpty(this.getState().user);
+        },
+
+        getUser: function(){
+            return Immutable.fromJS(this.getState().user);
+        },
+
+        getFormErrors: function(){
+            return Immutable.fromJS(this.getState().formErrors);
+        },
+
+        getErrorMessage: function(){
+            return this.getState().errorMessage;
         }
     });
 
@@ -48,12 +65,4 @@ UserStore.prototype.onUserFailed = function(data){
     }
 };
 
-// Create store
-var Store =  alt.createStore(UserStore, 'UserStore');
-
-// Deep clone state
-Store.config.getState = function(state){
-    return _.cloneDeep(state);
-};
-
-module.exports = Store;
+module.exports =  alt.createStore(UserStore, 'UserStore');

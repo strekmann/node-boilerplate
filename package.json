@@ -28,6 +28,7 @@
     "express-validator": "^2.3.0",
     "hiredis": "",
     "i18n-abide": "",
+    "immutable": "^3.7.4",
     "iso": "^4.1.0",
     "jade": "^1.8.2",
     "libby": "~2.2.2",

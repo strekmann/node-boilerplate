@@ -3,6 +3,7 @@ var React = require('react'),
     _ = require('lodash'),
     FluxyMixin = require('alt/mixins/FluxyMixin'),
     UserActions = require('../actions/user.jsx'),
+    Immutable = require('immutable'),
     UserStore = require('../stores/user.jsx');
 
 var Grid = require('react-bootstrap/lib/Grid'),
@@ -14,19 +15,33 @@ var Grid = require('react-bootstrap/lib/Grid'),
     TestNavbar = require('../components/navbar.jsx'),
     FormControls = require('react-bootstrap/lib/FormControls');
 
+defaultState = function(){
+    var state = UserStore.getImmutState();
+    state = state.set('isSaving', false);
+    return {data: state};
+}
+
 // A very simple page with a square on it.
 var AccountPage = React.createClass({
     mixins: [FluxyMixin],
     displayName: 'AccountPage',
 
     getInitialState: function(){
-        var storeState = UserStore.getState();
-        return {
-            user: storeState.user,
-            errorMessage: storeState.errorMessage,
-            formErrors: storeState.formErrors,
-            isSaving: false
-        };
+        return defaultState();
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState){
+        console.log('should update account?', this.state.data !== nextState.data);
+        return this.state.data !== nextState.data;
+    },
+
+    setImmState: function(fn){
+        return this.setState(function(prev){
+            var data = prev.data;
+            return {
+                data: fn(data)
+            };
+        });
     },
 
     // listen to store changes - fluxymixin
@@ -37,40 +52,49 @@ var AccountPage = React.createClass({
     },
 
     onUserChange: function(){
-        var state = UserStore.getState();
-        state.isSaving = false;
+        var state = defaultState();
         this.setState(state);
     },
 
     // action events
     saveUser: function(){
-        UserActions.saveUser(this.state.user);
-        this.setState({isSaving: true});
+        UserActions.saveUser(this.state.data.get('user').toJS());
+
+        this.setImmState(function(data){
+            return data.set('isSaving', true);
+        });
     },
 
     // component events
     userChange: function(){
-        var user = this.state.user;
-        user.username = this.refs.username.getValue();
-        user.name = this.refs.name.getValue();
-        user.email = this.refs.email.getValue();
+        var changes = {
+            username: this.refs.username.getValue(),
+            name: this.refs.name.getValue(),
+            email: this.refs.email.getValue()
+        };
 
-        this.setState({
-            user: user,
-            errorMessage: null,
-            formErrors: {}
+        this.setImmState(function(data){
+            return data.withMutations(function(map){
+                map.mergeIn(['user'], changes)
+                .set('formErrors', Immutable.Map({}))
+                .set('errorMessage', null);
+            });
         });
     },
 
     render: function(){
-        if (this.state.errorMessage){
+        var user = this.state.data.get('user'),
+            formErrors = this.state.data.get('formErrors'),
+            errorMessage = this.state.data.get('errorMessage'),
+            isSaving = this.state.data.get('isSaving');
+
+        if (errorMessage){
             var alert = (<Alert bsStyle='danger'>
-                <strong>{this.state.errorMessage}</strong>
+                <strong>{errorMessage}</strong>
             </Alert>);
         }
 
-        var user = this.state.user;
-        var user_created = moment(user.created).format('llll');
+        var user_created = moment(user.get('created')).format('llll');
 
         return (
             <div>
@@ -81,16 +105,16 @@ var AccountPage = React.createClass({
                             <h1>User information</h1>
                             {alert}
                             <form className="form-horizontal">
-                                <FormControls.Static label="ID" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user._id}/>
+                                <FormControls.Static label="ID" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user.get('_id')}/>
                                 <Input
                                     label="Username"
                                     labelClassName="col-md-3"
                                     wrapperClassName="col-md-9"
                                     type="text"
                                     placeholder="Username"
-                                    value={user.username}
-                                    bsStyle={this.state.formErrors.username ? 'error' : null}
-                                    help={this.state.formErrors.username}
+                                    value={user.get('username')}
+                                    bsStyle={formErrors.get('username') ? 'error' : null}
+                                    help={formErrors.get('username')}
                                     onChange={this.userChange}
                                     ref="username" />
                                 <Input
@@ -99,9 +123,9 @@ var AccountPage = React.createClass({
                                     wrapperClassName="col-md-9"
                                     type="text"
                                     placeholder="Name"
-                                    value={user.name}
-                                    bsStyle={this.state.formErrors.name ? 'error' : null}
-                                    help={this.state.formErrors.name}
+                                    value={user.get('name')}
+                                    bsStyle={formErrors.get('name') ? 'error' : null}
+                                    help={formErrors.get('name')}
                                     onChange={this.userChange}
                                     ref="name" />
                                 <Input
@@ -110,31 +134,31 @@ var AccountPage = React.createClass({
                                     wrapperClassName="col-md-9"
                                     type="text"
                                     placeholder="Email"
-                                    value={user.email}
-                                    bsStyle={this.state.formErrors.email ? 'error' : null}
-                                    help={this.state.formErrors.email}
+                                    value={user.get('email')}
+                                    bsStyle={formErrors.get('email') ? 'error' : null}
+                                    help={formErrors.get('email')}
                                     onChange={this.userChange}
                                     ref="email" />
                                 <Input
                                     label="Active"
                                     wrapperClassName="col-md-9 col-md-offset-3"
                                     type="checkbox"
-                                    checked={user.is_active}
+                                    checked={user.get('is_active')}
                                     disabled={true} />
                                 <Input
                                     label="Admin"
                                     wrapperClassName="col-md-9 col-md-offset-3"
                                     type="checkbox"
-                                    checked={user.is_admin}
+                                    checked={user.get('is_admin')}
                                     disabled={true} />
                                 <FormControls.Static label="Created" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user_created}/>
                                 <Row>
                                     <Col md={9} mdOffset={3}>
                                         <Button
                                             bsStyle="primary"
-                                            disabled={this.state.isSaving}
-                                            onClick={!this.state.isSaving ? this.saveUser : null}>
-                                            {this.state.isSaving ? <i className='fa fa-spinner fa-spin fa-lg'></i> : 'Save'}
+                                            disabled={isSaving}
+                                            onClick={!isSaving ? this.saveUser : null}>
+                                            {isSaving ? <i className='fa fa-spinner fa-spin fa-lg'></i> : 'Save'}
                                         </Button>
                                     </Col>
                                 </Row>

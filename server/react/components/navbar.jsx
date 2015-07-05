@@ -11,10 +11,14 @@ var TestNavbar = React.createClass({
     displayName: 'TestNavbar',
 
     getInitialState: function(){
-        var storeState = UserStore.getState();
         return {
-            user: storeState.user
+            user: UserStore.getUser()
         };
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState){
+        console.log('should update navbar?', this.state.user !== nextState.user);
+        return this.state.user != nextState.user;
     },
 
     // listen to store changes - fluxymixin
@@ -26,14 +30,16 @@ var TestNavbar = React.createClass({
 
     onUserChange: function(){
         this.setState({
-            user: UserStore.getState().user
+            user: UserStore.getUser()
         });
     },
 
     render: function () {
-        var userItem;
+        var user = this.state.user,
+            userItem;
+
         if (UserStore.hasUser()) {
-            userItem = (<NavItem href="/account">{this.state.user.name}</NavItem>);
+            userItem = (<NavItem href="/account">{user.get('name')}</NavItem>);
         }
         else {
             userItem = (<NavItem href="/auth/google">Log in</NavItem>);
