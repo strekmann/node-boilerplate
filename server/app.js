@@ -63,7 +63,7 @@ app.use(function(req, res, next){
 
 // Authentication against google.
 app.get('/auth/google', app.passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email']}), function(req, res){});
-app.get('/auth/google/callback', app.passport.authenticate('google', { failureRedirect: '/login' }), function(req, res){
+app.get('/auth/google/callback', app.passport.authenticate('google', { failureRedirect: '/' }), function(req, res){
     var url = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(url);
