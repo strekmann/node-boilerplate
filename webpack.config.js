@@ -23,8 +23,8 @@ module.exports = {
     module: {
         loaders: [
             // required for react jsx
-            { test: /\.js$/,    loader: "jsx-loader" },
-            { test: /\.jsx$/,   loader: "jsx-loader?insertPragma=React.DOM" },
+            { test: /\.js$/,    loader: "jsx-loader?harmony" },
+            { test: /\.jsx$/,   loader: "jsx-loader?harmony&insertPragma=React.DOM" },
         ]
     },
     plugins: [

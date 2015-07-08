@@ -7,7 +7,7 @@ var express = require('express'),
     package = require('../package'),
     settings = {};
 
-require('node-jsx').install({extension: '.jsx'});
+require('node-jsx').install({extension: '.jsx', harmony: true});
 
 try {
     settings = require('./settings');
