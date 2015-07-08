@@ -17,6 +17,7 @@ module.exports.ensureAuthenticated = function(req, res, next) {
 
 module.exports.addRenderReact = function (req, res, next) {
     res.renderReact = function (page, data) {
+        moment.locale(req.lang);
 
         var element = require('../react/pages/' + page + '.jsx');
 
