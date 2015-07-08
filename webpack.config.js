@@ -36,5 +36,14 @@ module.exports = {
             jQuery: "jquery",
             $: "jquery"
         })
+    ],
+    externals: [
+        function(context, request, callback){
+            if (/lib\/translator$/.test(request)){
+                var file = fs.readFileSync('./server/lib/translator-web.js', {encoding: 'utf8'});
+                return callback(null, file);
+            }
+            callback();
+        }
     ]
 };

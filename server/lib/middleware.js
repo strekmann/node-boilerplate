@@ -21,7 +21,7 @@ module.exports.addRenderReact = function (req, res, next) {
         var element = require('../react/pages/' + page + '.jsx');
 
         alt.bootstrap(JSON.stringify(data));
-        var html = Iso.render(React.renderToString(React.createElement(element)), alt.flush(), {react: true});
+        var html = Iso.render(React.renderToString(React.createElement(element, {lang: req.lang})), alt.flush(), {react: true});
 
         res.render('react',{
             html: html,

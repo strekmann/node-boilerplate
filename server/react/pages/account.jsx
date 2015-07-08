@@ -1,6 +1,7 @@
 var React = require('react'),
     moment = require('moment'),
     _ = require('lodash'),
+    translator = require('../../lib/translator'),
     FluxyMixin = require('alt/mixins/FluxyMixin'),
     UserActions = require('../actions/user.jsx'),
     Immutable = require('immutable'),
@@ -15,7 +16,7 @@ var Grid = require('react-bootstrap/lib/Grid'),
     TestNavbar = require('../components/navbar.jsx'),
     FormControls = require('react-bootstrap/lib/FormControls');
 
-defaultState = function(){
+function defaultState(){
     var state = UserStore.getImmutState();
     state = state.set('isSaving', false);
     return {data: state};
@@ -83,6 +84,8 @@ var AccountPage = React.createClass({
     },
 
     render: function(){
+        var __ = translator(this.props.lang);
+
         var user = this.state.data.get('user'),
             formErrors = this.state.data.get('formErrors'),
             errorMessage = this.state.data.get('errorMessage'),
@@ -107,7 +110,7 @@ var AccountPage = React.createClass({
                             <form className="form-horizontal">
                                 <FormControls.Static label="ID" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user.get('_id')}/>
                                 <Input
-                                    label="Username"
+                                    label={__("Username")}
                                     labelClassName="col-md-3"
                                     wrapperClassName="col-md-9"
                                     type="text"
