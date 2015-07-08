@@ -105,7 +105,7 @@ var AccountPage = React.createClass({
                 <Grid>
                     <Row>
                         <Col xs={12} md={10} mdOffset={1} lg={8} lgOffset={2}>
-                            <h1>User information</h1>
+                            <h1>{__('User information')}</h1>
                             {alert}
                             <form className="form-horizontal">
                                 <FormControls.Static label="ID" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user.get('_id')}/>
@@ -114,54 +114,54 @@ var AccountPage = React.createClass({
                                     labelClassName="col-md-3"
                                     wrapperClassName="col-md-9"
                                     type="text"
-                                    placeholder="Username"
+                                    placeholder={__('Username')}
                                     value={user.get('username')}
                                     bsStyle={formErrors.get('username') ? 'error' : null}
                                     help={formErrors.get('username')}
                                     onChange={this.userChange}
                                     ref="username" />
                                 <Input
-                                    label="Name"
+                                    label={__('Name')}
                                     labelClassName="col-md-3"
                                     wrapperClassName="col-md-9"
                                     type="text"
-                                    placeholder="Name"
+                                    placeholder={__('Name')}
                                     value={user.get('name')}
                                     bsStyle={formErrors.get('name') ? 'error' : null}
                                     help={formErrors.get('name')}
                                     onChange={this.userChange}
                                     ref="name" />
                                 <Input
-                                    label="Email"
+                                    label={__('Email')}
                                     labelClassName="col-md-3"
                                     wrapperClassName="col-md-9"
                                     type="text"
-                                    placeholder="Email"
+                                    placeholder={__('Email')}
                                     value={user.get('email')}
                                     bsStyle={formErrors.get('email') ? 'error' : null}
                                     help={formErrors.get('email')}
                                     onChange={this.userChange}
                                     ref="email" />
                                 <Input
-                                    label="Active"
+                                    label={__('Active')}
                                     wrapperClassName="col-md-9 col-md-offset-3"
                                     type="checkbox"
                                     checked={user.get('is_active')}
                                     disabled={true} />
                                 <Input
-                                    label="Admin"
+                                    label={__('Admin')}
                                     wrapperClassName="col-md-9 col-md-offset-3"
                                     type="checkbox"
                                     checked={user.get('is_admin')}
                                     disabled={true} />
-                                <FormControls.Static label="Created" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user_created}/>
+                                <FormControls.Static label={__('Created')} labelClassName="col-md-3" wrapperClassName="col-md-9" value={user_created}/>
                                 <Row>
                                     <Col md={9} mdOffset={3}>
                                         <Button
                                             bsStyle="primary"
                                             disabled={isSaving}
                                             onClick={!isSaving ? this.saveUser : null}>
-                                            {isSaving ? <i className='fa fa-spinner fa-spin fa-lg'></i> : 'Save'}
+                                            {isSaving ? <i className='fa fa-spinner fa-spin fa-lg'></i> : __('Save')}
                                         </Button>
                                     </Col>
                                 </Row>

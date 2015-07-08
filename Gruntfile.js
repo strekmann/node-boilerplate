@@ -128,6 +128,13 @@ module.exports = function(grunt) {
                     keyword: '__'
                 }
             },
+            client: {
+                src: 'public/js/*.js',
+                dest: 'server/locale/templates/LC_MESSAGES/messages.pot',
+                options: {
+                    keyword: '__'
+                }
+            },
             jade: {
                 src: 'server/views/**/*.jade',
                 dest: 'server/locale/templates/LC_MESSAGES/messages.pot',
@@ -164,8 +171,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-i18n-abide');
     grunt.loadNpmTasks('grunt-webpack');
 
-    grunt.registerTask('default', ['jshint', 'sass', 'concat', 'copy', 'webpack:build-dev', 'abideCompile']);
-    grunt.registerTask('prod', ['jshint', 'sass', 'concat', 'copy', 'webpack:build', 'abideCompile']);
+    grunt.registerTask('default', ['jshint', 'sass', 'concat', 'copy', 'abideCompile', 'webpack:build-dev']);
+    grunt.registerTask('prod', ['jshint', 'sass', 'concat', 'copy', 'abideCompile', 'webpack:build']);
     grunt.registerTask('hint', ['jshint']);
-    grunt.registerTask('locales', ['abideExtract', 'abideMerge']);
+    grunt.registerTask('locales', ['abideExtract', 'abideMerge', 'abideCompile']);
 };

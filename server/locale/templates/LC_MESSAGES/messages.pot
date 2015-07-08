@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2014-05-23 23:32+0000\n"
+"POT-Creation-Date: 2015-07-08 09:29+0000\n"
 
 #: server/views/layout.jade:22
 msgid "Boilerplate"
@@ -34,10 +34,14 @@ msgid "User data"
 msgstr ""
 
 #: server/views/account.jade:32
+#: public/js/account.js:117
+#: public/js/account.js:121
 msgid "Username"
 msgstr ""
 
 #: server/views/account.jade:38
+#: public/js/account.js:128
+#: public/js/account.js:132
 msgid "Name"
 msgstr ""
 
@@ -46,14 +50,17 @@ msgid "E-mail"
 msgstr ""
 
 #: server/views/account.jade:50
+#: public/js/account.js:150
 msgid "Active"
 msgstr ""
 
 #: server/views/account.jade:56
+#: public/js/account.js:156
 msgid "Admin"
 msgstr ""
 
 #: server/views/account.jade:62
+#: public/js/account.js:161
 msgid "Created"
 msgstr ""
 
@@ -62,5 +69,15 @@ msgid "Google data"
 msgstr ""
 
 #: server/views/account.jade:67
+#: public/js/account.js:168
 msgid "Save"
+msgstr ""
+
+#: public/js/account.js:112
+msgid "User information"
+msgstr ""
+
+#: public/js/account.js:139
+#: public/js/account.js:143
+msgid "Email"
 msgstr ""

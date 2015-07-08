@@ -1,16 +1,16 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Boilerplate\n"
-"POT-Creation-Date: 2014-05-23 23:32+0000\n"
-"PO-Revision-Date: 2014-05-24 01:33+0100\n"
-"Last-Translator: bergquis <jorgen.bergquist@ntnu.no>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: React-template\n"
+"POT-Creation-Date: 2015-07-08 09:29+0000\n"
+"PO-Revision-Date: 2015-07-08 11:34+0200\n"
+"Last-Translator: bergquis\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.8.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language-Team: \n"
 
 #: server/views/layout.jade:22
 msgid "Boilerplate"
@@ -36,11 +36,13 @@ msgstr "Logg inn med Google"
 msgid "User data"
 msgstr "Brukerinformasjon"
 
-#: server/views/account.jade:32
+#: server/views/account.jade:32 public/js/account.js:117
+#: public/js/account.js:121
 msgid "Username"
 msgstr "Brukernavn"
 
-#: server/views/account.jade:38
+#: server/views/account.jade:38 public/js/account.js:128
+#: public/js/account.js:132
 msgid "Name"
 msgstr "Navn"
 
@@ -48,15 +50,15 @@ msgstr "Navn"
 msgid "E-mail"
 msgstr "E-post"
 
-#: server/views/account.jade:50
+#: server/views/account.jade:50 public/js/account.js:150
 msgid "Active"
 msgstr "Aktiv"
 
-#: server/views/account.jade:56
+#: server/views/account.jade:56 public/js/account.js:156
 msgid "Admin"
 msgstr ""
 
-#: server/views/account.jade:62
+#: server/views/account.jade:62 public/js/account.js:161
 msgid "Created"
 msgstr "Opprettet"
 
@@ -64,6 +66,15 @@ msgstr "Opprettet"
 msgid "Google data"
 msgstr ""
 
-#: server/views/account.jade:67
+#: server/views/account.jade:67 public/js/account.js:168
 msgid "Save"
 msgstr "Lagre"
+
+#: public/js/account.js:112
+msgid "User information"
+msgstr "Brukerinformasjon"
+
+#: public/js/account.js:139 public/js/account.js:143
+#, fuzzy
+msgid "Email"
+msgstr "E-post"
