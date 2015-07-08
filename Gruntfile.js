@@ -174,5 +174,5 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['jshint', 'sass', 'concat', 'copy', 'abideCompile', 'webpack:build-dev']);
     grunt.registerTask('prod', ['jshint', 'sass', 'concat', 'copy', 'abideCompile', 'webpack:build']);
     grunt.registerTask('hint', ['jshint']);
-    grunt.registerTask('locales', ['abideExtract', 'abideMerge', 'abideCompile']);
+    grunt.registerTask('locales', ['webpack:build-dev', 'abideExtract', 'abideMerge', 'abideCompile']);
 };
