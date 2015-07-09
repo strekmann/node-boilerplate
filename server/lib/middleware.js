@@ -12,7 +12,7 @@ module.exports.ensureAuthenticated = function(req, res, next) {
     //   login page.
     if (req.isAuthenticated()) { return next(); }
     req.session.returnTo = req.url;
-    res.redirect('/login');
+    res.redirect('/');
 };
 
 module.exports.addRenderReact = function (req, res, next) {

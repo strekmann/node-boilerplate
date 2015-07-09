@@ -16,10 +16,6 @@ router.get('/', function(req, res, next){
     res.renderReact('index', data);
 });
 
-router.get('/login', function(req, res, next){
-    res.render('login');
-});
-
 router.get('/logout', function(req, res, next){
     req.logout();
     req.session.destroy();

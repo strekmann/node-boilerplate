@@ -82,7 +82,7 @@ app.use(function(err, req, res, next){
 
     res.format({
         html: function(){
-            res.render('500', {
+            res.status(500).render('500', {
                 error: err.message,
                 status: err.status || 500
             });
@@ -101,18 +101,14 @@ app.use(function(err, req, res, next){
 app.use(function(req, res, next){
     res.format({
         html: function(){
-            res.render('404', {
-                status: 404,
-                error: 'file not found',
-                url: req.url
+            res.status(404).render('404', {
+                error: 'file not found'
             });
         },
 
         json: function(){
             res.status(404).json({
-                status: '404',
-                error: 'file not found',
-                url: req.url
+                error: 'file not found'
             });
         }
     });
