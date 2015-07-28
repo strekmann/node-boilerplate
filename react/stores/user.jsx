@@ -3,66 +3,64 @@ var alt = require('../alt'),
     _ = require('lodash'),
     Immutable = require('immutable');
 
-function UserStore(){
-    this.bindListeners({
-        onUpdateUser: UserActions.updateUser,
-        onSaveUser: UserActions.saveUser,
-        onUserFailed: UserActions.userFailed
-    });
+class UserStore {
+    constructor(){
+        this.bindListeners({
+            onUpdateUser: UserActions.updateUser,
+            onSaveUser: UserActions.saveUser,
+            onUserFailed: UserActions.userFailed
+        });
 
-    // component states
-    this.user = {};
-    this.errorMessage = null;
-    this.formErrors = {};
+        // component states
+        this.user = {};
+        this.errorMessage = null;
+        this.formErrors = {};
+    }
 
-    this.exportPublicMethods({
-        getImmutState: function(){
-            return Immutable.fromJS(this.getState());
-        },
 
-        hasUser: function(){
-            return !_.isEmpty(this.getState().user);
-        },
+    onUpdateUser(user){
+        this.user = user;
+        this.errorMessage = null;
+        this.formErrors = {};
+    }
 
-        getUser: function(){
-            return Immutable.fromJS(this.getState().user);
-        },
+    onSaveUser(){
+        this.errorMessage = null;
+        this.formErrors = {};
+    }
 
-        getFormErrors: function(){
-            return Immutable.fromJS(this.getState().formErrors);
-        },
-
-        getErrorMessage: function(){
-            return this.getState().errorMessage;
+    onUserFailed(data){
+        if (data.error){
+            this.errorMessage = data.error;
         }
-    });
+        else if(data.errors){
+            var errors = _.reduce(data.errors, function(result, obj){
+                result[obj.param] = obj.msg;
+                return result;
+            }, {});
+            this.formErrors = errors;
+        }
+    }
 
-    // for debugging - remove me later
-    this.dispatcher.register(console.log.bind(console))
+    static getImmState(){
+        return Immutable.fromJS(this.getState());
+    }
+
+    static hasUser(){
+        return !_.isEmpty(this.getState().user);
+    }
+
+    static getUser(){
+        return Immutable.fromJS(this.getState().user);
+    }
+
+    static getFormErrors(){
+        return Immutable.fromJS(this.getState().formErrors);
+    }
+
+    static getErrorMessage(){
+        return this.getState().errorMessage;
+    }
 }
 
-UserStore.prototype.onUpdateUser = function(user){
-    this.user = user;
-    this.errorMessage = null;
-    this.formErrors = {};
-};
-
-UserStore.prototype.onSaveUser = function(){
-    this.errorMessage = null;
-    this.formErrors = {};
-};
-
-UserStore.prototype.onUserFailed = function(data){
-    if (data.error){
-        this.errorMessage = data.error;
-    }
-    else if(data.errors){
-        var errors = _.reduce(data.errors, function(result, obj){
-            result[obj.param] = obj.msg;
-            return result;
-        }, {});
-        this.formErrors = errors;
-    }
-};
-
-module.exports =  alt.createStore(UserStore, 'UserStore');
+module.exports = alt.createStore(UserStore, 'UserStore');

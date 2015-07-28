@@ -17,7 +17,7 @@ var Grid = require('react-bootstrap/lib/Grid'),
     FormControls = require('react-bootstrap/lib/FormControls');
 
 function defaultState(){
-    var state = UserStore.getImmutState();
+    var state = UserStore.getImmState();
     state = state.set('isSaving', false);
     return {data: state};
 }
