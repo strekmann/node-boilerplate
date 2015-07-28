@@ -1,6 +1,6 @@
 var Iso = require('iso'),
     React = require('react'),
-    alt = require('../react/alt');
+    alt = require('../../react/alt');
 
 module.exports.react2html = function(element, data){
     alt.bootstrap(JSON.stringify(data));

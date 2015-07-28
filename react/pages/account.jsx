@@ -1,7 +1,7 @@
 var React = require('react'),
     moment = require('moment'),
     _ = require('lodash'),
-    translator = require('../../lib/translator'),
+    translator = require('../../server/lib/translator'),
     FluxyMixin = require('alt/mixins/FluxyMixin'),
     UserActions = require('../actions/user.jsx'),
     Immutable = require('immutable'),

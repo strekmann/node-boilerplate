@@ -5,7 +5,7 @@ var webpack = require("webpack");
 var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 
 var entry = {};
-var pages_path = path.join(__dirname, 'server/react/pages');
+var pages_path = path.join(__dirname, 'react/pages');
 var pages = fs.readdirSync(pages_path);
 _.each(pages, function(page){
     if (path.extname(page) === '.jsx'){

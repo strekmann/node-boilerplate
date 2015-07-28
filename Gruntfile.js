@@ -105,7 +105,7 @@ module.exports = function(grunt) {
         },
         watch: {
             clientjs: {
-                files: ['server/react/**/*.jsx'],
+                files: ['react/**/*.jsx'],
                 tasks: ['webpack:build-dev'],
                 options: {
                     spawn: false
