@@ -13,7 +13,7 @@
     "node": "0.12"
   },
   "scripts": {
-    "start": "node cluster.js",
+    "start": "node index.js",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha"
   },
   "dependencies": {
