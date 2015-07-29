@@ -1,4 +1,7 @@
 module.exports = function(grunt) {
+    var webpack = require("webpack");
+	var webpackConfig = require("./webpack.config.js");
+
     grunt.initConfig({
         jshint: {
             files: ['client/js/**/*.js', 'server/**/*.js', 'test/*.js'],
@@ -37,20 +40,30 @@ module.exports = function(grunt) {
                 }
             }
         },
-        browserify: {
+        webpack: {
+            options: webpackConfig,
             build: {
-                dest: 'public/js/site.js',
-                src: [],
-                options: {
-                    alias: ['./client/js/index.js:s7n']
-                }
+                plugins: webpackConfig.plugins.concat(
+                    new webpack.DefinePlugin({
+                        "process.env": {
+                            // This has effect on the react lib size
+                            "NODE_ENV": JSON.stringify("production")
+                        }
+                    }),
+                    new webpack.optimize.DedupePlugin(),
+                    new webpack.optimize.UglifyJsPlugin()
+                )
+            },
+            "build-dev": {
+                devtool: "sourcemap",
+                debug: true
             }
         },
         sass: {
             options: {
                 includePaths: [
-                    'bower_components/foundation/scss',
-                    'bower_components/font-awesome/scss'
+                    'node_modules/font-awesome/scss',
+                    'node_modules/bootstrap-sass/assets/stylesheets'
                 ]
             },
             dest: {
@@ -69,42 +82,16 @@ module.exports = function(grunt) {
                     '/tmp/styles.css'
                 ],
                 dest: 'public/css/site.css'
-            },
-            vendor: {
-                options: {
-                    separator: ';' + grunt.util.linefeed
-                },
-                src: [
-                    'bower_components/underscore/underscore.js',
-                    'bower_components/jquery/dist/jquery.js',
-                    'bower_components/foundation/js/foundation.js',
-                    'bower_components/moment/moment.js',
-                    'bower_components/moment/min/langs.js',
-                    'bower_components/marked/lib/marked.js',
-                    'bower_components/ractive/ractive.js',
-                    'bower_components/ractive-events-tap/ractive-events-tap.js',
-                    'bower_components/ractive-decorators-sortable/Ractive-decorators-sortable.js',
-                    'bower_components/ractive-transitions-fade/ractive-transitions-fade.js',
-                    'bower_components/ractive-transitions-slide/ractive-transitions-slide.js',
-                    'client/vendor/js/*.js'
-                ],
-                dest: 'public/js/vendor.js'
             }
         },
         copy: {
-            js: {
-                expand: true,
-                flatten: true,
-                filter: 'isFile',
-                src: ['bower_components/modernizr/modernizr.js'],
-                dest: 'public/js/'
-            },
             font: {
                 expand: true,
                 flatten: true,
                 filter: 'isFile',
                 src: [
-                    'bower_components/font-awesome/fonts/*',
+                    'node_modules/font-awesome/fonts/*',
+                    'node_modules/bootstrap-sass/assets/fonts/bootstrap/*',
                     'client/fonts/*'
                 ],
                 dest: 'public/fonts/'
@@ -116,26 +103,13 @@ module.exports = function(grunt) {
                 dest: 'public/img'
             }
         },
-        uglify: {
-            options: {
-                mangle: false,
-                compress: true
-            },
-            vendor: {
-                files: {
-                    'public/js/vendor.js': ['public/js/vendor.js']
-                }
-            },
-            client: {
-                files: {
-                    'public/js/site.js': ['public/js/site.js']
-                }
-            }
-        },
         watch: {
             clientjs: {
-                files: ['client/js/**/*.js'],
-                tasks: ['jshint:client', 'browserify']
+                files: ['react/**/*.jsx'],
+                tasks: ['webpack:build-dev'],
+                options: {
+                    spawn: false
+                }
             },
             server: {
                 files: ['Gruntfile.js', 'cluster.js', 'server/**/*.js', 'test/**/*.js'],
@@ -149,6 +123,13 @@ module.exports = function(grunt) {
         abideExtract: {
             js: {
                 src: 'server/**/*.js',
+                dest: 'server/locale/templates/LC_MESSAGES/messages.pot',
+                options: {
+                    keyword: '__'
+                }
+            },
+            client: {
+                src: 'public/js/*.js',
                 dest: 'server/locale/templates/LC_MESSAGES/messages.pot',
                 options: {
                     keyword: '__'
@@ -186,13 +167,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-i18n-abide');
+    grunt.loadNpmTasks('grunt-webpack');
 
-    grunt.registerTask('default', ['jshint', 'sass', 'concat', 'copy', 'browserify', 'abideCompile']);
-    grunt.registerTask('prod', ['default', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'sass', 'concat', 'copy', 'abideCompile', 'webpack:build-dev']);
+    grunt.registerTask('prod', ['jshint', 'sass', 'concat', 'copy', 'abideCompile', 'webpack:build']);
     grunt.registerTask('hint', ['jshint']);
-    grunt.registerTask('locales', ['abideExtract', 'abideMerge']);
+    grunt.registerTask('locales', ['webpack:build-dev', 'abideExtract', 'abideMerge', 'abideCompile']);
 };

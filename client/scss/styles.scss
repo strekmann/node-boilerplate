@@ -1,48 +1,9 @@
-@charset "UTF-8";
-// foundation helper functions
-@import "foundation/functions";
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700);
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:300,400,500,700);
 
-// our variables
-// - goes here
+@import 'variables';
+@import 'bootstrap';
+@import 'paper';
+@import 'font-awesome';
 
-// normalize lib
-@import "normalize";
-
-// foundation lib
-@import "foundation";
-
-// font-awesome
-@import "font-awesome";
-
-// our styles
-.button {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    -ie-box-shadow: none;
-    -o-box-shadow: none;
-    box-shadow: none;
-    border: none;
-}
-.button:hover {
-    text-decoration: none;
-}
-a:hover {
-    text-decoration: underline;
-}
-
-nav.top-bar {
-    margin-bottom: 0.5rem;
-}
-
-nav a:hover {
-    text-decoration: none;
-}
-
-html {
-    min-height: 100%;
-}
-
-
-.listair {
-    padding: 0.625em 0;
-}
+// our stuff

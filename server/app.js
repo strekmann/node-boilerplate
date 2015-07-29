@@ -2,9 +2,12 @@ var express = require('express'),
     path = require('path'),
     fs = require('fs'),
     db = require('./lib/db'),
-    log = require('./lib/logger').getLogger(),
+    middleware = require('./lib/middleware'),
+    log = require('./lib/logger')(),
     package = require('../package'),
     settings = {};
+
+require('node-jsx').install({extension: '.jsx', harmony: true});
 
 try {
     settings = require('./settings');
@@ -47,6 +50,8 @@ app.set('view engine', 'jade');
 app.use(app.passport.initialize());
 app.use(app.passport.session());
 
+app.use(middleware.addRenderReact);
+
 // Make some variables always available in templates.
 app.use(function(req, res, next){
     res.locals.active_user = req.user;
@@ -55,9 +60,10 @@ app.use(function(req, res, next){
 });
 
 // ## Application routes
+
 // Authentication against google.
 app.get('/auth/google', app.passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email']}), function(req, res){});
-app.get('/auth/google/callback', app.passport.authenticate('google', { failureRedirect: '/login' }), function(req, res){
+app.get('/auth/google/callback', app.passport.authenticate('google', { failureRedirect: '/' }), function(req, res){
     var url = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(url);
@@ -66,22 +72,17 @@ app.get('/auth/google/callback', app.passport.authenticate('google', { failureRe
 // Core routes like index, login, logout and account.
 app.use('/', require('./routes/index'));
 
-// Example index route, change me :D
-app.get('/', function(req, res, next){
-    res.render('foundation');
-});
-
 // Static file middleware serving static files.
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Internal server error - 500 status
 app.use(function(err, req, res, next){
     log.error(err);
+    log.error(err.stack);
 
-    res.status(500);
     res.format({
         html: function(){
-            res.render('500', {
+            res.status(500).render('500', {
                 error: err.message,
                 status: err.status || 500
             });
@@ -98,21 +99,16 @@ app.use(function(err, req, res, next){
 
 // File not found - 404 status
 app.use(function(req, res, next){
-    res.status(404);
     res.format({
         html: function(){
-            res.render('404', {
-                status: 404,
-                error: 'file not found',
-                url: req.url
+            res.status(404).render('404', {
+                error: 'file not found'
             });
         },
 
         json: function(){
             res.status(404).json({
-                status: '404',
-                error: 'file not found',
-                url: req.url
+                error: 'file not found'
             });
         }
     });

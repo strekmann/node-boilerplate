@@ -1,14 +1,19 @@
 var express = require('express'),
+    fs = require('fs'),
+    path = require('path'),
     router = express.Router(),
+    React = require('react'),
     User = require('../models').User,
     ensureAuthenticated = require('../lib/middleware').ensureAuthenticated;
 
-router.get('/foundation', function(req, res, next){
-    res.render('foundation');
-});
+router.get('/', function(req, res, next){
+    var data = {
+        UserStore: {
+            user: req.user
+        }
+    };
 
-router.get('/login', function(req, res, next){
-    res.render('login');
+    res.renderReact('index', data);
 });
 
 router.get('/logout', function(req, res, next){
@@ -20,12 +25,18 @@ router.get('/logout', function(req, res, next){
 router.route('/account')
     .all(ensureAuthenticated)
     .get(function(req, res, next){
-        res.render('account');
+        var data = {
+            UserStore: {
+                user: req.user
+            }
+        };
+
+        res.renderReact('account', data);
     })
     .put(function(req, res, next){
         User.findById(req.user._id, function(err, user){
             if (err) {
-                return res.json(404, {
+                return res.status(404).json({
                     error: 'Could not find user'
                 });
             }
@@ -36,7 +47,7 @@ router.route('/account')
 
             var errors = req.validationErrors();
             if (errors) {
-                return res.json('200', {
+                return res.status(400).json({
                     errors: errors
                 });
             }
@@ -44,12 +55,10 @@ router.route('/account')
             user.username = req.body.username;
             user.name = req.body.name;
             user.email = req.body.email;
-            return user.save(function(err){
-                if (err) { next(err); }
+            user.save(function(err){
+                if (err) { return next(err); }
 
-                return res.json(200, {
-                    message: 'Changes saved'
-                });
+                return res.json(user);
             });
         });
     });

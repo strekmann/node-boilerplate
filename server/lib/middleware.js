@@ -1,5 +1,8 @@
 // express middleware
-var moment = require('moment');
+var moment = require('moment'),
+    Iso = require('iso'),
+    React = require('react'),
+    alt = require('../../react/alt');
 
 module.exports.ensureAuthenticated = function(req, res, next) {
     // Simple route middleware to ensure user is authenticated.
@@ -9,5 +12,22 @@ module.exports.ensureAuthenticated = function(req, res, next) {
     //   login page.
     if (req.isAuthenticated()) { return next(); }
     req.session.returnTo = req.url;
-    res.redirect('/login');
+    res.redirect('/');
+};
+
+module.exports.addRenderReact = function (req, res, next) {
+    res.renderReact = function (page, data) {
+        moment.locale(req.lang);
+
+        var element = require('../../react/pages/' + page + '.jsx');
+
+        alt.bootstrap(JSON.stringify(data));
+        var html = Iso.render(React.renderToString(React.createElement(element, {lang: req.lang})), alt.flush(), {react: true});
+
+        res.render('react',{
+            html: html,
+            page: page
+        });
+    };
+    next();
 };

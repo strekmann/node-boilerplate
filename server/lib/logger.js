@@ -1,34 +1,39 @@
-var bunyan,
-    util = require('util'),
-    fs = require('fs'),
-    settings = {};
+var util = require('util'),
+    _ = require('lodash');
 
-try {
-    settings = require('../settings');
-} catch(e) {}
+var _logger = null;
 
-var logger;
+function getConsoleLogger(){
+    var logger = console;
+    logger.fatal = console.error;
+    logger.child = function(){
+        return logger;
+    };
+    return logger;
+}
 
-if (settings.useBunyan && process.env.NODE_ENV !== 'test'){
-    var bunyan = require('bunyan');
+module.exports = function(){
+    if (_logger === null){
+        console.warn("Logger not initialized! Using console fallback.");
+        return getConsoleLogger();
+    }
+    return _logger;
+};
 
-    var opts = {name:'unnamed'};
+module.exports.init = function(config){
+    if (_logger){ return _logger; }
 
+    if (config.useBunyan && config.environment !== 'test'){
+        var bunyan = require('bunyan');
 
-    module.exports = function(config){
-        if (logger){ return logger; }
+        var opts = { name: 'unnamed' };
 
-        var override = false;
-        opts = config || opts;
-
-        if (opts.overrideConsole){
-            override = true;
-            delete opts.overrideConsole;
+        if (config && config.bunyan){
+            opts = _.assign(opts, config.bunyan);
         }
+        _logger = bunyan.createLogger(opts);
 
-        logger = bunyan.createLogger(opts);
-
-        if (override){
+        if (config && config.overrideConsole){
             var consoleLog = logger.child({console: true});
             console.log   = function(){ consoleLog.debug(null, util.format.apply(this, arguments)); };
             console.debug = function(){ consoleLog.debug(null, util.format.apply(this, arguments)); };
@@ -36,19 +41,32 @@ if (settings.useBunyan && process.env.NODE_ENV !== 'test'){
             console.warn  = function(){ consoleLog.warn (null, util.format.apply(this, arguments)); };
             console.error = function(){ consoleLog.error(null, util.format.apply(this, arguments)); };
         }
+        return _logger;
+    }
+    else {
+        _logger = getConsoleLogger();
+        return _logger;
+    }
+};
 
-        return logger;
-    };
-
-} else {
-    module.exports = function(config){
-        logger = console;
-        logger.fatal = console.error;
-        logger.child = function(){
-            return logger;
+module.exports.defaultSerializers = {
+    res: function(res){
+        if (!_.isObject(res)) { return res; }
+        return {
+            statusCode: res.statusCode,
+            header: res._header
         };
-        return logger;
-    };
-}
+    },
+    req: function(req){
+        if (!_.isObject(req)) { return req; }
 
-module.exports.getLogger = function(){ return logger; };
+        var connection = req.connection || {};
+        return {
+            method: req.method,
+            url: req.url,
+            headers: req.headers,
+            remoteAdress: connection.remoteAddress,
+            remotePort: connection.remotePort
+        };
+    }
+};

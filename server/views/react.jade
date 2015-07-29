@@ -1,0 +1,18 @@
+doctype html
+
+html(lang=lang dir=lang_dir data-locale=locale)
+  head
+    meta(charset="utf-8")
+    title= title
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(name="author" content="Strekmann")
+    link(href="/css/site.css?"+stamp rel="stylesheet")
+
+    link(rel="shortcut icon" href="/img/favicon.png")
+
+  body
+    section#main!= html
+
+    script(src="/js/common.js?"+stamp)
+    script(src="/js/" + lang + "/messages.js?" + stamp)
+    script(src="/js/"+page+".js?"+stamp)

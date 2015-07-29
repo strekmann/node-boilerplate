@@ -5,7 +5,6 @@ build:
 
 production:
 	npm install
-	./node_modules/.bin/bower install
 	@./node_modules/.bin/grunt prod
 
 watch:
@@ -22,22 +21,13 @@ test: hint
 		--reporter $(REPORTER) \
 		--ui bdd
 
-test-w:
-	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--reporter $(REPORTER) \
-		--growl \
-		--ui bdd \
-		--watch
-
 install:
 	npm install
-	./node_modules/.bin/bower install
 
 update:
 	npm update
-	./node_modules/.bin/bower update
 
 clean:
-	rm -r ./node_modules ./bower_components ./public
+	rm -r ./node_modules ./public
 
-.PHONY: build production watch test test-w hint locales install update clean
+.PHONY: build production watch test hint locales install update clean

@@ -1,10 +1,6 @@
 {
-    "ignore": [
-        ".git/",
-        "bower_components/",
-        "client/",
-        "node_modules/",
-        "setup/",
-        "test/"
+    "watch": [
+        "server/**/*.js",
+        "public/js/*.js"
     ]
 }

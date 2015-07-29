@@ -1,8 +1,9 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    shortid = require('shortid');
 
 var UserSchema = new mongoose.Schema({
-    _id: {type: String, lowercase: true, trim: true, required: true, unique: true},
-    username: {type: String, lowercase: true, trim: true, required: true, unique: true},
+    _id: {type: String, required: true, unique: true, 'default': shortid.generate},
+    username: {type: String, unique: true, sparse: true, trim: true, lowercase: true},
     name: {type: String, required: true},
     email: {type: String},
     password: {type: String},
