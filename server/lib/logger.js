@@ -34,7 +34,7 @@ module.exports.init = function(config){
         _logger = bunyan.createLogger(opts);
 
         if (config && config.overrideConsole){
-            var consoleLog = logger.child({console: true});
+            var consoleLog = _logger.child({console: true});
             console.log   = function(){ consoleLog.debug(null, util.format.apply(this, arguments)); };
             console.debug = function(){ consoleLog.debug(null, util.format.apply(this, arguments)); };
             console.info  = function(){ consoleLog.info (null, util.format.apply(this, arguments)); };
