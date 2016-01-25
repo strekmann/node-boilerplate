@@ -1,8 +1,7 @@
 {
     "ignore": [
         ".git/",
-        "bower_components/",
-        "client/",
+        "src/client/",
         "node_modules/",
         "setup/",
         "test/"
