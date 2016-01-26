@@ -1,5 +1,0 @@
-{
-    "glob": [ "README.md", "client/**/*.js", "server/**/*.js" ],
-    "except": ["client/vendor/**/*.js"],
-    "out": "public/doc"
-}
