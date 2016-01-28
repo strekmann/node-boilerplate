@@ -30,12 +30,12 @@ var defaultSerializers = {
 };
 
 if (config.get('bunyan')) {
-    opts = _.assign(opts, config.get('bunyan');
+    opts = _.assign(opts, config.get('bunyan'));
 }
 
 let logger = bunyan.createLogger(opts);
 
-if (config.util.getEnv('NODE_ENV')) === 'test') {
+if (config.util.getEnv('NODE_ENV') === 'test') {
     logger = console;
     logger.fatal = logger.error;
 }

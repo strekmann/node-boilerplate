@@ -9,7 +9,7 @@ import socketIO from 'socket.io';
 import config from 'config';
 import serveStatic from 'serve-static';
 
-import * as api from './server/api';
+import api from './server/api';
 import * as uni from './server/app';
 import socketRoutes from './server/socket';
 import logger from './server/lib/logger';
@@ -38,7 +38,7 @@ socketRoutes(io);
 /*** Universal app endpoint ***/
 app.get('*', uni.handleRender);
 
-process.on('uncaughtException' (err) => {
+process.on('uncaughtException', (err) => {
     log.fatal(err);
     process.exit(1);
 })
