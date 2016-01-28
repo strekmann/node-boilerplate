@@ -10,9 +10,9 @@ import config from 'config';
 import serveStatic from 'serve-static';
 
 import api from './server/api';
-import * as uni from './server/app';
+import universal from './server/app';
 import socketRoutes from './server/socket';
-import logger from './server/lib/logger';
+import log from './server/lib/logger';
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -36,7 +36,7 @@ app.use('/api/1/auth', api.auth);
 socketRoutes(io);
 
 /*** Universal app endpoint ***/
-app.get('*', uni.handleRender);
+app.get('*', universal);
 
 process.on('uncaughtException', (err) => {
     log.fatal(err);
