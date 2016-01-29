@@ -1,7 +1,6 @@
 var React = require('react'),
     Navbar = require('react-bootstrap/lib/Navbar'),
     Nav = require('react-bootstrap/lib/Nav'),
-    CollapsibleNav = require('react-bootstrap/lib/CollapsibleNav'),
     NavItem = require('react-bootstrap/lib/NavItem');
 
 var TestNavbar = React.createClass({
@@ -26,14 +25,16 @@ var TestNavbar = React.createClass({
         }
 
         return (
-            <Navbar
-                brand={<a href="/">React-Test</a>}
-                toggleNavKey={0}>
-                <CollapsibleNav eventKey={0}>
-                    <Nav navbar right>
+            <Navbar>
+                <Navbar.Header>
+                    <Navbar.Brand><a href="/">React-Test</a></Navbar.Brand>
+                    <Navbar.Toggle />
+                </Navbar.Header>
+                <Navbar.Collapse eventKey={0}>
+                    <Nav navbar pullRight>
                         {userItem}
                     </Nav>
-                </CollapsibleNav>
+                </Navbar.Collapse>
             </Navbar>
         );
     }
