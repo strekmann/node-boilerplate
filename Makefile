@@ -1,25 +1,13 @@
-REPORTER = spec
+# Everything at one place
 
 build:
-	@./node_modules/.bin/grunt
-
-production:
-	npm install
-	@./node_modules/.bin/grunt prod
+	npm run build
 
 watch:
-	@./node_modules/.bin/grunt watch
+	npm run watch
 
-hint:
-	@./node_modules/.bin/grunt hint
-
-locales:
-	@./node_modules/.bin/grunt locales
-
-test: hint
-	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--reporter $(REPORTER) \
-		--ui bdd
+test: lint
+	npm test
 
 install:
 	npm install
@@ -27,7 +15,13 @@ install:
 update:
 	npm update
 
+run:
+	nodemon
+
+lint:
+	npm run lint
+
 clean:
 	rm -r ./node_modules ./public
 
-.PHONY: build production watch test hint locales install update clean
+.PHONY: build watch install update run lint test clean

@@ -1,6 +1,5 @@
 {
     "watch": [
-        "server/**/*.js",
-        "public/js/*.js"
+        "src/**/*.js"
     ]
 }

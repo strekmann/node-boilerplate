@@ -6,16 +6,6 @@ var express = require('express'),
     User = require('../models').User,
     ensureAuthenticated = require('../lib/middleware').ensureAuthenticated;
 
-router.get('/', function(req, res, next){
-    var data = {
-        UserStore: {
-            user: req.user
-        }
-    };
-
-    res.renderReact('index', data);
-});
-
 router.get('/logout', function(req, res, next){
     req.logout();
     req.session.destroy();
@@ -24,15 +14,6 @@ router.get('/logout', function(req, res, next){
 
 router.route('/account')
     .all(ensureAuthenticated)
-    .get(function(req, res, next){
-        var data = {
-            UserStore: {
-                user: req.user
-            }
-        };
-
-        res.renderReact('account', data);
-    })
     .put(function(req, res, next){
         User.findById(req.user._id, function(err, user){
             if (err) {
@@ -41,9 +22,9 @@ router.route('/account')
                 });
             }
 
-            req.assert('username', 'username is required').notEmpty();
-            req.assert('name', 'name is required').notEmpty();
-            req.assert('email', 'valid email required').isEmail();
+            req.assert('user.username', 'username is required').notEmpty();
+            req.assert('user.name', 'name is required').notEmpty();
+            req.assert('user.email', 'valid email required').isEmail();
 
             var errors = req.validationErrors();
             if (errors) {
@@ -52,13 +33,13 @@ router.route('/account')
                 });
             }
 
-            user.username = req.body.username;
-            user.name = req.body.name;
-            user.email = req.body.email;
+            user.username = req.body.user.username;
+            user.name = req.body.user.name;
+            user.email = req.body.user.email;
             user.save(function(err){
                 if (err) { return next(err); }
 
-                return res.json(user);
+                return res.json({user});
             });
         });
     });

@@ -1,11 +1,11 @@
 var React = require('react'),
     moment = require('moment'),
     _ = require('lodash'),
-    translator = require('../../server/lib/translator'),
-    FluxyMixin = require('alt/mixins/FluxyMixin'),
-    UserActions = require('../actions/user.jsx'),
-    Immutable = require('immutable'),
-    UserStore = require('../stores/user.jsx');
+    translator = require('../../server/lib/translator');
+
+import Immutable from 'immutable';
+import { connect } from 'react-redux';
+import { saveUser, setUsername, setName, setEmail } from '../actions/user';
 
 var Grid = require('react-bootstrap/lib/Grid'),
     Row = require('react-bootstrap/lib/Row'),
@@ -13,83 +13,28 @@ var Grid = require('react-bootstrap/lib/Grid'),
     Button = require('react-bootstrap/lib/Button'),
     Input = require('react-bootstrap/lib/Input'),
     Alert = require('react-bootstrap/lib/Alert'),
-    TestNavbar = require('../components/navbar.jsx'),
     FormControls = require('react-bootstrap/lib/FormControls');
 
-function defaultState(){
-    var state = UserStore.getImmState();
-    state = state.set('isSaving', false);
-    return {data: state};
-}
 
-// A very simple page with a square on it.
-var AccountPage = React.createClass({
-    mixins: [FluxyMixin],
-    displayName: 'AccountPage',
-
-    getInitialState: function(){
-        return defaultState();
-    },
-
-    shouldComponentUpdate: function(nextProps, nextState){
-        console.log('should update account?', this.state.data !== nextState.data);
-        return this.state.data !== nextState.data;
-    },
-
-    setImmState: function(fn){
-        return this.setState(function(prev){
-            var data = prev.data;
-            return {
-                data: fn(data)
-            };
-        });
-    },
-
-    // listen to store changes - fluxymixin
-    statics: {
-        storeListeners: {
-            onUserChange: UserStore
-        }
-    },
-
-    onUserChange: function(){
-        var state = defaultState();
-        this.setState(state);
-    },
+var App = React.createClass({
 
     // action events
-    saveUser: function(){
-        UserActions.saveUser(this.state.data.get('user').toJS());
-
-        this.setImmState(function(data){
-            return data.set('isSaving', true);
-        });
-    },
-
-    // component events
-    userChange: function(){
-        var changes = {
+    saveUser: function() {
+        //UserActions.saveUser(this.state.data.get('user').toJS());
+        this.props.dispatch(saveUser({
             username: this.refs.username.getValue(),
             name: this.refs.name.getValue(),
             email: this.refs.email.getValue()
-        };
-
-        this.setImmState(function(data){
-            return data.withMutations(function(map){
-                map.mergeIn(['user'], changes)
-                .set('formErrors', Immutable.Map({}))
-                .set('errorMessage', null);
-            });
-        });
+        }));
     },
 
     render: function(){
         var __ = translator(this.props.lang);
 
-        var user = this.state.data.get('user'),
-            formErrors = this.state.data.get('formErrors'),
-            errorMessage = this.state.data.get('errorMessage'),
-            isSaving = this.state.data.get('isSaving');
+        var viewer = this.props.viewer,
+            formErrors = this.props.formErrors,
+            errorMessage = this.props.errorMessage,
+            isSaving = this.props.isSaving;
 
         if (errorMessage){
             var alert = (<Alert bsStyle='danger'>
@@ -97,28 +42,28 @@ var AccountPage = React.createClass({
             </Alert>);
         }
 
-        var user_created = moment(user.get('created')).format('llll');
+        var user_created = moment(viewer.get('created')).format('llll');
+        var dispatch = this.props.dispatch;
 
         return (
             <div>
-                <TestNavbar />
                 <Grid>
                     <Row>
                         <Col xs={12} md={10} mdOffset={1} lg={8} lgOffset={2}>
                             <h1>{__('User information')}</h1>
                             {alert}
                             <form className="form-horizontal">
-                                <FormControls.Static label="ID" labelClassName="col-md-3" wrapperClassName="col-md-9" value={user.get('_id')}/>
+                                <FormControls.Static label="ID" labelClassName="col-md-3" wrapperClassName="col-md-9" value={viewer.get('_id')}/>
                                 <Input
                                     label={__("Username")}
                                     labelClassName="col-md-3"
                                     wrapperClassName="col-md-9"
                                     type="text"
                                     placeholder={__('Username')}
-                                    value={user.get('username')}
+                                    value={this.props.viewer.get('username')}
                                     bsStyle={formErrors.get('username') ? 'error' : null}
                                     help={formErrors.get('username')}
-                                    onChange={this.userChange}
+                                    onChange={e => dispatch(setUsername(e.target.value))}
                                     ref="username" />
                                 <Input
                                     label={__('Name')}
@@ -126,10 +71,10 @@ var AccountPage = React.createClass({
                                     wrapperClassName="col-md-9"
                                     type="text"
                                     placeholder={__('Name')}
-                                    value={user.get('name')}
+                                    value={this.props.viewer.get('name')}
                                     bsStyle={formErrors.get('name') ? 'error' : null}
                                     help={formErrors.get('name')}
-                                    onChange={this.userChange}
+                                    onChange={e => dispatch(setName(e.target.value))}
                                     ref="name" />
                                 <Input
                                     label={__('Email')}
@@ -137,22 +82,22 @@ var AccountPage = React.createClass({
                                     wrapperClassName="col-md-9"
                                     type="text"
                                     placeholder={__('Email')}
-                                    value={user.get('email')}
+                                    value={this.props.viewer.get('email')}
                                     bsStyle={formErrors.get('email') ? 'error' : null}
                                     help={formErrors.get('email')}
-                                    onChange={this.userChange}
+                                    onChange={e => dispatch(setEmail(e.target.value))}
                                     ref="email" />
                                 <Input
                                     label={__('Active')}
                                     wrapperClassName="col-md-9 col-md-offset-3"
                                     type="checkbox"
-                                    checked={user.get('is_active')}
+                                    checked={viewer.get('is_active')}
                                     disabled={true} />
                                 <Input
                                     label={__('Admin')}
                                     wrapperClassName="col-md-9 col-md-offset-3"
                                     type="checkbox"
-                                    checked={user.get('is_admin')}
+                                    checked={viewer.get('is_admin')}
                                     disabled={true} />
                                 <FormControls.Static label={__('Created')} labelClassName="col-md-3" wrapperClassName="col-md-9" value={user_created}/>
                                 <Row>
@@ -171,8 +116,16 @@ var AccountPage = React.createClass({
                 </Grid>
             </div>
         );
-    }
+    },
 });
 
-require('../bootstrap')(AccountPage);
-module.exports = AccountPage;
+function select(state) {
+    return {
+        viewer: state.get('viewer'),
+        formErrors: state.get('formErrors'),
+        errorMessage: state.get('errorMessage'),
+        isSaving: state.get('isSaving'),
+    };
+}
+
+export default connect(select)(App);

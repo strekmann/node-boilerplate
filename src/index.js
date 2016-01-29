@@ -9,15 +9,15 @@ var http = require('http'),
     env = process.env.NODE_ENV || 'development',
     i = 0;
 
-settings = {
+var settings = {
     useBunyan: false,
     environment: env,
     overrideConsole: true,
     bunyan: {
-        name: require('./package').name,
+        name: require('../package').name,
         level: env === 'development' ? 'debug' : 'info',
-        serializers: logger.defaultSerializers
-    }
+        serializers: logger.defaultSerializers,
+    },
 };
 
 try {
@@ -28,7 +28,7 @@ try {
 var log = logger.init(settings);
 
 
-var app = require('./server/app');
+var app = require('./server/app').default;
 app.db = db;
 app.stamp = moment().format('YYMMDDHHmm');
 

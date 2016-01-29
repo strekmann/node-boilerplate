@@ -1,3 +1,9 @@
+module.exports = function () {
+    return function (original) {
+        return original;
+    };
+};
+/*
 module.exports = function(lang){
     function format(){
         var args = [];
@@ -26,7 +32,7 @@ module.exports = function(lang){
             translations = lang;
         }
         else {
-            translations = require('../../public/js/' + lang + '/messages.json').messages;
+            translations = require('../../../public/js/' + lang + '/messages.json').messages;
         }
 
         return function(word){
@@ -41,3 +47,4 @@ module.exports = function(lang){
         };
     }
 };
+*/
