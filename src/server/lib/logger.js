@@ -4,9 +4,10 @@ import util from 'util';
 import _ from 'lodash';
 import bunyan from 'bunyan';
 import settings from '../settings';
+import pkg from '../../../package';
 
-var opts = { name: 'samklang' };
-var defaultSerializers = {
+let opts = { name: pkg.name };
+const defaultSerializers = {
     res: (res) => {
         if (!_.isObject(res)) { return res; }
         return {
@@ -15,7 +16,7 @@ var defaultSerializers = {
         };
     },
     req: (req) => {
-        var connection = req.connection || {};
+        const connection = req.connection || {};
 
         if (!_.isObject(req)) { return req; }
 
@@ -40,14 +41,23 @@ if (process.env.NODE_ENV === 'test') {
     logger.fatal = logger.error;
 }
 else {
-    const consoleLog = logger.child({console: true});
-    console.log = function log() { consoleLog.debug(null, util.format.apply(this, arguments)); };
-    console.debug = function debug() { consoleLog.debug(null, util.format.apply(this, arguments)); };
-    console.info = function info() { consoleLog.info(null, util.format.apply(this, arguments)); };
-    console.warn = function warn() { consoleLog.warn(null, util.format.apply(this, arguments)); };
-    console.error = function error() { consoleLog.error(null, util.format.apply(this, arguments)); };
+    const consoleLog = logger.child({ console: true });
+    console.log = function log() {
+        consoleLog.debug(null, util.format.apply(this, arguments));
+    };
+    console.debug = function debug() {
+        consoleLog.debug(null, util.format.apply(this, arguments));
+    };
+    console.info = function info() {
+        consoleLog.info(null, util.format.apply(this, arguments));
+    };
+    console.warn = function warn() {
+        consoleLog.warn(null, util.format.apply(this, arguments));
+    };
+    console.error = function error() {
+        consoleLog.error(null, util.format.apply(this, arguments));
+    };
 }
 
-
 export default logger;
-export {defaultSerializers};
+export { defaultSerializers };
