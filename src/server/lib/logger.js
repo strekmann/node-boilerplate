@@ -1,72 +1,53 @@
-var util = require('util'),
-    _ = require('lodash');
+/* eslint "no-console": 0 */
 
-var _logger = null;
+import util from 'util';
+import _ from 'lodash';
+import bunyan from 'bunyan';
+import settings from '../settings';
 
-function getConsoleLogger(){
-    var logger = console;
-    logger.fatal = console.error;
-    logger.child = function(){
-        return logger;
-    };
-    return logger;
-}
-
-module.exports = function(){
-    if (_logger === null){
-        console.warn("Logger not initialized! Using console fallback.");
-        return getConsoleLogger();
-    }
-    return _logger;
-};
-
-module.exports.init = function(config){
-    if (_logger){ return _logger; }
-
-    if (config.useBunyan && config.environment !== 'test'){
-        var bunyan = require('bunyan');
-
-        var opts = { name: 'unnamed' };
-
-        if (config && config.bunyan){
-            opts = _.assign(opts, config.bunyan);
-        }
-        _logger = bunyan.createLogger(opts);
-
-        if (config && config.overrideConsole){
-            var consoleLog = _logger.child({console: true});
-            console.log   = function(){ consoleLog.debug(null, util.format.apply(this, arguments)); };
-            console.debug = function(){ consoleLog.debug(null, util.format.apply(this, arguments)); };
-            console.info  = function(){ consoleLog.info (null, util.format.apply(this, arguments)); };
-            console.warn  = function(){ consoleLog.warn (null, util.format.apply(this, arguments)); };
-            console.error = function(){ consoleLog.error(null, util.format.apply(this, arguments)); };
-        }
-        return _logger;
-    }
-    else {
-        _logger = getConsoleLogger();
-        return _logger;
-    }
-};
-
-module.exports.defaultSerializers = {
-    res: function(res){
+var opts = { name: 'samklang' };
+var defaultSerializers = {
+    res: (res) => {
         if (!_.isObject(res)) { return res; }
         return {
             statusCode: res.statusCode,
-            header: res._header
+            header: res._header,
         };
     },
-    req: function(req){
+    req: (req) => {
+        var connection = req.connection || {};
+
         if (!_.isObject(req)) { return req; }
 
-        var connection = req.connection || {};
         return {
             method: req.method,
             url: req.url,
             headers: req.headers,
             remoteAdress: connection.remoteAddress,
-            remotePort: connection.remotePort
+            remotePort: connection.remotePort,
         };
-    }
+    },
 };
+
+if (settings.bunyan) {
+    opts = _.assign(opts, settings.bunyan);
+}
+
+let logger = bunyan.createLogger(opts);
+
+if (process.env.NODE_ENV === 'test') {
+    logger = console;
+    logger.fatal = logger.error;
+}
+else {
+    const consoleLog = logger.child({console: true});
+    console.log = function log() { consoleLog.debug(null, util.format.apply(this, arguments)); };
+    console.debug = function debug() { consoleLog.debug(null, util.format.apply(this, arguments)); };
+    console.info = function info() { consoleLog.info(null, util.format.apply(this, arguments)); };
+    console.warn = function warn() { consoleLog.warn(null, util.format.apply(this, arguments)); };
+    console.error = function error() { consoleLog.error(null, util.format.apply(this, arguments)); };
+}
+
+
+export default logger;
+export {defaultSerializers};

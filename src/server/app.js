@@ -1,3 +1,4 @@
+import http from 'http';
 import express from 'express';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -9,13 +10,17 @@ import { RouterContext, match } from "react-router";
 import reducers from '../common/reducers/user';
 import path from 'path';
 import fs from 'fs';
+import _ from 'lodash';
 import db from './lib/db';
+import log from './lib/logger';
 import middleware from './lib/middleware';
-import logger from './lib/logger';
 import routes from "../common/routes";
+import socketRoutes from './routes/socket';
 import pkg from '../../package';
+import passportSocketIO from 'passport.socketio';
+import socketIO from 'socket.io';
+import cookieParser from 'cookie-parser';
 
-const log = logger();
 let settings = {};
 
 try {
@@ -27,28 +32,44 @@ if (!settings.session_name){
 }
 
 const app = require('libby')(express, settings, db);
+const httpServer = http.createServer(app);
+const io = socketIO(httpServer);
 
 // # Application setup
 
 // Set up bunyan logger
 if (settings.useBunyan){
-    var express_bunyan = require('express-bunyan-logger');
-    var bunyan_opts = {
-        logger: log,
-        excludes: ['req', 'res', 'req-headers', 'res-headers']
-    };
-    if (app.settings.env === 'development' || app.settings.env === 'production'){
-        app.use(express_bunyan(bunyan_opts));
-        app.use(express_bunyan.errorLogger(bunyan_opts));
-    }
+var express_bunyan = require('express-bunyan-logger');
+var bunyan_opts = {
+    logger: log,
+    excludes: ['req', 'res', 'req-headers', 'res-headers']
+};
+if (app.settings.env === 'development' || app.settings.env === 'production'){
+    app.use(express_bunyan(bunyan_opts));
+    app.use(express_bunyan.errorLogger(bunyan_opts));
 }
+}
+
+const socketOptions = _.assign(app.sessionConfig, {
+    success: (data, accept) => {
+        log.debug('successful auth');
+        accept();
+    },
+    fail: (data, message, error, accept) => {
+        log.debug('auth failed', message);
+        accept(new Error(message));
+    },
+});
+io.path('/s');
+io.use(passportSocketIO.authorize(socketOptions));
+
 
 // Add passport to application.
 app.passport = require('./lib/passport')(app);
 
 if (app.settings.env === 'development'){
-    // pretty print jade html in development
-    app.locals.pretty = true;
+// pretty print jade html in development
+app.locals.pretty = true;
 }
 
 // Use jade templates located under server/views
@@ -58,6 +79,8 @@ app.set('view engine', 'jade');
 // Initialize passport
 app.use(app.passport.initialize());
 app.use(app.passport.session());
+
+socketRoutes(io);
 
 // Make some variables always available in templates.
 app.use(function(req, res, next){
@@ -176,4 +199,15 @@ app.use((req, res, next) => {
     });
 });
 
-export default app;
+process.on('uncaughtException', (err) => {
+    log.fatal(err);
+    log.fatal(err.message);
+    log.fatal(err.stack);
+    process.exit(1);
+});
+
+io.attach(httpServer);
+
+httpServer.listen(app.conf.port, () => {
+    log.info('port %s, env=%s', app.conf.port, process.env.NODE_ENV || 'development');
+});
