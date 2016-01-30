@@ -1,17 +1,16 @@
 import log from '../lib/logger';
 
-var usernames = {};
-var numUsers = 0;
+let numUsers = 0;
+const usernames = {};
 
-function socket(io) {
+function socketRoutes(io) {
     io.on('connection', socket => {
-        var addedUser = false;
+        let addedUser = false;
         log.info('socket connected', socket.id, socket.request.user.name);
-        console.log("OST");
-        io.emit('usercount', {users: io.engine.clientsCount});
+        io.emit('usercount', { users: io.engine.clientsCount });
 
         // when the client emits 'new message', this listens and executes
-        socket.on('new message', function(data) {
+        socket.on('new message', (data) => {
             // we tell the client to execute 'new message'
             socket.broadcast.emit('new message', {
                 username: socket.username,
@@ -20,40 +19,38 @@ function socket(io) {
         });
 
         // when the client emits 'add user', this listens and executes
-        socket.on('add user', function(username) {
+        socket.on('add user', (username) => {
             // we store the username in the socket session for this client
             socket.username = username;
             // add the client's username to the global list
             usernames[username] = username;
             ++numUsers;
             addedUser = true;
-            socket.emit('login', {
-                numUsers: numUsers,
-            });
+            socket.emit('login', { numUsers });
             // echo globally (all clients) that a person has connected
             socket.broadcast.emit('user joined', {
                 username: socket.username,
-                numUsers: numUsers,
+                numUsers,
             });
         });
 
         // when the client emits 'typing', we broadcast it to others
-        socket.on('typing', function() {
+        socket.on('typing', () => {
             socket.broadcast.emit('typing', {
                 username: socket.username,
             });
         });
 
         // when the client emits 'stop typing', we broadcast it to others
-        socket.on('stop typing', function() {
+        socket.on('stop typing', () => {
             socket.broadcast.emit('stop typing', {
                 username: socket.username,
             });
         });
 
         // when the user disconnects.. perform this
-        socket.on('disconnect', function() {
-            io.emit('usercount', {users: io.engine.clientsCount});
+        socket.on('disconnect', () => {
+            io.emit('usercount', { users: io.engine.clientsCount });
             // remove the username from global usernames list
             if (addedUser) {
                 delete usernames[socket.username];
@@ -62,11 +59,11 @@ function socket(io) {
                 // echo globally that this client has left
                 socket.broadcast.emit('user left', {
                     username: socket.username,
-                    numUsers: numUsers,
+                    numUsers,
                 });
             }
         });
     });
 }
 
-export default socket;
+export default socketRoutes;

@@ -1,21 +1,17 @@
-var React = require('react'),
-    Navbar = require('react-bootstrap/lib/Navbar'),
-    Nav = require('react-bootstrap/lib/Nav'),
-    NavItem = require('react-bootstrap/lib/NavItem');
+import React from 'react';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
-var TestNavbar = React.createClass({
-    displayName: 'TestNavbar',
-
+class Navigation extends React.Component {
     /*
-    shouldComponentUpdate: function(nextProps, nextState){
+    shouldComponentUpdate(nextProps, nextState){
         console.log('should update navbar?', this.state.user !== nextState.user);
         return this.state.user != nextState.user;
     },
     */
 
-    render: function () {
-        var user = this.props.viewer,
-            userItem;
+    render() {
+        const user = this.props.viewer;
+        let userItem;
 
         if (user) {
             userItem = (<NavItem href="/account">{user.get('name')}</NavItem>);
@@ -38,6 +34,10 @@ var TestNavbar = React.createClass({
             </Navbar>
         );
     }
-});
+}
 
-export default TestNavbar;
+Navigation.propTypes = {
+    viewer: React.PropTypes.object,
+};
+
+export default Navigation;

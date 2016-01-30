@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import { Grid, Row, Col, PageHeader } from 'react-bootstrap';
 
-// A very simple page with a square on it.
-var Home = React.createClass({
+class Home extends React.Component {
 
-    render: function(){
+    render() {
         if (this.props.viewer) {
             return (
                 <Grid>
@@ -32,8 +30,12 @@ var Home = React.createClass({
                 </Row>
             </Grid>
         );
-    },
-});
+    }
+}
+
+Home.propTypes = {
+    viewer: React.PropTypes.object,
+};
 
 function select(state) {
     return {

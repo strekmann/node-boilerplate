@@ -1,17 +1,17 @@
-var React = require('react');
+import React from 'react';
 import Navigation from '../components/Navigation';
 import actions from '../actions/user';
 import Immutable from 'immutable';
 import { connect } from 'react-redux';
 import io from 'socket.io-client';
 
-const App = React.createClass({
+class App extends React.Component {
 
     componentDidMount() {
         this.socket = io({
             path: '/s',
         });
-    },
+    }
 
     render() {
         return (
@@ -21,7 +21,12 @@ const App = React.createClass({
             </div>
         );
     }
-});
+}
+
+App.propTypes = {
+    children: React.PropTypes.element,
+    viewer: React.PropTypes.object,
+};
 
 function select(state) {
     return {
