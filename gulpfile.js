@@ -57,13 +57,13 @@ gulp.task("sass", function () {
 });
 
 gulp.task("webpack:build-dev", function () {
-    return gulp.src("src/common/client.js")
+    return gulp.src("src/client/app.js")
     .pipe(webpack(devConfig))
     .pipe(gulp.dest("dist"));
 });
 
 gulp.task("webpack:build", function (callback) {
-    return gulp.src("src/common/client.js")
+    return gulp.src("src/client/app.js")
     .pipe(webpack(prodConfig))
     .pipe(gulp.dest("dist"));
 });
