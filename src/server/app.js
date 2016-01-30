@@ -86,16 +86,17 @@ app.get('/auth/google/callback', app.passport.authenticate('google', { failureRe
     res.redirect(url);
 });
 
-// Core routes like index, login, logout and account.
-app.use('/', require('./routes/index'));
-
 // Static file middleware serving static files.
 app.use(express.static(path.join(__dirname, '..', '..', 'dist')));
 
-app.use((req, res) => {
+// Core routes like index, login, logout and account.
+app.use('/', require('./routes/index'));
+
+app.use((req, res, next) => {
     match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
         if (err) {
-            res.status(500).send(err.message);
+            return next(err);
+            //res.status(500).send(err.message);
         }
         else if (redirectLocation) {
             res.redirect(302, redirectLocation.pathname + redirectLocation.search);
@@ -134,6 +135,44 @@ app.use((req, res) => {
         else {
             res.status(404).send("Not found");
         }
+    });
+});
+
+app.use((err, req, res, next) => {
+    log.error(err);
+    log.error(err.stack);
+
+    res.format({
+        html: () => {
+            res.status(500).render('500', {
+                error: err.message,
+                status: err.status || 500,
+            });
+        },
+
+        json: () => {
+            res.status(500).json({
+                error: err.message,
+                status: err.status || 500,
+            });
+        },
+    });
+});
+
+// File not found - 404 status
+app.use((req, res, next) => {
+    res.format({
+        html: () => {
+            res.status(404).render('404', {
+                error: 'file not found',
+            });
+        },
+
+        json: () => {
+            res.status(404).json({
+                error: 'file not found',
+            });
+        },
     });
 });
 

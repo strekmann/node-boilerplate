@@ -1,4 +1,4 @@
-import { SAVE_USER_INIT, SAVE_USER_SUCCESS, SET_USERNAME, SET_NAME, SET_EMAIL } from '../actions/user';
+import { SAVE_USER_INIT, SAVE_USER_SUCCESS, SAVE_USER_ERROR, SET_USERNAME, SET_NAME, SET_EMAIL } from '../actions/user';
 import Immutable from 'immutable';
 
 const initialState = Immutable.Map({
@@ -14,6 +14,8 @@ function app(state = initialState, action) {
             return state.set('isSaving', true);
         case SAVE_USER_SUCCESS:
             return state.set('viewer', action.payload).set('isSaving', false);
+        case SAVE_USER_ERROR:
+            return state.set('errorMessage', action.error).set('isSaving', false);
         case SET_USERNAME:
             return state.setIn(['viewer', 'username'], action.payload);
         case SET_NAME:

@@ -64,8 +64,18 @@ export function saveUser(payload) {
             },
             body: JSON.stringify({ user: payload }),
         })
-        .then(response => response.json())
-        .then(json => dispatch(saveUserSuccess(Immutable.fromJS(json.user))))
-        .catch(error => dispatch(saveUserError(error)));
+        .then(res => {
+            const json = res.json();
+            if (res.status >= 200 && res.status < 300) {
+                return json;
+            }
+            return json.then(Promise.reject.bind(Promise));
+        })
+        .then((data) => {
+            dispatch(saveUserSuccess(Immutable.fromJS(data.user)));
+        })
+        .catch((error) => {
+            dispatch(saveUserError(error.error));
+        });
     };
 }
