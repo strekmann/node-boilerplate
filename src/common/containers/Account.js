@@ -10,14 +10,29 @@ class Account extends React.Component {
     constructor(props) {
         super(props);
         this.saveUser = this.saveUser.bind(this);
+        this.setUsername = this.setUsername.bind(this);
+        this.setName = this.setName.bind(this);
+        this.setEmail = this.setEmail.bind(this);
     }
+
     // action events
+    setUsername(e) {
+        this.props.dispatch(setUsername(e.target.value));
+    }
+
+    setName(e) {
+        this.props.dispatch(setName(e.target.value));
+    }
+
+    setEmail(e) {
+        this.props.dispatch(setEmail(e.target.value));
+    }
+
     saveUser() {
-        //UserActions.saveUser(this.state.data.get('user').toJS());
         this.props.dispatch(saveUser({
             username: this.refs.username.getValue(),
             name: this.refs.name.getValue(),
-            email: this.refs.email.getValue()
+            email: this.refs.email.getValue(),
         }));
     }
 
@@ -27,7 +42,6 @@ class Account extends React.Component {
         const formErrors = this.props.formErrors;
         const errorMessage = this.props.errorMessage;
         const isSaving = this.props.isSaving;
-        const dispatch = this.props.dispatch;
 
         let alert;
         if (errorMessage) {
@@ -60,7 +74,7 @@ class Account extends React.Component {
                                     value={viewer.get('username')}
                                     bsStyle={formErrors.get('username') ? 'error' : null}
                                     help={formErrors.get('username')}
-                                    onChange={e => dispatch(setUsername(e.target.value))}
+                                    onChange={this.setUsername}
                                     ref="username"
                                 />
                                 <Input
@@ -72,7 +86,7 @@ class Account extends React.Component {
                                     value={viewer.get('name')}
                                     bsStyle={formErrors.get('name') ? 'error' : null}
                                     help={formErrors.get('name')}
-                                    onChange={e => dispatch(setName(e.target.value))}
+                                    onChange={this.setName}
                                     ref="name"
                                 />
                                 <Input
@@ -84,7 +98,7 @@ class Account extends React.Component {
                                     value={viewer.get('email')}
                                     bsStyle={formErrors.get('email') ? 'error' : null}
                                     help={formErrors.get('email')}
-                                    onChange={e => dispatch(setEmail(e.target.value))}
+                                    onChange={this.setEmail}
                                     ref="email"
                                 />
                                 <Input
@@ -101,7 +115,12 @@ class Account extends React.Component {
                                     checked={viewer.get('is_admin')}
                                     disabled
                                 />
-                                <FormControls.Static label={__('Created')} labelClassName="col-md-3" wrapperClassName="col-md-9" value={userCreated}/>
+                                <FormControls.Static
+                                    label={__('Created')}
+                                    labelClassName="col-md-3"
+                                    wrapperClassName="col-md-9"
+                                    value={userCreated}
+                                />
                                 <Row>
                                     <Col md={9} mdOffset={3}>
                                         <Button
@@ -109,7 +128,10 @@ class Account extends React.Component {
                                             disabled={isSaving}
                                             onClick={!isSaving ? this.saveUser : null}
                                         >
-                                            {isSaving ? <i className="fa fa-spinner fa-spin fa-lg"></i> : __('Save')}
+                                            {isSaving ?
+                                                <i className="fa fa-spinner fa-spin fa-lg"></i>
+                                                : __('Save')
+                                            }
                                         </Button>
                                     </Col>
                                 </Row>
@@ -120,6 +142,7 @@ class Account extends React.Component {
             </div>
         );
     }
+
 }
 
 Account.propTypes = {
@@ -128,6 +151,7 @@ Account.propTypes = {
     errorMessage: React.PropTypes.string,
     isSaving: React.PropTypes.bool,
     dispatch: React.PropTypes.func,
+    lang: React.PropTypes.string,
 };
 
 function select(state) {
