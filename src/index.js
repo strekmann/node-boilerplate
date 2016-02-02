@@ -6,6 +6,7 @@ import http from 'http';
 import moment from 'moment';
 import path from 'path';
 import socketIO from 'socket.io';
+import passportSocketIO from 'passport.socketio';
 import config from 'config';
 import serveStatic from 'serve-static';
 
@@ -20,7 +21,17 @@ const port = config.get('express.port') || 3000;
 const io = socketIO(httpServer);
 
 io.path('/s');
-// io.use(passportSocketIO.authorize(socketOptions));
+const socketOptions = _.assign(congif.session, {
+    success: (data, accept) => {
+        log.debug('successful auth');
+        accept();
+    },
+    fail: (data, message, error, accept) => {
+        log.debug('auth failed', message);
+        accept(new Error(message));
+    },
+});
+io.use(passportSocketIO.authorize(socketOptions));
 
 app.use(serveStatic(path.join(__dirname, '..', 'dist', 'public')));
 
