@@ -1,4 +1,5 @@
 import React from 'react';
+import Immutable from 'immutable';
 import moment from 'moment';
 import translator from '../../server/lib/translator';
 import { connect } from 'react-redux';
@@ -123,7 +124,7 @@ class Account extends React.Component {
 
 Account.propTypes = {
     viewer: React.PropTypes.object,
-    formErrors: React.PropTypes.array,
+    formErrors: React.PropTypes.instanceOf(Immutable.List),
     errorMessage: React.PropTypes.string,
     isSaving: React.PropTypes.bool,
     dispatch: React.PropTypes.func,

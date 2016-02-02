@@ -92,7 +92,7 @@ app.use(function(req, res, next){
 app.use((req, res, next) => {
     res.locals.data = Immutable.Map({
         viewer: Immutable.fromJS(req.user),
-        formErrors: Immutable.Map(),
+        formErrors: Immutable.List(),
         errorMessage: '',
         isSaving: false,
         socket: Immutable.Map({
