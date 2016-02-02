@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Label } from 'react-bootstrap';
 
 class Navigation extends React.Component {
     /*
@@ -28,7 +28,9 @@ class Navigation extends React.Component {
                 </Navbar.Header>
                 <Navbar.Collapse eventKey={0}>
                     <Nav navbar pullRight>
-                        {userItem}
+                        <Navbar.Text>
+                            <Label bsStyle="primary">{this.props.usercount}</Label>
+                        </Navbar.Text> {userItem}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
@@ -38,6 +40,7 @@ class Navigation extends React.Component {
 
 Navigation.propTypes = {
     viewer: React.PropTypes.object,
+    usercount: React.PropTypes.number,
 };
 
 export default Navigation;

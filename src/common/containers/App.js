@@ -7,16 +7,10 @@ import io from 'socket.io-client';
 
 class App extends React.Component {
 
-    componentDidMount() {
-        this.socket = io({
-            path: '/s',
-        });
-    }
-
     render() {
         return (
             <div>
-                <Navigation viewer={this.props.viewer} />
+                <Navigation viewer={this.props.viewer} usercount={this.props.usercount} />
                 {this.props.children}
             </div>
         );
@@ -26,11 +20,13 @@ class App extends React.Component {
 App.propTypes = {
     children: React.PropTypes.element,
     viewer: React.PropTypes.object,
+    usercount: React.PropTypes.number,
 };
 
 function select(state) {
     return {
         viewer: state.get('viewer'),
+        usercount: state.getIn(['socket', 'usercount']),
     };
 }
 

@@ -95,6 +95,9 @@ app.use((req, res, next) => {
         formErrors: Immutable.Map(),
         errorMessage: '',
         isSaving: false,
+        socket: Immutable.Map({
+            usercount: 0,
+        }),
     });
     next();
 });
@@ -201,8 +204,6 @@ app.use((req, res, next) => {
 
 process.on('uncaughtException', (err) => {
     log.fatal(err);
-    log.fatal(err.message);
-    log.fatal(err.stack);
     process.exit(1);
 });
 
