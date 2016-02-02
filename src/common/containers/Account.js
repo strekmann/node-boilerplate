@@ -5,7 +5,11 @@ import { connect } from 'react-redux';
 import { saveUser, setUsername, setName, setEmail } from '../actions/user';
 import { Grid, Row, Col, Button, Input, Alert, FormControls } from 'react-bootstrap';
 
-class App extends React.Component {
+class Account extends React.Component {
+    constructor(props) {
+        super(props);
+        this.saveUser = this.saveUser.bind(this);
+    }
     // action events
     saveUser() {
         //UserActions.saveUser(this.state.data.get('user').toJS());
@@ -117,7 +121,7 @@ class App extends React.Component {
     }
 }
 
-App.propTypes = {
+Account.propTypes = {
     viewer: React.PropTypes.object,
     formErrors: React.PropTypes.array,
     errorMessage: React.PropTypes.string,
@@ -134,4 +138,4 @@ function select(state) {
     };
 }
 
-export default connect(select)(App);
+export default connect(select)(Account);
