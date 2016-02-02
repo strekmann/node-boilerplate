@@ -6,20 +6,18 @@ import Immutable from 'immutable';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
-import { RouterContext, match } from "react-router";
+import { RouterContext, match } from 'react-router';
 import reducers from '../common/reducers/user';
 import path from 'path';
-import fs from 'fs';
 import _ from 'lodash';
 import db from './lib/db';
 import log from './lib/logger';
-import middleware from './lib/middleware';
-import routes from "../common/routes";
+import routes from '../common/routes';
 import socketRoutes from './routes/socket';
 import pkg from '../../package';
 import passportSocketIO from 'passport.socketio';
 import socketIO from 'socket.io';
-import cookieParser from 'cookie-parser';
+import 'cookie-parser';
 
 let settings = {};
 
