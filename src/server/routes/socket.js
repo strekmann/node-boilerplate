@@ -7,7 +7,7 @@ function socketRoutes(io) {
     io.on('connection', socket => {
         let addedUser = false;
         log.info('socket connected', socket.id, socket.request.user.name);
-        io.emit('usercount', { users: io.engine.clientsCount });
+        io.emit('action', { type: 'SOCKET_SET_USERCOUNT', payload: io.engine.clientsCount });
 
         // when the client emits 'new message', this listens and executes
         socket.on('new message', (data) => {

@@ -1,14 +1,7 @@
 import { SAVE_USER_INIT, SAVE_USER_SUCCESS, SAVE_USER_ERROR, SET_USERNAME, SET_NAME, SET_EMAIL } from '../actions/user';
-import Immutable from 'immutable';
+import { SOCKET_SET_USERCOUNT } from '../actions/socket';
 
-const initialState = Immutable.Map({
-    viewer: Immutable.Map(),
-    formErrors: Immutable.Map(),
-    errorMessage: '',
-    isSaving: false,
-});
-
-function app(state = initialState, action) {
+function app(state, action) {
     switch (action.type) {
         case SAVE_USER_INIT:
             return state.set('isSaving', true);
@@ -22,6 +15,8 @@ function app(state = initialState, action) {
             return state.setIn(['viewer', 'name'], action.payload);
         case SET_EMAIL:
             return state.setIn(['viewer', 'email'], action.payload);
+        case SOCKET_SET_USERCOUNT:
+            return state.setIn(['socket', 'usercount'], action.payload);
         default:
             return state;
     }

@@ -95,6 +95,9 @@ app.use((req, res, next) => {
         formErrors: Immutable.Map(),
         errorMessage: '',
         isSaving: false,
+        socket: Immutable.Map({
+            usercount: 0,
+        }),
     });
     next();
 });
