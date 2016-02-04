@@ -8,6 +8,7 @@ import Account from './containers/Account';
 
 export default (store) => {
     const requireAuth = (nextState, replace, callback) => {
+        const { user: {authenticated }} = store.getState();
         if (!authenticated) {
             replace({
                 pathname: '/login',

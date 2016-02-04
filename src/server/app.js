@@ -1,7 +1,6 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { RouterContext, match, createMemoryHistory } from 'react-router';
-import fetch from 'isomorphic-fetch';
 import { Provider } from 'react-redux';
 import createRoutes from '../common/routes';
 import configureStore from '../common/configureStore';
@@ -36,7 +35,7 @@ function renderFullPage(renderedContent, initialState, head={
 
 export default function render(req, res) {
     const history = createMemoryHistory();
-    const authenticated = false; //req.isAuthenticated();
+    const authenticated = req.isAuthenticated();
     const store = configureStore({
         user: {
             authenticated: authenticated,
@@ -54,14 +53,13 @@ export default function render(req, res) {
         }
         else if (renderProps) {
 
-            const initialState = store.getState();
             const renderedContent = renderToString(
                 <Provider store={store}>
                     <RouterContext {...renderProps} />
                 </Provider>
             );
 
-            const renderedPage = renderFullPage(renderedContent, initialState, {
+            const renderedPage = renderFullPage(renderedContent, store.getState(), {
                 title: headconfig.title,
                 meta: headconfig.meta,
                 link: headconfig.link
