@@ -52,19 +52,29 @@ export default function render(req, res) {
             res.redirect(302, redirectLocation.pathname + redirectLocation.search);
         }
         else if (renderProps) {
-
-            const renderedContent = renderToString(
-                <Provider store={store}>
-                    <RouterContext {...renderProps} />
-                </Provider>
-            );
-
-            const renderedPage = renderFullPage(renderedContent, store.getState(), {
-                title: headconfig.title,
-                meta: headconfig.meta,
-                link: headconfig.link
+            // Collect all async promises from components
+            const promises = renderProps.components.map(function (component, index) {
+                if (typeof component.fetchData !== 'function') {
+                    return false;
+                }
+                return component.fetchData(store.dispatch);
             });
-            res.send(renderedPage);
+
+            // Then render when all promises are resolved
+            Promise.all(promises).then(() => {
+                const renderedContent = renderToString(
+                    <Provider store={store}>
+                        <RouterContext {...renderProps} />
+                    </Provider>
+                );
+
+                const renderedPage = renderFullPage(renderedContent, store.getState(), {
+                    title: headconfig.title,
+                    meta: headconfig.meta,
+                    link: headconfig.link
+                });
+                res.send(renderedPage);
+            });
         }
         else {
             res.status(404).send('Not Found');

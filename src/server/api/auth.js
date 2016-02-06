@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/test', (req, res, next) => {
     res.json({
-        test: 'mesa iz a test',
+        msg: 'mesa iz a test',
     })
 });
 

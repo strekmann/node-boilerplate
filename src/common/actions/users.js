@@ -1,4 +1,3 @@
-import 'es6-promise';
 import fetch from 'isomorphic-fetch';
 import * as types from '../constants';
 
