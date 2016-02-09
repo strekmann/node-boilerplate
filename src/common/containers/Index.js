@@ -11,8 +11,10 @@ class Index extends React.Component {
     componentDidMount() {
         // Client runs this when component is mounted
         console.log('componentWillMount');
-        const { dispatch } = this.props;
-        Index.fetchData(dispatch);
+        const { dispatch, test } = this.props;
+        if (!test.msg) {
+            Index.fetchData(dispatch);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
