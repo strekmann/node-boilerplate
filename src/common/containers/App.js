@@ -24,9 +24,10 @@ App.propTypes = {
 };
 
 function select(state) {
+    console.error("stat", state);
     return {
-        viewer: state.get('viewer'),
-        usercount: state.getIn(['socket', 'usercount']),
+        viewer: state.user.user.get('viewer'),
+        usercount: state.user.user.getIn(['socket', 'usercount']),
     };
 }
 

@@ -1,7 +1,7 @@
 import { SAVE_USER_INIT, SAVE_USER_SUCCESS, SAVE_USER_ERROR, SET_USERNAME, SET_NAME, SET_EMAIL } from '../actions/user';
 import { SOCKET_SET_USERCOUNT } from '../actions/socket';
 
-function app(state, action) {
+function user(state, action) {
     switch (action.type) {
         case SAVE_USER_INIT:
             return state.set('isSaving', true);
@@ -22,4 +22,4 @@ function app(state, action) {
     }
 }
 
-export default app;
+export default user;

@@ -1,23 +1,25 @@
 import http from 'http';
 import express from 'express';
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 import Immutable from 'immutable';
-import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import thunkMiddleware from 'redux-thunk';
-import { RouterContext, match } from 'react-router';
-import reducers from '../common/reducers/user';
+// import thunkMiddleware from 'redux-thunk';
+import { RouterContext, match, createMemoryHistory } from 'react-router';
+// import reducers from '../common/reducers/user';
+import configureStore from '../common/stores';
 import path from 'path';
 import _ from 'lodash';
 import db from './lib/db';
 import log from './lib/logger';
-import routes from '../common/routes';
+import createRoutes from '../common/routes';
 import socketRoutes from './routes/socket';
+import headconfig from '../common/components/Meta';
 import pkg from '../../package';
 import passportSocketIO from 'passport.socketio';
 import socketIO from 'socket.io';
 import 'cookie-parser';
+
 
 let settings = {};
 
@@ -33,19 +35,44 @@ const app = require('libby')(express, settings, db);
 const httpServer = http.createServer(app);
 const io = socketIO(httpServer);
 
+function renderFullPage(renderedContent, initialState, head = {
+    title: '<title>React Redux</title>',
+    meta: '<meta name="viewport" content="width=device-width, initial-scale=1" />',
+    link: '<link rel="stylesheet" href="/css/styles.css"/>',
+}) {
+    return `
+    <!doctype html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        ${head.title}
+        ${head.meta}
+        ${head.link}
+    </head>
+    <body>
+        <div id="app">${renderedContent}</div>
+        <script>
+            window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
+        </script>
+        <script src="/js/site.js"></script>
+    </body>
+    </html>
+    `;
+}
+
 // # Application setup
 
 // Set up bunyan logger
 if (settings.useBunyan){
-var express_bunyan = require('express-bunyan-logger');
-var bunyan_opts = {
-    logger: log,
-    excludes: ['req', 'res', 'req-headers', 'res-headers']
-};
-if (app.settings.env === 'development' || app.settings.env === 'production'){
-    app.use(express_bunyan(bunyan_opts));
-    app.use(express_bunyan.errorLogger(bunyan_opts));
-}
+    var express_bunyan = require('express-bunyan-logger');
+    var bunyan_opts = {
+        logger: log,
+        excludes: ['req', 'res', 'req-headers', 'res-headers']
+    };
+    if (app.settings.env === 'development' || app.settings.env === 'production'){
+        app.use(express_bunyan(bunyan_opts));
+        app.use(express_bunyan.errorLogger(bunyan_opts));
+    }
 }
 
 const socketOptions = _.assign(app.sessionConfig, {
@@ -82,9 +109,11 @@ socketRoutes(io);
 
 // Make some variables always available in templates.
 app.use(function(req, res, next){
+    console.log("h1");
     res.locals.stamp = app.stamp;
     next();
 });
+    console.log("h2");
 
 // Initialize local data
 app.use((req, res, next) => {
@@ -117,16 +146,55 @@ app.use(express.static(path.join(__dirname, '..', '..', 'dist/public')));
 app.use('/', require('./routes/index'));
 
 app.use((req, res, next) => {
+    const history = createMemoryHistory();
+    const store = configureStore(
+        Immutable.Map({
+            viewer: Immutable.fromJS(req.user || null),
+            formErrors: Immutable.List(),
+            errorMessage: '',
+            isSaving: false,
+            socket: Immutable.Map({
+                usercount: 0,
+            }),
+        }), history);
+    const routes = createRoutes(store);
+
     match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
         if (err) {
             return next(err);
-            //res.status(500).send(err.message);
+            // res.status(500).send(err.message);
         }
         else if (redirectLocation) {
             res.redirect(302, redirectLocation.pathname + redirectLocation.search);
         }
         else if (renderProps) {
-            const initialState = res.locals.data;
+            // Collect all async promises from components
+            const promises = renderProps.components.map(function (component, index) {
+                if (typeof component.fetchData !== 'function') {
+                    return false;
+                }
+                return component.fetchData(store.dispatch);
+            });
+
+            // Then render when all promises are resolved
+            //Promise.all(promises).then(() => {
+                const renderedContent = renderToString(
+                    <Provider store={store}>
+                        <RouterContext {...renderProps} />
+                    </Provider>
+                );
+                console.error("sEE", store.getState())
+
+                const renderedPage = renderFullPage(renderedContent, store.getState(), {
+                    title: headconfig.title,
+                    meta: headconfig.meta,
+                    link: headconfig.link,
+                });
+                res.send(renderedPage);
+                //});
+        }
+        /*
+        const initialState = res.locals.data;
             const createStoreWithMiddleware = applyMiddleware(thunkMiddleware)(createStore);
             const store = createStoreWithMiddleware(reducers, initialState);
 
@@ -135,29 +203,10 @@ app.use((req, res, next) => {
                     <RouterContext {...renderProps} />
                 </Provider>
             );
-
-            const markup = `
-                <!doctype html>
-                <html>
-                    <head>
-                        <meta charset="utf-8" />
-                        <title>Boilerplate</title>
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                        <link href="/css/styles.css" rel="stylesheet" />
-                    </head>
-                    <body>
-                        <div id="main">${html}</div>
-                        <script>
-                            window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
-                        </script>
-                        <script src="/js/site.js"></script>
-                    </body>
-                </html>
-                `;
-            res.send(markup);
         }
+        */
         else {
-            res.status(404).send("Not found");
+            res.status(404).send('Not found');
         }
     });
 });

@@ -22,5 +22,7 @@ export default (url, options) => {
         },
     }, options);
 
+    console.error("will fetch", url, opts);
+
     return fetch(url, opts);
 };
