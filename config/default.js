@@ -5,7 +5,8 @@ module.exports = {
     },
     express: {
         port: 3000,
-        trust_proxy: false
+        trust_proxy: false,
+        apiurl: 'http://localhost:3000'
     },
     session: {
         secret: 'sessionsecret',

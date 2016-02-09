@@ -1,5 +1,4 @@
-import fetch from 'isomorphic-fetch';
-//import request from 'superagent';
+import fetch from '../../server/lib/fetch';
 
 function testSuccess(payload) {
     return { type: 'TEST_SUCCESS', payload };
@@ -12,14 +11,7 @@ function testError() {
 export function loadTest() {
     return (dispatch, getState) => {
         console.log('pre fetch');
-        return fetch('http://localhost:3000/api/1/auth/test', {
-            method: 'get',
-            credentials: 'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
+        return fetch('/api/1/auth/test')
         .then(res => {
             if (res.status !== 200) {
                 console.log(res);
