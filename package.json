@@ -27,6 +27,7 @@
     "babel-register": "^6.4.3",
     "bunyan": "^1.2.3",
     "bunyan-request-logger": "^0.2.3",
+    "config": "^1.19.0",
     "connect-redis": "^2.1.0",
     "cookie-parser": "^1.4.1",
     "express": "^4.8.3",
