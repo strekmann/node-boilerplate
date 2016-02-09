@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch';
+import fetch from '../lib/fetch';
 import Immutable from 'immutable';
 
 
@@ -56,12 +56,6 @@ export function saveUser(payload) {
 
         return fetch('/account', {
             method: 'put',
-            credentials: 'same-origin',
-            mode: 'cors',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
             body: JSON.stringify({ user: payload }),
         })
         .then(res => {

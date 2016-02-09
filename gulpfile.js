@@ -7,7 +7,15 @@ var assign = require("lodash").assign;
 var devConfig = {
     devtool: "cheap-module-source-map",
     context: __dirname + "/src",
-    plugins: [],
+    plugins: [
+        new webpack.webpack.DefinePlugin({
+            "process.env": {
+                // This has effect on the react lib size
+                "NODE_ENV": JSON.stringify("development")
+            },
+            "__CLIENT__": JSON.stringify(true)
+        }),
+    ],
     output: {
         filename: "site.js",
     },
@@ -22,18 +30,34 @@ var devConfig = {
     }
 };
 
-var prodConfig = assign({}, devConfig);
-prodConfig.plugins = prodConfig.plugins.concat(
-    new webpack.webpack.DefinePlugin({
-        "process.env": {
-            // This has effect on the react lib size
-            "NODE_ENV": JSON.stringify("production")
-        }
-    }),
-    new webpack.webpack.optimize.DedupePlugin(),
-    new webpack.webpack.optimize.OccurenceOrderPlugin(true),
-    new webpack.webpack.optimize.UglifyJsPlugin()
-);
+var prodConfig = {
+    devtool: "cheap-module-source-map",
+    context: __dirname + "/src",
+    plugins: [
+        new webpack.webpack.DefinePlugin({
+            "process.env": {
+                // This has effect on the react lib size
+                "NODE_ENV": JSON.stringify("production")
+            },
+            "__CLIENT__": JSON.stringify(true)
+        }),
+        new webpack.webpack.optimize.DedupePlugin(),
+        new webpack.webpack.optimize.OccurenceOrderPlugin(true),
+        new webpack.webpack.optimize.UglifyJsPlugin()
+    ],
+    output: {
+        filename: "site.js",
+    },
+    module: {
+        loaders: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loaders: ["babel-loader"],
+            }
+        ],
+    }
+};
 
 gulp.task("default", ["build-dev"]);
 gulp.task("build", ["sass", "icons", "images", "webpack:build"]);
