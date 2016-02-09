@@ -111,7 +111,7 @@ app.get('/auth/google/callback', app.passport.authenticate('google', { failureRe
 });
 
 // Static file middleware serving static files.
-app.use(express.static(path.join(__dirname, '..', '..', 'dist')));
+app.use(express.static(path.join(__dirname, '..', '..', 'dist/public')));
 
 // Core routes like index, login, logout and account.
 app.use('/', require('./routes/index'));
@@ -143,14 +143,14 @@ app.use((req, res, next) => {
                         <meta charset="utf-8" />
                         <title>Boilerplate</title>
                         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                        <link href="/styles.css" rel="stylesheet" />
+                        <link href="/css/styles.css" rel="stylesheet" />
                     </head>
                     <body>
                         <div id="main">${html}</div>
                         <script>
                             window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
                         </script>
-                        <script src="/client.js"></script>
+                        <script src="/js/site.js"></script>
                     </body>
                 </html>
                 `;

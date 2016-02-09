@@ -17,7 +17,7 @@
     "build": "gulp build",
     "watch": "gulp",
     "lint": "gulp lint",
-    "start": "node dev.js"
+    "nodemon": "nodemon dev.js | bunyan -o short"
   },
   "dependencies": {
     "async": "^0.9.0",

@@ -16,7 +16,7 @@ update:
 	npm update
 
 run:
-	nodemon dev.js | ./node_modules/.bin/bunyan -o short
+	npm run nodemon
 
 lint:
 	npm run lint

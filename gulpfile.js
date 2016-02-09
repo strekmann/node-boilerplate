@@ -1,5 +1,4 @@
 var gulp = require("gulp");
-var gutil = require("gulp-util");
 var sass = require("gulp-sass");
 var eslint = require("gulp-eslint");
 var webpack = require("webpack-stream");
@@ -10,7 +9,7 @@ var devConfig = {
     context: __dirname + "/src",
     plugins: [],
     output: {
-        filename: "client.js",
+        filename: "site.js",
     },
     module: {
         loaders: [
@@ -53,27 +52,27 @@ gulp.task("lint", function () {
 gulp.task("sass", function () {
     return gulp.src("src/client/scss/styles.scss")
     .pipe(sass({ includePaths: ["node_modules/bootstrap-sass/assets/stylesheets", "node_modules/font-awesome/scss"] }))
-    .pipe(gulp.dest("dist"));
+    .pipe(gulp.dest("dist/public/css"));
 });
 
 gulp.task("webpack:build-dev", function () {
     return gulp.src("src/client/app.js")
     .pipe(webpack(devConfig))
-    .pipe(gulp.dest("dist"));
+    .pipe(gulp.dest("dist/public/js"));
 });
 
 gulp.task("webpack:build", function (callback) {
     return gulp.src("src/client/app.js")
     .pipe(webpack(prodConfig))
-    .pipe(gulp.dest("dist"));
+    .pipe(gulp.dest("dist/public/js"));
 });
 
 gulp.task("icons", function () {
     return gulp.src("./node_modules/font-awesome/fonts/*.*")
-        .pipe(gulp.dest("./dist/fonts"));
+    .pipe(gulp.dest("./dist/public/fonts"));
 });
 
 gulp.task("images", function () {
     return gulp.src("./src/client/images/**/*.*")
-        .pipe(gulp.dest("./dist/img"));
+    .pipe(gulp.dest("./dist/public/img"));
 });
