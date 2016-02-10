@@ -97,10 +97,6 @@ if (app.settings.env === 'development'){
 app.locals.pretty = true;
 }
 
-// Use jade templates located under server/views
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
 // Initialize passport
 app.use(app.passport.initialize());
 app.use(app.passport.session());
