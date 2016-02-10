@@ -1,4 +1,3 @@
-/*
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -6,26 +5,39 @@ import Immutable from 'immutable';
 import { createStore, applyMiddleware } from 'redux';
 import createSocketIoMiddleware from 'redux-socket.io';
 import { Provider } from 'react-redux';
-import thunkMiddleware from 'redux-thunk';
+import thunk from 'redux-thunk';
 import { Router, browserHistory } from 'react-router';
-import routes from '../common/routes';
+import createRoutes from '../common/routes';
 import reducers from '../common/reducers/user';
 import io from 'socket.io-client';
+import createLogger from 'redux-logger';
+import { syncHistory } from 'react-router-redux';
 
+const initialState = Immutable.fromJS(window.__INITIAL_STATE__);
 const socket = io({ path: '/s' });
 const socketMiddleware = createSocketIoMiddleware(socket, 'socket/');
-const initialState = Immutable.fromJS(window.__INITIAL_STATE__);
-const createStoreWithMiddleware = applyMiddleware(socketMiddleware, thunkMiddleware)(createStore);
+const middleware = [socketMiddleware, thunk];
+
+const router = syncHistory(browserHistory);
+if (process.env.NODE_ENV === 'development') {
+    middleware.push(router, createLogger({ logger: console }));
+}
+else {
+    middleware.push(router);
+}
+
+const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
 const store = createStoreWithMiddleware(reducers, initialState);
+const routes = createRoutes(store);
 
 ReactDOM.render(
     <Provider store={store}>
         <Router history={browserHistory}>{routes}</Router>
     </Provider>,
-    document.getElementById('main')
+    document.getElementById('app')
 );
-*/
 
+/*
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
@@ -46,3 +58,4 @@ render(
         </Router>
     </Provider>, document.getElementById('app')
 );
+*/

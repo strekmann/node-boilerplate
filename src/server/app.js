@@ -109,23 +109,7 @@ socketRoutes(io);
 
 // Make some variables always available in templates.
 app.use(function(req, res, next){
-    console.log("h1");
     res.locals.stamp = app.stamp;
-    next();
-});
-    console.log("h2");
-
-// Initialize local data
-app.use((req, res, next) => {
-    res.locals.data = Immutable.Map({
-        viewer: Immutable.fromJS(req.user),
-        formErrors: Immutable.List(),
-        errorMessage: '',
-        isSaving: false,
-        socket: Immutable.Map({
-            usercount: 0,
-        }),
-    });
     next();
 });
 
@@ -177,13 +161,13 @@ app.use((req, res, next) => {
             });
 
             // Then render when all promises are resolved
-            //Promise.all(promises).then(() => {
+            Promise.all(promises).then(() => {
                 const renderedContent = renderToString(
                     <Provider store={store}>
                         <RouterContext {...renderProps} />
                     </Provider>
                 );
-                console.error("sEE", store.getState())
+                console.error("sEE", store.getState());
 
                 const renderedPage = renderFullPage(renderedContent, store.getState(), {
                     title: headconfig.title,
@@ -191,20 +175,8 @@ app.use((req, res, next) => {
                     link: headconfig.link,
                 });
                 res.send(renderedPage);
-                //});
+            });
         }
-        /*
-        const initialState = res.locals.data;
-            const createStoreWithMiddleware = applyMiddleware(thunkMiddleware)(createStore);
-            const store = createStoreWithMiddleware(reducers, initialState);
-
-            const html = ReactDOMServer.renderToString(
-                <Provider store={store}>
-                    <RouterContext {...renderProps} />
-                </Provider>
-            );
-        }
-        */
         else {
             res.status(404).send('Not found');
         }

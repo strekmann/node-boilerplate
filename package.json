@@ -76,7 +76,7 @@
     "eslint-plugin-react": "^3.16.1",
     "expose-loader": "^0.7.0",
     "font-awesome": "^4.3.0",
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-eslint": "^1.1.1",
     "gulp-sass": "^2.1.1",
     "gulp-util": "^3.0.7",
