@@ -39,7 +39,7 @@ Home.propTypes = {
 
 function select(state) {
     return {
-        viewer: state.user.user.get('viewer'),
+        viewer: state.get('viewer'),
     };
 }
 
