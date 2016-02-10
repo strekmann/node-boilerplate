@@ -16,7 +16,6 @@ export default function configureStore(initialState, history) {
     }
 
     const finalCreateStore = applyMiddleware(...middleware)(createStore);
-    console.error("initial", initialState);
     const store = finalCreateStore(reducers, initialState);
 
     return store;

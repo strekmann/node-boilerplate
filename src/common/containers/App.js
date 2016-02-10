@@ -1,9 +1,6 @@
 import React from 'react';
 import Navigation from '../components/Navigation';
-import actions from '../actions/user';
-import Immutable from 'immutable';
 import { connect } from 'react-redux';
-import io from 'socket.io-client';
 
 class App extends React.Component {
 
@@ -24,7 +21,6 @@ App.propTypes = {
 };
 
 function select(state) {
-    console.error("stat", state);
     return {
         viewer: state.get('viewer'),
         usercount: state.getIn(['socket', 'usercount']),
