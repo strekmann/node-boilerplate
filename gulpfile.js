@@ -63,8 +63,8 @@ gulp.task("default", ["build-dev"]);
 gulp.task("build", ["sass", "icons", "images", "webpack:build"]);
 gulp.task("build-dev", ["webpack:build-dev", "sass", "icons", "images", "lint"], function () {
     gulp.watch("src/**/*.js", ["webpack:build-dev", "lint"]);
-    gulp.watch("src/scss/*.scss", ["sass"]);
-    gulp.watch("src/images/*.scss", ["images"]);
+    gulp.watch("src/client/scss/*.scss", ["sass"]);
+    gulp.watch("src/client/images/*.scss", ["images"]);
 });
 
 gulp.task("lint", function () {
