@@ -7,6 +7,7 @@ if (typeof __CLIENT__ === 'undefined') {
     const config = require('config');
     base = config.get('express.apiurl');
 }
+base += '/api/1';
 
 export default (url, options) => {
     if (!url.match(/^https?:/)) {
@@ -21,8 +22,6 @@ export default (url, options) => {
             'Content-Type': 'application/json',
         },
     }, options);
-
-    console.error("will fetch", url, opts);
 
     return fetch(url, opts);
 };

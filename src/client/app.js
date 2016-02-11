@@ -14,7 +14,8 @@ import createLogger from 'redux-logger';
 import { syncHistory } from 'react-router-redux';
 
 const initialState = Immutable.fromJS(window.__INITIAL_STATE__);
-const socket = io({ path: '/s' });
+const socket = io();
+// const socket = io({ path: '/s' });
 const socketMiddleware = createSocketIoMiddleware(socket, 'socket/');
 const middleware = [socketMiddleware, thunk];
 

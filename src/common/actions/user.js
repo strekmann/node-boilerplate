@@ -54,7 +54,7 @@ export function saveUser(payload) {
     return function saveUserAsync(dispatch) {
         dispatch(saveUserInit());
 
-        return fetch('/account', {
+        return fetch('/auth/account', {
             method: 'put',
             body: JSON.stringify({ user: payload }),
         })

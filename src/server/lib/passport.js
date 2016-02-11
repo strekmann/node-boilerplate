@@ -1,58 +1,85 @@
-var User = require('../models').User,
-    passport = require('passport'),
-    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+/* eslint no-param-reassign: 0 */
 
-module.exports = function(app){
-    passport.serializeUser(function(user, done) {
-        done(null, user._id);
+import passport from 'passport';
+import LocalStrategy from 'passport-local';
+import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
+
+import { User } from '../models';
+import config from 'config';
+
+passport.serializeUser((user, done) => {
+    done(null, user._id);
+});
+
+passport.deserializeUser((userId, done) => {
+    User.findById(userId, (err, user) => {
+        if (err) {
+            return done(err.message, null);
+        }
+        if (!user) {
+            return done(null, false);
+        }
+        done(null, user);
     });
+});
 
-    passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err, user){
-            if (err) {
-                return done(err.message, null);
-            }
+passport.passportLocal = new LocalStrategy(
+    {
+        usernameField: 'email',
+        passwordField: 'password',
+    },
+    (email, password, done) => {
+        email = email.toLowerCase();
+
+        User.findOne({ email }, (err, user) => {
+            if (err) { return done(err); }
             if (!user) {
-                // User not found, tell passport user is not valid
-                return done(null, false);
-            }
-            done(null, user);
-        });
-    });
-
-    if (app.conf.auth.google) {
-        passport.use(new GoogleStrategy({
-                clientID: app.conf.auth.google.clientId,
-                clientSecret: app.conf.auth.google.clientSecret,
-                callbackURL: app.conf.auth.google.callbackURL
-            },
-            function(accessToken, refreshToken, profile, done) {
-                process.nextTick(function () {
-                    User.findOne({google_id: profile.id}, function(err, user){
-                        if (err) {
-                            return done(err.message, null);
-                        }
-                        if (user) {
-                            return done(null, user);
-                        }
-                        else {
-                            user = new User({
-                                name: profile.displayName,
-                                email: profile._json.email,
-                                google_id: profile.id
-                            });
-                            user.save(function(err){
-                                if (err) {
-                                    return done("Could not create user", null);
-                                }
-                                return done(null, user);
-                            });
-                        }
-                    });
+                return done(null, false, {
+                    message: `Unknown user with email ${email}`,
                 });
             }
-        ));
-    }
 
-    return passport;
-};
+            user.authenticate(password, (authErr, ok) => {
+                if (authErr) { return done(authErr); }
+                if (ok) {
+                    return done(null, user);
+                }
+                return done(null, false, { message: 'Invalid password' });
+            });
+        });
+    }
+);
+
+if (config.auth.google) {
+    passport.use(new GoogleStrategy({
+        clientID: config.auth.google.clientId,
+        clientSecret: config.auth.google.clientSecret,
+        callbackURL: config.auth.google.callbackURL,
+    },
+    (accessToken, refreshToken, profile, done) => {
+        process.nextTick(() => {
+            User.findOne({ google_id: profile.id }, (err, user) => {
+                if (err) {
+                    return done(err.message, null);
+                }
+                if (user) {
+                    return done(null, user);
+                }
+                user = new User({
+                    name: profile.displayName,
+                    email: profile._json.email,
+                    google_id: profile.id,
+                });
+                user.save((saveErr) => {
+                    if (saveErr) {
+                        return done('Could not create user', null);
+                    }
+                    return done(null, user);
+                });
+            });
+        });
+    }));
+}
+
+passport.use(passport.passportLocal);
+export default passport;

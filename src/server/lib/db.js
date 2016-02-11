@@ -1,18 +1,11 @@
-var mongoose = require('mongoose'),
-    settings = {},
-    db;
+import config from 'config';
+import mongoose from 'mongoose';
 
-try {
-    settings = require('../settings');
-} catch(e) {}
-
-
-if (process.env.NODE_ENV === 'test'){
-    db = mongoose.connect('mongodb://localhost/mocha_test');
+if (process.env.NODE_ENV === 'test') {
+    mongoose.connect('mongodb://localhost/mocha_test');
 }
 else {
-    settings.mongo = settings.mongo || {servers: ['localhost'], replSet: null};
-    var db = mongoose.connect(settings.mongo.servers.join(','), {replSet: {rs_name: settings.mongo.replset}});
+    const servers = config.mongodb.servers || ['localhost'];
+    const replset = config.mongodb.replset || null;
+    mongoose.connect(servers.join(','), { replSet: { rs_name: replset } });
 }
-
-module.exports = db;

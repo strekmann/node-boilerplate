@@ -7,7 +7,7 @@ import Account from './containers/Account';
 
 export default (store) => {
     const requireAuth = (nextState, replace, callback) => {
-        const { viewer } = store.get('viewer');
+        const viewer = store.getState().get('viewer');
         if (!viewer) {
             replace({
                 pathname: '/login',

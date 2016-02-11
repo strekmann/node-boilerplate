@@ -1,4 +1,4 @@
-import log from '../lib/logger';
+import log from './lib/logger';
 
 let numUsers = 0;
 const usernames = {};

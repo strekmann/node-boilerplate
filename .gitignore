@@ -7,3 +7,5 @@
 /dist
 *.mo
 *.log
+/config/production.js
+/config/development.js

@@ -6,7 +6,8 @@ module.exports = {
     express: {
         port: 3000,
         trust_proxy: false,
-        apiurl: 'http://localhost:3000'
+        apiurl: 'http://localhost:3000',
+        apiversion: '0'
     },
     session: {
         secret: 'sessionsecret',
@@ -25,5 +26,12 @@ module.exports = {
     mongodb: {
         servers: ['mongodb://localhost/test'],
         replset: null
+    },
+    auth: {
+        google: {
+            clientId: 'GoogleAppId',
+            clientSecret: 'GoogleAppSecret',
+            callbackURL: 'http://localhost:3000/auth/google/callback'
+        },
     }
 };
