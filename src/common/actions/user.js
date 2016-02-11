@@ -26,6 +26,14 @@ export function setEmail(payload) {
     };
 }
 
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export function loadUserSuccess(payload) {
+    return {
+        type: LOAD_USER_SUCCESS,
+        payload,
+    };
+}
+
 export const SAVE_USER_INIT = 'SAVE_USER_INIT';
 function saveUserInit() {
     return {
@@ -46,6 +54,28 @@ function saveUserError(error) {
     return {
         type: SAVE_USER_ERROR,
         error,
+    };
+}
+
+export const LOAD_USER = 'LOAD_USER';
+export function loadUser(id) {
+    return function loadUserAsync(dispatch) {
+        return fetch(`/profile/${id}`, {
+            method: 'get',
+        })
+        .then(res => {
+            const json = res.json();
+            if (res.status >= 200 && res.status < 300) {
+                return json;
+            }
+            return json.then(Promise.reject.bind(Promise));
+        })
+        .then((data) => {
+            dispatch(loadUserSuccess(Immutable.fromJS(data.user)));
+        })
+        .catch((error) => {
+            //dispatch(saveUserError(error.error));
+        });
     };
 }
 

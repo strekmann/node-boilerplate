@@ -161,7 +161,6 @@ class Account extends React.Component {
             </div>
         );
     }
-
 }
 
 Account.propTypes = {
