@@ -1,5 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, NavItem, Label } from 'react-bootstrap';
+import { Link } from 'react-router';
+import { LinkContainer } from 'react-router-bootstrap';
 
 class Navigation extends React.Component {
     /*
@@ -14,16 +16,16 @@ class Navigation extends React.Component {
         let userItem;
 
         if (user) {
-            userItem = (<NavItem href="/account">{user.get('name')}</NavItem>);
+            userItem = (<LinkContainer to="/account"><NavItem to="/account">{user.get('name')}</NavItem></LinkContainer>);
         }
         else {
-            userItem = (<NavItem href="/auth/google">Log in</NavItem>);
+            userItem = (<NavItem to="/auth/google">Log in</NavItem>);
         }
 
         return (
             <Navbar>
                 <Navbar.Header>
-                    <Navbar.Brand><a href="/">React-Test</a></Navbar.Brand>
+                    <Navbar.Brand><Link to="/">React-Test</Link></Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse eventKey={0}>
