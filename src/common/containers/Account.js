@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 import moment from 'moment';
 import translator from '../../server/lib/translator';
 import { connect } from 'react-redux';
-import { saveUser, setUsername, setName, setEmail } from '../actions/user';
+import { saveUser } from '../actions/user';
 import { Grid, Row, Col, Button, Input, Alert, FormControls } from 'react-bootstrap';
 
 class Account extends React.Component {
@@ -13,22 +13,38 @@ class Account extends React.Component {
         this.setUsername = this.setUsername.bind(this);
         this.setName = this.setName.bind(this);
         this.setEmail = this.setEmail.bind(this);
+        this.state = {
+            username: props.viewer.get('username'),
+            name: props.viewer.get('name'),
+            email: props.viewer.get('email'),
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.viewer !== nextProps.viewer) {
+            this.setState({
+                username: nextProps.viewer.get('username'),
+                name: nextProps.viewer.get('name'),
+                email: nextProps.viewer.get('email'),
+            });
+        }
     }
 
     // action events
-    setUsername(e) {
-        this.props.dispatch(setUsername(e.target.value));
+    setUsername() {
+        this.setState({ username: this.refs.username.getValue() });
     }
 
-    setName(e) {
-        this.props.dispatch(setName(e.target.value));
+    setName() {
+        this.setState({ name: this.refs.name.getValue() });
     }
 
-    setEmail(e) {
-        this.props.dispatch(setEmail(e.target.value));
+    setEmail() {
+        this.setState({ email: this.refs.email.getValue() });
     }
 
-    saveUser() {
+    saveUser(e) {
+        e.preventDefault();
         this.props.dispatch(saveUser({
             username: this.refs.username.getValue(),
             name: this.refs.name.getValue(),
@@ -59,7 +75,10 @@ class Account extends React.Component {
                         <Col xs={12} md={10} mdOffset={1} lg={8} lgOffset={2}>
                             <h1>{__('User information')}</h1>
                             {alert}
-                            <form className="form-horizontal">
+                            <form
+                                className="form-horizontal"
+                                onSubmit={!isSaving ? this.saveUser : null}
+                            >
                                 <FormControls.Static
                                     label="ID"
                                     labelClassName="col-md-3"
@@ -71,7 +90,7 @@ class Account extends React.Component {
                                     wrapperClassName="col-md-9"
                                     type="text"
                                     placeholder={__('Username')}
-                                    value={viewer.get('username')}
+                                    value={this.state.username}
                                     bsStyle={formErrors.get('username') ? 'error' : null}
                                     help={formErrors.get('username')}
                                     onChange={this.setUsername}
@@ -83,7 +102,7 @@ class Account extends React.Component {
                                     wrapperClassName="col-md-9"
                                     type="text"
                                     placeholder={__('Name')}
-                                    value={viewer.get('name')}
+                                    value={this.state.name}
                                     bsStyle={formErrors.get('name') ? 'error' : null}
                                     help={formErrors.get('name')}
                                     onChange={this.setName}
@@ -95,7 +114,7 @@ class Account extends React.Component {
                                     wrapperClassName="col-md-9"
                                     type="text"
                                     placeholder={__('Email')}
-                                    value={viewer.get('email')}
+                                    value={this.state.email}
                                     bsStyle={formErrors.get('email') ? 'error' : null}
                                     help={formErrors.get('email')}
                                     onChange={this.setEmail}
@@ -124,9 +143,9 @@ class Account extends React.Component {
                                 <Row>
                                     <Col md={9} mdOffset={3}>
                                         <Button
+                                            type="submit"
                                             bsStyle="primary"
                                             disabled={isSaving}
-                                            onClick={!isSaving ? this.saveUser : null}
                                         >
                                             {isSaving ?
                                                 <i className="fa fa-spinner fa-spin fa-lg"></i>
