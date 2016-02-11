@@ -1,5 +1,10 @@
-import userReducer from './user';
+import { combineReducers } from 'redux-immutable';
+import user from './user';
+import routeReducer from './routeReducer';
 
-export default function reducer(state, action) {
-    return userReducer(state, action);
-}
+const reducer = combineReducers({
+    viewer: user,
+    routing: routeReducer,
+});
+
+export default reducer;
