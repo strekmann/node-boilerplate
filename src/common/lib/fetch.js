@@ -1,4 +1,3 @@
-import 'es6-promise';
 import fetch from 'isomorphic-fetch';
 
 let base = '';

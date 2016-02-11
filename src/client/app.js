@@ -14,8 +14,7 @@ import createLogger from 'redux-logger';
 import { syncHistory } from 'react-router-redux';
 
 const initialState = Immutable.fromJS(window.__INITIAL_STATE__);
-const socket = io();
-// const socket = io({ path: '/s' });
+const socket = io({ path: '/s' });
 const socketMiddleware = createSocketIoMiddleware(socket, 'socket/');
 const middleware = [socketMiddleware, thunk];
 
@@ -37,26 +36,3 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('app')
 );
-
-/*
-import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { Router, browserHistory } from 'react-router';
-import Immutable from 'immutable';
-import createRoutes from '../common/routes';
-import configureStore from '../common/stores';
-
-const initialState = Immutable.fromJS(window.__INITIAL_STATE__);
-
-const store = configureStore(initialState, browserHistory);
-const routes = createRoutes(store);
-
-render(
-    <Provider store={store}>
-        <Router history={browserHistory}>
-            {routes}
-        </Router>
-    </Provider>, document.getElementById('app')
-);
-*/

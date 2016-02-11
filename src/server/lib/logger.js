@@ -3,10 +3,11 @@
 import util from 'util';
 import _ from 'lodash';
 import bunyan from 'bunyan';
-import settings from '../settings';
+import config from 'config';
 import pkg from '../../../package';
 
-let opts = { name: pkg.name };
+const opts = _.assign({ name: pkg.name }, config.get('bunyan'));
+
 const defaultSerializers = {
     res: (res) => {
         if (!_.isObject(res)) { return res; }
@@ -29,10 +30,6 @@ const defaultSerializers = {
         };
     },
 };
-
-if (settings.bunyan) {
-    opts = _.assign(opts, settings.bunyan);
-}
 
 let logger = bunyan.createLogger(opts);
 

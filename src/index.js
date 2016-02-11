@@ -25,7 +25,7 @@ import './server/lib/db';
 const app = express();
 const httpServer = http.createServer(app);
 const port = config.get('express.port') || 3000;
-const io = socketIO(httpServer);
+const io = socketIO(httpServer, { path: '/s' });
 
 if (config.get('express.trust_proxy')) {
     app.enable('trust proxy');
@@ -84,7 +84,6 @@ const socketOptions = {
         accept(new Error(message));
     },
 };
-// io.path('/s');
 io.use(passportSocketIO.authorize(socketOptions));
 
 app.use(bodyParser.urlencoded({ extended: true }));
