@@ -4,6 +4,7 @@ import { SOCKET_SET_USERCOUNT } from '../actions/socket';
 function user(state, action) {
     switch (action.type) {
         case LOAD_USER_SUCCESS:
+            console.log("success", action.payload);
             return state.set('user', action.payload);
         case SAVE_USER_INIT:
             return state.set('isSaving', true);

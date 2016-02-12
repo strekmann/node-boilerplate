@@ -10,10 +10,10 @@ class Profile extends React.Component {
     }
 }
 
-Profile.fetchData = function fetchData(dispatch) {
-    console.log("p", this.props);
+Profile.fetchData = function fetchData(dispatch, props) {
+    console.log("p", props);
     return Promise.all([
-        dispatch(loadUser(this.props.params.id)),
+        dispatch(loadUser(props.params.id)),
     ]);
 };
 

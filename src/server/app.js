@@ -63,7 +63,7 @@ export default function render(req, res, next) {
                 if (typeof component.fetchData !== 'function') {
                     return false;
                 }
-                return component.fetchData(store.dispatch);
+                return component.fetchData(store.dispatch, renderProps);
             });
 
             // Then render when all promises are resolved

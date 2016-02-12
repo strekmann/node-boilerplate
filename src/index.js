@@ -126,6 +126,7 @@ app.get('/auth/logout', (req, res, next) => {
 
 /** API endpoints **/
 app.use('/api/1/auth', api.auth);
+app.use('/api/1/profile', api.profile);
 
 /** Static stuff **/
 app.use(serveStatic(path.join(__dirname, '..', 'dist', 'public')));
