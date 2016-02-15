@@ -71,7 +71,6 @@ export function loadUser(id) {
             return json.then(Promise.reject.bind(Promise));
         })
         .then((data) => {
-            console.log("data", data, data.user);
             dispatch(loadUserSuccess(Immutable.fromJS(data.user)));
         })
         .catch((error) => {

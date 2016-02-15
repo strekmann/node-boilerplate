@@ -31,7 +31,7 @@ class Navigation extends React.Component {
                 <Navbar.Collapse eventKey={0}>
                     <Nav navbar pullRight>
                         <Navbar.Text>
-                            <Label bsStyle="primary">{this.props.usercount}</Label>
+                            <Label bsStyle="primary">{this.props.viewer.get('socket').get('usercount')}</Label>
                         </Navbar.Text> {userItem}
                     </Nav>
                 </Navbar.Collapse>

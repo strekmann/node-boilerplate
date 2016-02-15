@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { Router, browserHistory } from 'react-router';
 import createRoutes from '../common/routes';
-import reducers from '../common/reducers/user';
+import reducers from '../common/reducers';
 import io from 'socket.io-client';
 import createLogger from 'redux-logger';
 import { syncHistory } from 'react-router-redux';

@@ -36,16 +36,20 @@ function renderFullPage(renderedContent, initialState, head = {
 }
 
 export default function render(req, res, next) {
+    let viewer = {};
+    if (req.user) {
+        viewer = req.user.toObject();
+    }
+    viewer.formErrors = [];
+    viewer.errorMessage = '';
+    viewer.isSaving = false;
+    viewer.socket = { usercount: 0 };
+
     const history = createMemoryHistory();
     const store = configureStore(
         Immutable.Map({
-            viewer: Immutable.fromJS(req.user || null),
-            formErrors: Immutable.List(),
-            errorMessage: '',
-            isSaving: false,
-            socket: Immutable.Map({
-                usercount: 0,
-            }),
+            viewer: Immutable.fromJS(viewer),
+            user: Immutable.Map(),
         }), history);
     const routes = createRoutes(store);
 
@@ -63,7 +67,7 @@ export default function render(req, res, next) {
                 if (typeof component.fetchData !== 'function') {
                     return false;
                 }
-                return component.fetchData(store.dispatch, renderProps);
+                return component.fetchData(store.dispatch, renderProps.params);
             });
 
             // Then render when all promises are resolved

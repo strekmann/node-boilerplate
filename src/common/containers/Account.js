@@ -55,9 +55,9 @@ class Account extends React.Component {
     render() {
         const __ = translator(this.props.lang);
         const viewer = this.props.viewer;
-        const formErrors = this.props.formErrors;
-        const errorMessage = this.props.errorMessage;
-        const isSaving = this.props.isSaving;
+        const formErrors = this.props.viewer.get('formErrors');
+        const errorMessage = this.props.viewer.get('errorMessage');
+        const isSaving = this.props.viewer.get('isSaving');
 
         let alert;
         if (errorMessage) {
