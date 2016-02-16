@@ -70,13 +70,12 @@ export default function render(req, res, next) {
             });
 
             // Then render when all promises are resolved
-            //Promise.all(promises).then(() => {
+            Promise.all(promises).then(() => {
                 const renderedContent = renderToString(
                     <Provider store={store}>
                         <RouterContext {...renderProps} />
                     </Provider>
                 );
-                console.error("sEE", store.getState());
 
                 const renderedPage = renderFullPage(renderedContent, store.getState(), {
                     title: headconfig.title,
@@ -84,7 +83,7 @@ export default function render(req, res, next) {
                     link: headconfig.link,
                 });
                 res.send(renderedPage);
-            //});
+            });
         }
         else {
             res.status(404).send('Not found');
