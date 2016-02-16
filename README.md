@@ -9,12 +9,11 @@ Based on
 * node
 * express
 * mongoose
-* passport
-* jade
-* react
-* alt (flux pattern)
-* iso (isomorphic react)
-* i18n-abide
+* redis
+* passport (passport-local, passport-google-oauth)
+* react (react-router, react-bootstrap, react-router-bootstrap)
+* redux (redux-immutable, redux-thunk, redux-logger)
+* socketio (passport.socketio, redux-socket.io)
 * mocha
 
 Howto
@@ -23,18 +22,14 @@ Howto
 * Clone this repository: ``git clone git://github.com/strekmann/node-boilerplate.git``
 * Change directory: ``cd node-boilerplate``
 * Install dependencies: ``make install``
-* Create a settings file, and remember to edit it: ``cp server/settings.example.js server/settings.js``
-* See that everything works on your side: ``make test``
-* Run: ``node index``
+* Run: ``node``
 * Open browser at localhost:3000
 
 Developers howto
 ----------------
 
-* Make everything: ``make``
-* Make translation files: ``make locales``
 * Compile sass and react components on file changes: ``make watch``
-* Restart cluster on file changes: ``nodemon cluster``
+* Restart cluster on file changes: ``make run``
 
 Bugs? Contributions?
 --------------------
@@ -43,5 +38,5 @@ Please use the issues and pull requests at Github.
 
 Copyright and license
 ---------------------
-Copyright © 2013-2015 Jørgen Bergquist and Sigurd Gartmann, released under the
+Copyright © 2013-2016 Jørgen Bergquist and Sigurd Gartmann, released under the
 [MIT license](https://github.com/strekmann/node-boilerplate/blob/master/LICENSE).
