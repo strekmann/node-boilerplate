@@ -14,18 +14,20 @@ class Account extends React.Component {
         this.setName = this.setName.bind(this);
         this.setEmail = this.setEmail.bind(this);
         this.state = {
-            username: props.viewer.get('username'),
-            name: props.viewer.get('name'),
-            email: props.viewer.get('email'),
+            username: props.users.getIn([props.viewer.get('id'), 'username']),
+            name: props.users.getIn([props.viewer.get('id'), 'name']),
+            email: props.users.getIn([props.viewer.get('id'), 'email']),
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.viewer !== nextProps.viewer) {
+        const viewer = this.props.users.get(this.props.viewer.get('id'));
+        const nextViewer = nextProps.users.get(nextProps.viewer.get('id'));
+        if (viewer !== nextViewer) {
             this.setState({
-                username: nextProps.viewer.get('username'),
-                name: nextProps.viewer.get('name'),
-                email: nextProps.viewer.get('email'),
+                username: nextViewer.get('username'),
+                name: nextViewer.get('name'),
+                email: nextViewer.get('email'),
             });
         }
     }
@@ -59,6 +61,8 @@ class Account extends React.Component {
         const errorMessage = this.props.viewer.get('errorMessage');
         const isSaving = this.props.viewer.get('isSaving');
 
+        const viewerid = this.props.viewer.get('id');
+
         let alert;
         if (errorMessage) {
             alert = (<Alert bsStyle="danger">
@@ -82,7 +86,7 @@ class Account extends React.Component {
                                 <FormControls.Static
                                     label="ID"
                                     labelClassName="col-md-3"
-                                    wrapperClassName="col-md-9" value={viewer.get('_id')}
+                                    wrapperClassName="col-md-9" value={viewerid}
                                 />
                                 <Input
                                     label={__('Username')}
@@ -124,14 +128,14 @@ class Account extends React.Component {
                                     label={__('Active')}
                                     wrapperClassName="col-md-9 col-md-offset-3"
                                     type="checkbox"
-                                    checked={viewer.get('is_active')}
+                                    checked={this.props.users.getIn([viewerid, 'is_active'])}
                                     disabled
                                 />
                                 <Input
                                     label={__('Admin')}
                                     wrapperClassName="col-md-9 col-md-offset-3"
                                     type="checkbox"
-                                    checked={viewer.get('is_admin')}
+                                    checked={this.props.users.getIn([viewerid, 'is_admin'])}
                                     disabled
                                 />
                                 <FormControls.Static
@@ -165,9 +169,7 @@ class Account extends React.Component {
 
 Account.propTypes = {
     viewer: React.PropTypes.object,
-    formErrors: React.PropTypes.instanceOf(Immutable.List),
-    errorMessage: React.PropTypes.string,
-    isSaving: React.PropTypes.bool,
+    users: React.PropTypes.instanceOf(Immutable.Map),
     dispatch: React.PropTypes.func,
     lang: React.PropTypes.string,
 };
@@ -175,9 +177,7 @@ Account.propTypes = {
 function select(state) {
     return {
         viewer: state.get('viewer'),
-        formErrors: state.get('formErrors'),
-        errorMessage: state.get('errorMessage'),
-        isSaving: state.get('isSaving'),
+        users: state.get('users'),
     };
 }
 

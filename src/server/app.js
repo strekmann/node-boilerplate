@@ -36,20 +36,19 @@ function renderFullPage(renderedContent, initialState, head = {
 }
 
 export default function render(req, res, next) {
-    let viewer = {};
+    const viewer = {};
+    const users = {};
     if (req.user) {
-        viewer = req.user.toObject();
-    }
-    viewer.formErrors = [];
-    viewer.errorMessage = '';
-    viewer.isSaving = false;
-    viewer.socket = { usercount: 0 };
+        viewer.id = req.user.id;
+        viewer.formErrors = [];
 
+        users[req.user.id] = req.user.toObject();
+    }
     const history = createMemoryHistory();
     const store = configureStore(
         Immutable.Map({
             viewer: Immutable.fromJS(viewer),
-            user: Immutable.Map(),
+            users: Immutable.fromJS(users),
         }), history);
     const routes = createRoutes(store);
 
@@ -71,7 +70,7 @@ export default function render(req, res, next) {
             });
 
             // Then render when all promises are resolved
-            Promise.all(promises).then(() => {
+            //Promise.all(promises).then(() => {
                 const renderedContent = renderToString(
                     <Provider store={store}>
                         <RouterContext {...renderProps} />
@@ -85,7 +84,7 @@ export default function render(req, res, next) {
                     link: headconfig.link,
                 });
                 res.send(renderedPage);
-            });
+            //});
         }
         else {
             res.status(404).send('Not found');

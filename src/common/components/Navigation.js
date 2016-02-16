@@ -12,14 +12,14 @@ class Navigation extends React.Component {
     */
 
     render() {
-        const user = this.props.viewer;
+        const viewerid = this.props.viewer.get('id');
         let userItem;
 
-        if (user) {
-            userItem = (<LinkContainer to="/account"><NavItem to="/account">{user.get('name')}</NavItem></LinkContainer>);
+        if (!viewerid) {
+            userItem = (<NavItem href="/auth/google">Log in</NavItem>);
         }
         else {
-            userItem = (<NavItem to="/auth/google">Log in</NavItem>);
+            userItem = (<LinkContainer to="/account"><NavItem to="/account">{this.props.users.getIn([viewerid, 'name'])}</NavItem></LinkContainer>);
         }
 
         return (
@@ -31,7 +31,7 @@ class Navigation extends React.Component {
                 <Navbar.Collapse eventKey={0}>
                     <Nav navbar pullRight>
                         <Navbar.Text>
-                            <Label bsStyle="primary">{this.props.viewer.get('socket').get('usercount')}</Label>
+                            <Label bsStyle="primary">{this.props.socket.get('usercount')}</Label>
                         </Navbar.Text> {userItem}
                     </Nav>
                 </Navbar.Collapse>
@@ -42,7 +42,8 @@ class Navigation extends React.Component {
 
 Navigation.propTypes = {
     viewer: React.PropTypes.object,
-    usercount: React.PropTypes.number,
+    users: React.PropTypes.object,
+    socket: React.PropTypes.object,
 };
 
 export default Navigation;

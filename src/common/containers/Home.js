@@ -5,16 +5,14 @@ import { Grid, Row, Col, PageHeader } from 'react-bootstrap';
 class Home extends React.Component {
 
     render() {
-        if (this.props.viewer) {
+        const viewerid = this.props.viewer.get('id');
+        if (!viewerid) {
             return (
                 <Grid>
                     <Row>
                         <Col xs={12}>
                             <PageHeader>Welcome! <small>Here be dragons</small></PageHeader>
-                            <ul>
-                                <li>{this.props.viewer.get('name')}</li>
-                                <li>{this.props.viewer.get('email')}</li>
-                            </ul>
+                            <p>You need to log in</p>
                         </Col>
                     </Row>
                 </Grid>
@@ -25,7 +23,10 @@ class Home extends React.Component {
                 <Row>
                     <Col xs={12}>
                         <PageHeader>Welcome! <small>Here be dragons</small></PageHeader>
-                        <p>You need to log in</p>
+                        <ul>
+                            <li>{this.props.users.getIn([viewerid, 'name'])}</li>
+                            <li>{this.props.users.getIn([viewerid, 'email'])}</li>
+                        </ul>
                     </Col>
                 </Row>
             </Grid>
@@ -35,11 +36,13 @@ class Home extends React.Component {
 
 Home.propTypes = {
     viewer: React.PropTypes.object,
+    users: React.PropTypes.object,
 };
 
 function select(state) {
     return {
         viewer: state.get('viewer'),
+        users: state.get('users'),
     };
 }
 

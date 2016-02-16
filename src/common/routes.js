@@ -9,7 +9,7 @@ import Profile from './containers/Profile';
 export default (store) => {
     const requireAuth = (nextState, replace, callback) => {
         const viewer = store.getState().get('viewer');
-        if (!viewer) {
+        if (!viewer.get('id')) {
             replace({
                 pathname: '/',
                 state: { nextPathname: nextState.location.pathname },

@@ -7,7 +7,7 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <Navigation viewer={this.props.viewer} usercount={this.props.usercount} />
+                <Navigation viewer={this.props.viewer} socket={this.props.socket} users={this.props.users} />
                 {this.props.children}
             </div>
         );
@@ -23,7 +23,8 @@ App.propTypes = {
 function select(state) {
     return {
         viewer: state.get('viewer'),
-        usercount: state.getIn(['socket', 'usercount']),
+        users: state.get('users'),
+        socket: state.get('socket'),
     };
 }
 

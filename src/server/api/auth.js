@@ -34,7 +34,7 @@ router.route('/account')
         user.save((saveErr) => {
             if (saveErr) { return next(saveErr); }
 
-            return res.json({ user });
+            return res.json({ user: user.toObject() });
         });
     });
 });

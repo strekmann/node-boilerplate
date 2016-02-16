@@ -20,7 +20,7 @@ const middleware = [socketMiddleware, thunk];
 
 const router = syncHistory(browserHistory);
 if (process.env.NODE_ENV === 'development') {
-    middleware.push(router, createLogger({ logger: console }));
+    middleware.push(router, createLogger({ logger: console, stateTransformer: state => state && state.toJS() }));
 }
 else {
     middleware.push(router);
