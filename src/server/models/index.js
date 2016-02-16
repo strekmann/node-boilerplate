@@ -13,6 +13,14 @@ var UserSchema = new mongoose.Schema({
     google_id: {type: String}
 });
 
+UserSchema.set('toObject', {
+    transform: function (document, ret, options) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+    }
+});
+
 var User = mongoose.model('User', UserSchema);
 
 module.exports = {
