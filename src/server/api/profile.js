@@ -16,7 +16,7 @@ router.route('/:id')
                 error: 'Could not find user',
             });
         }
-        return res.json({ user });
+        return res.json({ user: user.toObject() });
     });
 });
 
