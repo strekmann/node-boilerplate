@@ -1,43 +1,27 @@
-REPORTER = spec
+# Everything at one place
 
 build:
-	@./node_modules/.bin/grunt
-
-production:
-	npm install
-	./node_modules/.bin/bower install
-	@./node_modules/.bin/grunt prod
+	npm run build
 
 watch:
-	@./node_modules/.bin/grunt watch
+	npm run watch
 
-hint:
-	@./node_modules/.bin/grunt hint
-
-locales:
-	@./node_modules/.bin/grunt locales
-
-test: hint
-	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--reporter $(REPORTER) \
-		--ui bdd
-
-test-w:
-	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--reporter $(REPORTER) \
-		--growl \
-		--ui bdd \
-		--watch
+test: lint
+	npm test
 
 install:
 	npm install
-	./node_modules/.bin/bower install
 
 update:
 	npm update
-	./node_modules/.bin/bower update
+
+run:
+	npm run nodemon
+
+lint:
+	npm run lint
 
 clean:
-	rm -r ./node_modules ./bower_components ./public
+	rm -r ./node_modules ./public
 
-.PHONY: build production watch test test-w hint locales install update clean
+.PHONY: build watch install update run lint test clean

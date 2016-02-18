@@ -4,5 +4,8 @@
 /setup/mongo
 .sass-cache
 /public
+/dist
 *.mo
-
+*.log
+/config/production.js
+/config/development.js

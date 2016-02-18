@@ -1,0 +1,17 @@
+{
+    "extends": "airbnb",
+    "rules": {
+        "indent": [ 2, 4, {"SwitchCase": 1} ],
+        "react/jsx-indent-props": [2, 4],
+        "brace-style": [ 2, "stroustrup", { "allowSingleLine": true } ],
+        "quotes": [ 1, "single"],
+        "no-unused-vars": [ 1, { "vars": "all", "args": "after-used", "argsIgnorePattern": "req|res|next" }],
+        "no-shadow": 1,
+        "no-param-reassign": 1,
+        "new-cap": [1, { "capIsNewExceptions": ["ImmutableStore", "List", "Map"] }],
+        "comma-dangle": 1,
+        "no-unused-expressions": 1,
+        "react/sort-comp": 1,
+        "prefer-const": 1,
+    },
+}
