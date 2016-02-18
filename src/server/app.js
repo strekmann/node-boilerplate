@@ -69,7 +69,7 @@ export default function render(req, res, next) {
         }
         else if (renderProps) {
             // Collect all async promises from components
-            const promises = renderProps.components.map(function (component, index) {
+            const promises = renderProps.components.map((component) => {
                 if (typeof component.fetchData !== 'function') {
                     return false;
                 }
