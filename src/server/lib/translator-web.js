@@ -12,14 +12,14 @@ module.exports = function (lang) {
         var fmt = args.shift();
 
         if (args.length === 1 && typeof args[0] === 'object'){
-            return fmt.replace(/%\(\s*([^)]+)\s*\)s/g, function (m, v){
-                return String(args[0][v.trim()]);
-            });
+            return fmt.replace(/%\(\s*([^)]+)\s*\)s/g, (m, v) =>
+                String(args[0][v.trim()])
+            );
         }
 
-        return fmt.replace(/%s/g, function () {
-            return String(args.shift());
-        });
+        return fmt.replace(/%s/g, () =>
+            String(args.shift())
+        );
     }
 
     return function (word) {
