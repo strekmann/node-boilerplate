@@ -5,14 +5,14 @@ import bcrypt from 'bcrypt';
 const SALT_WORK_FACTOR = 10;
 
 const UserSchema = new mongoose.Schema({
-    _id: { type: String, required: true, unique: true, 'default': shortid.generate },
+    _id: { type: String, required: true, unique: true, default: shortid.generate },
     username: { type: String, unique: true, sparse: true, trim: true, lowercase: true },
     name: { type: String, required: true },
     email: { type: String },
     password: { type: String },
-    is_active: { type: Boolean, 'default': true },
-    is_admin: { type: Boolean, 'default': false },
-    created: { type: Date, required: true, 'default': Date.now },
+    is_active: { type: Boolean, default: true },
+    is_admin: { type: Boolean, default: false },
+    created: { type: Date, required: true, default: Date.now },
     google_id: { type: String },
 });
 
