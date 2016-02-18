@@ -1,4 +1,4 @@
-module.exports = function () {
+module.exports = function translator() {
     function format() {
         const args = [];
         for (const a in arguments) {
@@ -22,7 +22,7 @@ module.exports = function () {
         );
     }
 
-    return function (word) {
+    return function formatWord(word) {
         const args = arguments;
         const localeData = window.json_locale_data;
         if (args.length === 0) { return ''; }

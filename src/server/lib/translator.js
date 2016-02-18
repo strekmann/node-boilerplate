@@ -1,8 +1,5 @@
-module.exports = function () {
-    return function (original) {
-        return original;
-    };
-};
+module.exports = () => (original) => original;
+
 /*
 module.exports = function(lang){
     function format(){
