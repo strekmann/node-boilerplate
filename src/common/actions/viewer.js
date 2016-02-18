@@ -1,4 +1,5 @@
 import Immutable from 'immutable';
+import { routeActions } from 'react-router-redux';
 
 import fetch from '../lib/fetch';
 import {
@@ -45,6 +46,7 @@ export function loginUser(payload) {
         })
         .then((data) => {
             dispatch(loginUserSuccess(Immutable.fromJS(data.user)));
+            dispatch(routeActions.push('/'));
         })
         .catch((error) => {
             dispatch(loginUserError(error.error));
@@ -61,6 +63,7 @@ export function registerUser(payload) {
         })
         .then((data) => {
             dispatch(registerUserSuccess(Immutable.fromJS(data.user)));
+            dispatch(routeActions.push('/'));
         })
         .catch((error) => {
             dispatch(registerUserError(error.error));
