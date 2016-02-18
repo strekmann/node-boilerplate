@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 import { Provider } from 'react-redux';
 // import thunkMiddleware from 'redux-thunk';
 import { RouterContext, match, createMemoryHistory } from 'react-router';
-// import reducers from '../common/reducers/user';
+import log from './lib/logger';
 import configureStore from '../common/stores';
 import createRoutes from '../common/routes';
 import headconfig from '../common/components/Meta';
@@ -83,7 +83,8 @@ export default function render(req, res, next) {
                     link: headconfig.link,
                 });
                 res.send(renderedPage);
-            });
+            })
+            .catch((promiseErr) => next(promiseErr));
         }
         else {
             res.status(404).send('Not found');

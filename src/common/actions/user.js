@@ -72,11 +72,6 @@ export function loadUser(id) {
         })
         .then((data) => {
             dispatch(loadUserSuccess(Immutable.fromJS(data.user)));
-        })
-        .catch((error) => {
-            console.error(error);
-            dispatch();
-            //dispatch(saveUserError(error.error));
         });
     };
 }
