@@ -13,6 +13,7 @@ class Profile extends React.Component {
                     <Col xs={12}>
                         <h2>{user.get('name')}</h2>
                         <p>{user.get('email')}</p>
+                        <p>{user.get('created')}</p>
                     </Col>
                 </Row>
             </Grid>
