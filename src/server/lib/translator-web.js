@@ -24,8 +24,9 @@ module.exports = function () {
 
     return function (word) {
         const args = arguments;
+        const localeData = window.json_locale_data;
         if (args.length === 0) { return ''; }
-        args[0] = window.json_locale_data.messages[word] && window.json_locale_data.messages[word][1] || word;
+        args[0] = localeData.messages[word] && localeData.messages[word][1] || word;
         return format.apply(this, args);
     };
 };
