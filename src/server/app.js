@@ -1,11 +1,12 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import Immutable from 'immutable';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-// import thunkMiddleware from 'redux-thunk';
+import thunk from 'redux-thunk';
 import { RouterContext, match, createMemoryHistory } from 'react-router';
-import log from './lib/logger';
-import configureStore from '../common/stores';
+import { syncHistory } from 'react-router-redux';
+import reducers from '../common/reducers';
 import createRoutes from '../common/routes';
 import headconfig from '../common/components/Meta';
 import 'cookie-parser';
@@ -44,12 +45,18 @@ export default function render(req, res, next) {
 
         users[req.user.id] = req.user.toObject();
     }
+
     const history = createMemoryHistory();
-    const store = configureStore(
-        Immutable.Map({
-            viewer: Immutable.fromJS(viewer),
-            users: Immutable.fromJS(users),
-        }), history);
+    const initialState = Immutable.Map({
+        viewer: Immutable.fromJS(viewer),
+        users: Immutable.fromJS(users),
+    });
+
+    const router = syncHistory(history);
+    const middleware = [thunk, router];
+
+    const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
+    const store = createStoreWithMiddleware(reducers, initialState);
     const routes = createRoutes(store);
 
     match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
