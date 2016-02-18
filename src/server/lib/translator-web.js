@@ -24,7 +24,7 @@ module.exports = function (lang) {
 
     return function (word) {
         const args = arguments;
-        if (args.length === 0) { return ""; }
+        if (args.length === 0) { return ''; }
         args[0] = window.json_locale_data.messages[word] && window.json_locale_data.messages[word][1] || word;
         return format.apply(this, args);
     };
