@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { Grid, Row, Col, Input, Button } from 'react-bootstrap';
 
 import { loginUser } from '../actions/viewer';
@@ -39,8 +40,10 @@ class Login extends React.Component {
                                     ref="password"
                                     placeholder="password"
                                 />
-                                <Button type="submit" bsStyle="primary">Login</Button>
                                 <p>Hint: email: example@ninja.com password: ninja</p>
+                                <Button type="submit" bsStyle="primary">Login</Button>
+                                {" or "}
+                                <Link to="/register">Register</Link>
                             </fieldset>
                         </form>
                     </Col>

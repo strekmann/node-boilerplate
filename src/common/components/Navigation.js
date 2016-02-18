@@ -16,12 +16,18 @@ class Navigation extends React.Component {
         let userItem;
 
         if (!viewerid) {
-            userItem = (<NavItem href="/auth/google">Log in</NavItem>);
+            userItem = (
+                <LinkContainer to="/login">
+                    <NavItem>
+                        Log in
+                    </NavItem>
+                </LinkContainer>
+            );
         }
         else {
             userItem = (
                 <LinkContainer to="/account">
-                    <NavItem to="/account">
+                    <NavItem>
                         {this.props.users.getIn([viewerid, 'name'])}
                     </NavItem>
                 </LinkContainer>
