@@ -174,6 +174,20 @@ app.use((err, req, res, next) => {
     });
 });
 
+app.use((req, res, next) => {
+    res.format({
+        html: () => {
+            res.sendStatus(404);
+        },
+        json: () => {
+            res.status(404).json({
+                error: 'Not Found',
+                status: 404,
+            });
+        },
+    });
+});
+
 process.on('uncaughtException', (err) => {
     log.fatal(err);
     process.exit(1);
