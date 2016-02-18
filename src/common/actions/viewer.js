@@ -43,13 +43,6 @@ export function loginUser(payload) {
             body: JSON.stringify(payload),
             root: true,
         })
-        .then(res => {
-            const json = res.json();
-            if (res.status >= 200 && res.status < 300) {
-                return json;
-            }
-            return json.then(Promise.reject.bind(Promise));
-        })
         .then((data) => {
             dispatch(loginUserSuccess(Immutable.fromJS(data.user)));
         })
@@ -66,13 +59,6 @@ export function registerUser(payload) {
             method: 'post',
             body: JSON.stringify(payload),
             root: true,
-        })
-        .then(res => {
-            const json = res.json();
-            if (res.status >= 200 && res.status < 300) {
-                return json;
-            }
-            return json.then(Promise.reject.bind(Promise));
         })
         .then((data) => {
             dispatch(registerUserSuccess(Immutable.fromJS(data.user)));

@@ -39,13 +39,6 @@ export function loadUser(id) {
         return fetch(`/profile/${id}`, {
             method: 'get',
         })
-        .then(res => {
-            const json = res.json();
-            if (res.status >= 200 && res.status < 300) {
-                return json;
-            }
-            return json.then(Promise.reject.bind(Promise));
-        })
         .then((data) => {
             dispatch(loadUserSuccess(Immutable.fromJS(data.user)));
         });
@@ -60,13 +53,6 @@ export function saveUser(payload) {
         return fetch('/auth/account', {
             method: 'put',
             body: JSON.stringify({ user: payload }),
-        })
-        .then(res => {
-            const json = res.json();
-            if (res.status >= 200 && res.status < 300) {
-                return json;
-            }
-            return json.then(Promise.reject.bind(Promise));
         })
         .then((data) => {
             dispatch(saveUserSuccess(Immutable.fromJS(data.user)));

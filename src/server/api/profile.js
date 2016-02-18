@@ -7,16 +7,15 @@ router.route('/:id')
 .get((req, res, next) => {
     User.findById(req.params.id, (err, user) => {
         if (err) {
-            return res.status(500).json({
-                error: 'Failed when fetching user',
-            });
+            return next(err);
         }
         if (!user) {
             return res.status(404).json({
                 error: 'Could not find user',
+                status: 404,
             });
         }
-        return res.json({ user: user.toObject() });
+        return res.json({ user });
     });
 });
 

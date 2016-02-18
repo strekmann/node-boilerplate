@@ -8,16 +8,6 @@ if (typeof __CLIENT__ === 'undefined') {
 }
 
 export default (url, options) => {
-    // some routes should be allowed at root, but default should be to
-    // use api + version
-    if (!options.root) {
-        base += '/api/1';
-    }
-
-    if (!url.match(/^https?:/)) {
-        url = base + url;
-    }
-
     const opts = Object.assign({}, {
         method: 'get',
         credentials: 'same-origin',
@@ -27,5 +17,23 @@ export default (url, options) => {
         },
     }, options);
 
-    return fetch(url, opts);
+    // some routes should be allowed at root, but default should be to
+    // use api + version
+    let baseurl = base;
+    if (!opts.root) {
+        baseurl += '/api/1';
+    }
+
+    if (!url.match(/^https?:/)) {
+        url = baseurl + url;
+    }
+
+    // check status and return promise
+    return fetch(url, opts).then(res => {
+        const json = res.json();
+        if (res.status >= 200 && res.status < 300) {
+            return json;
+        }
+        return json.then(Promise.reject.bind(Promise));
+    });
 };

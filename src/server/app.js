@@ -84,10 +84,15 @@ export default function render(req, res, next) {
                 });
                 res.send(renderedPage);
             })
-            .catch((promiseErr) => next(promiseErr));
+            .catch((promiseErr) => {
+                if (promiseErr.status === 404) {
+                    return next();
+                }
+                return next(promiseErr);
+            });
         }
         else {
-            res.status(404).send('Not found');
+            return next();
         }
     });
 }
