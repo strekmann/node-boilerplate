@@ -19,7 +19,13 @@ class Navigation extends React.Component {
             userItem = (<NavItem href="/auth/google">Log in</NavItem>);
         }
         else {
-            userItem = (<LinkContainer to="/account"><NavItem to="/account">{this.props.users.getIn([viewerid, 'name'])}</NavItem></LinkContainer>);
+            userItem = (
+                <LinkContainer to="/account">
+                    <NavItem to="/account">
+                        {this.props.users.getIn([viewerid, 'name'])}
+                    </NavItem>
+                </LinkContainer>
+            );
         }
 
         return (

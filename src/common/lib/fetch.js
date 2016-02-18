@@ -12,7 +12,7 @@ export default (url, options) => {
         method: 'get',
         credentials: 'same-origin',
         headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json',
         },
     }, options);
@@ -20,16 +20,17 @@ export default (url, options) => {
     // some routes should be allowed at root, but default should be to
     // use api + version
     let baseurl = base;
+    let fullurl = url;
     if (!opts.root) {
         baseurl += '/api/1';
     }
 
-    if (!url.match(/^https?:/)) {
-        url = baseurl + url;
+    if (!fullurl.match(/^https?:/)) {
+        fullurl = baseurl + fullurl;
     }
 
     // check status and return promise
-    return fetch(url, opts).then(res => {
+    return fetch(fullurl, opts).then(res => {
         const json = res.json();
         if (res.status >= 200 && res.status < 300) {
             return json;

@@ -102,7 +102,9 @@ app.get('/auth/google',
         passport.authenticate('google', {
             scope: ['https://www.googleapis.com/auth/userinfo.profile',
                 'https://www.googleapis.com/auth/userinfo.email'],
-        }), (req, res) => {});
+        }), (req, res) => {
+            // do nothing
+        });
 app.get('/auth/google/callback',
         passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
             const url = req.session.returnTo || '/';
@@ -138,14 +140,14 @@ app.post('/auth/register', (req, res, next) => {
     user.name = name;
     user.email = email;
     user.password = password;
-    user.save((err, user) => {
+    user.save((err, createdUser) => {
         if (err) { return next(err); }
 
         // let the new user be logged in
-        req.logIn(user, (err) => {
+        req.logIn(createdUser, (err) => {
             if (err) { return next(err); }
 
-            res.json({ user });
+            res.json({ user: createdUser });
         });
     });
 });
