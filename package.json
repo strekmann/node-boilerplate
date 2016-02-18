@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "async": "^0.9.0",
+    "bcrypt": "^0.8.5",
     "body-parser": "^1.15.0",
     "bunyan": "^1.2.3",
     "bunyan-request-logger": "^0.2.3",

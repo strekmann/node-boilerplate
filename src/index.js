@@ -20,6 +20,7 @@ import api from './server/api';
 import universal from './server/app';
 import socketRoutes from './server/socket';
 import log from './server/lib/logger';
+import { User } from './server/models';
 import './server/lib/db';
 
 const app = express();
@@ -114,7 +115,7 @@ app.post('/auth/login', passport.authenticate('local'), (req, res, next) => {
             res.redirect('/');
         },
         json: () => {
-            res.json(_.pick(req.user, 'id','name'));
+            res.json({ user: req.user });
         },
     });
 });
@@ -122,6 +123,31 @@ app.post('/auth/login', passport.authenticate('local'), (req, res, next) => {
 app.get('/auth/logout', (req, res, next) => {
     req.logout();
     res.redirect('/');
+});
+app.post('/auth/register', (req, res, next) => {
+    const name = req.body.name.trim();
+    const email = req.body.email.trim();
+    const password = req.body.password;  // should not trim this
+
+    // simple validation
+    if (!name || !email || !password) {
+        return next(new Error('All fields are needed'));
+    }
+
+    const user = new User();
+    user.name = name;
+    user.email = email;
+    user.password = password;
+    user.save((err, user) => {
+        if (err) { return next(err); }
+
+        // let the new user be logged in
+        req.logIn(user, (err) => {
+            if (err) { return next(err); }
+
+            res.json({ user });
+        });
+    });
 });
 
 /** API endpoints **/

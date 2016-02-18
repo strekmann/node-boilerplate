@@ -6,9 +6,14 @@ if (typeof __CLIENT__ === 'undefined') {
     const config = require('config');
     base = config.get('express.apiurl');
 }
-base += '/api/1';
 
 export default (url, options) => {
+    // some routes should be allowed at root, but default should be to
+    // use api + version
+    if (!options.root) {
+        base += '/api/1';
+    }
+
     if (!url.match(/^https?:/)) {
         url = base + url;
     }
