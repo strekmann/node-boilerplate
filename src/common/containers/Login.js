@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col, Input, Button } from 'react-bootstrap';
 
-import { loginUser } from '../actions/user';
+import { loginUser } from '../actions/viewer';
 
 class Login extends React.Component {
     constructor(props) {

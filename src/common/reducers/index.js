@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux-immutable';
-import viewer from './user';
+import viewer from './viewer';
 import users from './users';
 import user from './user';
 import socket from './socket';

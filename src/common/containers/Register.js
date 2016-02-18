@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col, Input, Button } from 'react-bootstrap';
 
-import { registerUser } from '../actions/user';
+import { registerUser } from '../actions/viewer';
 
 class Register extends React.Component {
     constructor(props) {
