@@ -1,5 +1,5 @@
 module.exports = function (lang) {
-    function format(){
+    function format() {
         var args = [];
         for (var a in arguments) {
             if ({}.hasOwnProperty.call(arguments, a)) {
@@ -7,11 +7,11 @@ module.exports = function (lang) {
             }
         }
 
-        if (args.length === 1){ return args[0]; }
+        if (args.length === 1) { return args[0]; }
 
         var fmt = args.shift();
 
-        if (args.length === 1 && typeof args[0] === 'object'){
+        if (args.length === 1 && typeof args[0] === 'object') {
             return fmt.replace(/%\(\s*([^)]+)\s*\)s/g, (m, v) =>
                 String(args[0][v.trim()])
             );
