@@ -42,7 +42,7 @@ UserSchema.methods.authenticate = function authenticateUser(candidate, next) {
 };
 
 UserSchema.set('toObject', {
-    transform: (document, ret, options) => {
+    transform: (document, ret) => {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
@@ -50,7 +50,7 @@ UserSchema.set('toObject', {
 });
 
 UserSchema.set('toJSON', {
-    transform: (document, ret, options) => {
+    transform: (document, ret) => {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;

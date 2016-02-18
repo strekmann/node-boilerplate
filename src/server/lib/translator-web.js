@@ -1,4 +1,4 @@
-module.exports = function (lang) {
+module.exports = function () {
     function format() {
         const args = [];
         for (const a in arguments) {
