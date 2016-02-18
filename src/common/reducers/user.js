@@ -1,10 +1,10 @@
+import Immutable from 'immutable';
 import {
     SAVE_USER_INIT,
     SAVE_USER_SUCCESS,
     SAVE_USER_ERROR,
-    LOAD_USER_SUCCESS } from '../actions/user';
+    LOAD_USER_SUCCESS } from '../constants';
 
-import Immutable from 'immutable';
 const initialState = Immutable.fromJS({
     isSaving: false,
     errorMessage: '',

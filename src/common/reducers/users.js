@@ -1,4 +1,4 @@
-import { LOAD_USER_SUCCESS, SAVE_USER_SUCCESS } from '../actions/user';
+import { LOAD_USER_SUCCESS, SAVE_USER_SUCCESS } from '../constants';
 
 import Immutable from 'immutable';
 const initialState = Immutable.Map();

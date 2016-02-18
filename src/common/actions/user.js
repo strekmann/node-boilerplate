@@ -1,23 +1,26 @@
-import fetch from '../lib/fetch';
 import Immutable from 'immutable';
 
+import fetch from '../lib/fetch';
+import {
+    LOAD_USER_SUCCESS,
+    SAVE_USER_INIT,
+    SAVE_USER_ERROR,
+    SAVE_USER_SUCCESS,
+} from '../constants';
 
-export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
-export function loadUserSuccess(payload) {
+function loadUserSuccess(payload) {
     return {
         type: LOAD_USER_SUCCESS,
         payload,
     };
 }
 
-export const SAVE_USER_INIT = 'SAVE_USER_INIT';
 function saveUserInit() {
     return {
         type: SAVE_USER_INIT,
     };
 }
 
-export const SAVE_USER_SUCCESS = 'SAVE_USER_SUCCESS';
 function saveUserSuccess(payload) {
     return {
         type: SAVE_USER_SUCCESS,
@@ -25,7 +28,6 @@ function saveUserSuccess(payload) {
     };
 }
 
-export const SAVE_USER_ERROR = 'SAVE_USER_ERROR';
 function saveUserError(error) {
     return {
         type: SAVE_USER_ERROR,
@@ -33,7 +35,6 @@ function saveUserError(error) {
     };
 }
 
-export const LOAD_USER = 'LOAD_USER';
 export function loadUser(id) {
     return function loadUserAsync(dispatch) {
         return fetch(`/profile/${id}`, {
@@ -45,7 +46,6 @@ export function loadUser(id) {
     };
 }
 
-export const SAVE_USER = 'SAVE_USER';
 export function saveUser(payload) {
     return function saveUserAsync(dispatch) {
         dispatch(saveUserInit());

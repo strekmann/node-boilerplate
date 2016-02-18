@@ -1,4 +1,4 @@
-import { SOCKET_SET_USERCOUNT } from '../actions/socket';
+import { SOCKET_SET_USERCOUNT } from '../constants';
 
 import Immutable from 'immutable';
 const initialState = Immutable.fromJS({
