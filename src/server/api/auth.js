@@ -1,9 +1,9 @@
-import express from 'express';
+import { Router } from 'express';
 
 import { ensureAuthenticated } from '../lib/middleware';
 import { User } from '../models';
 
-const router = express.Router();
+const router = new Router();
 
 router.route('/account')
 .all(ensureAuthenticated)

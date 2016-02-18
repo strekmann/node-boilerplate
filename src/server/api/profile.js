@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { User } from '../models';
 
-const router = Router();
+const router = new Router();
 
 router.route('/:id')
 .get((req, res, next) => {
