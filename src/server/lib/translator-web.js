@@ -1,8 +1,10 @@
 module.exports = function (lang) {
     function format(){
         var args = [];
-        for (var a in arguments){
-            args.push(arguments[a]);
+        for (var a in arguments) {
+            if ({}.hasOwnProperty.call(arguments, a)) {
+                args.push(arguments[a]);
+            }
         }
 
         if (args.length === 1){ return args[0]; }
