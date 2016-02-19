@@ -21,8 +21,9 @@ Howto
 
 * Clone this repository: ``git clone git://github.com/strekmann/node-boilerplate.git``
 * Change directory: ``cd node-boilerplate``
-* Install dependencies: ``make install``
-* Run: ``node``
+* Install dependencies: ``npm install``
+* Build frontend: ``npm build``
+* Run: ``npm start``
 * Open browser at localhost:3000
 
 Developers howto
