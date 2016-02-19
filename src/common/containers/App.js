@@ -1,5 +1,6 @@
 import React from 'react';
 import Navigation from '../components/Navigation';
+import Footer from '../components/Footer';
 import { connect } from 'react-redux';
 
 class App extends React.Component {
@@ -13,6 +14,7 @@ class App extends React.Component {
                     users={this.props.users}
                 />
                 {this.props.children}
+                <Footer />
             </div>
         );
     }
