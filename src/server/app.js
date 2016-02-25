@@ -39,9 +39,6 @@ function renderFullPage(renderedContent, initialState, head = {
 export default function render(req, res, next) {
     const history = createMemoryHistory();
     const initialState = Immutable.fromJS(res.store);
-    console.log('init state', initialState);
-
-    console.log('store', JSON.stringify(res.store));
 
     const router = syncHistory(history);
     const middleware = [thunk, router];

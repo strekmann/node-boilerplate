@@ -7,8 +7,6 @@ import Immutable from 'immutable';
 class Profile extends React.Component {
     render() {
         const user = this.props.users.get(this.props.user.get('id'));
-        console.log(this.props.users);
-        console.log(user);
         return (
             <Grid>
                 <Row>

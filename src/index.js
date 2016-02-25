@@ -165,10 +165,11 @@ app.use((req, res, next) => {
     res.store.viewer = {};
     res.store.viewer.formErrors = [];
 
+    // Using JSON stringify and parse to make sure server data is similar to client data.
     if (req.user) {
         res.store.viewer.id = req.user.id;
         res.store.users = {};
-        res.store.users[req.user.id] = req.user;
+        res.store.users[req.user.id] = JSON.parse(JSON.stringify(req.user));
     }
     next();
 });
@@ -180,7 +181,7 @@ app.get('/profile/:id', (req, res, next) => {
             res.store.user = {};
             res.store.user.id = user.id;
             res.store.users = res.store.users || {};
-            res.store.users[user.id] = user;
+            res.store.users[user.id] = JSON.parse(JSON.stringify(user));
         }
         next();
     })
