@@ -1,5 +1,8 @@
 import config from 'config';
+import Promise from 'bluebird';
 import mongoose from 'mongoose';
+
+mongoose.Promise = Promise;
 
 if (process.env.NODE_ENV === 'test') {
     mongoose.connect('mongodb://localhost/mocha_test');

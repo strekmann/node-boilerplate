@@ -42,18 +42,18 @@ UserSchema.methods.authenticate = function authenticateUser(candidate, next) {
 };
 
 UserSchema.set('toObject', {
+    versionKey: false,
     transform: (document, ret) => {
         ret.id = ret._id;
         delete ret._id;
-        delete ret.__v;
     },
 });
 
 UserSchema.set('toJSON', {
+    versionKey: false,
     transform: (document, ret) => {
         ret.id = ret._id;
         delete ret._id;
-        delete ret.__v;
         delete ret.password;
     },
 });
