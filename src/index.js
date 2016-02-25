@@ -2,7 +2,6 @@
 
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import methodOverride from 'method-override';
 import session from 'express-session';
 import errorHandler from 'errorhandler';
 import express from 'express';
@@ -89,7 +88,6 @@ io.use(passportSocketIO.authorize(socketOptions));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(methodOverride());
 
 app.use(passport.initialize());
 app.use(passport.session());

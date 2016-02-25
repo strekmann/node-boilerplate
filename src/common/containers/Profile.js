@@ -21,9 +21,9 @@ class Profile extends React.Component {
     }
 }
 
-Profile.fetchData = function fetchData(dispatch, params) {
+Profile.fetchData = function fetchData(store, params, cookie) {
     return Promise.all([
-        dispatch(loadUser(params.id)),
+        store.dispatch(loadUser(params.id, cookie)),
     ]);
 };
 
