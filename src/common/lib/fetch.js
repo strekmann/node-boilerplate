@@ -8,6 +8,13 @@ if (typeof __CLIENT__ === 'undefined') {
 }
 
 export default (url, options) => {
+    // Move cookie option into headers if present
+    if (options.cookie) {
+        options.headers = options.headers || {};
+        options.headers.cookie = options.cookie;
+        delete options.cookie;
+    }
+
     const opts = Object.assign({}, {
         method: 'get',
         credentials: 'same-origin',

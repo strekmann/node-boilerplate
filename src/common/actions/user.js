@@ -35,10 +35,11 @@ function saveUserError(error) {
     };
 }
 
-export function loadUser(id) {
+export function loadUser(id, cookie) {
     return function loadUserAsync(dispatch) {
         return fetch(`/profile/${id}`, {
             method: 'get',
+            cookie,
         })
         .then((data) => {
             dispatch(loadUserSuccess(Immutable.fromJS(data.user)));

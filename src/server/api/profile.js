@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import { User } from '../models';
+import { ensureAuthenticated } from '../lib/middleware';
 
 const router = new Router();
 
 router.route('/:id')
+.all(ensureAuthenticated)
 .get((req, res, next) => {
     User.findById(req.params.id, (err, user) => {
         if (err) {
