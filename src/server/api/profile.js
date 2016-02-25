@@ -1,22 +1,29 @@
 import { Router } from 'express';
 import { User } from '../models';
 
-const router = new Router();
+function getUser(req) {
+    return User.findById(req.params.id).exec();
+}
 
+const router = new Router();
 router.route('/:id')
 .get((req, res, next) => {
-    User.findById(req.params.id, (err, user) => {
-        if (err) {
-            return next(err);
-        }
+    getUser(req)
+    .then((user) => {
         if (!user) {
-            return res.status(404).json({
-                error: 'Could not find user',
+            res.status(404).json({
                 status: 404,
+                error: 'Could not find user',
             });
         }
-        return res.json({ user });
+        else {
+            res.json({user});
+        }
+    })
+    .catch((err) => {
+        next(err);
     });
 });
 
 export default router;
+export { getUser };

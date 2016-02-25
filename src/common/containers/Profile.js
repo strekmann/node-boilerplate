@@ -7,6 +7,8 @@ import Immutable from 'immutable';
 class Profile extends React.Component {
     render() {
         const user = this.props.users.get(this.props.user.get('id'));
+        console.log(this.props.users);
+        console.log(user);
         return (
             <Grid>
                 <Row>
@@ -20,12 +22,6 @@ class Profile extends React.Component {
         );
     }
 }
-
-Profile.fetchData = function fetchData(dispatch, params) {
-    return Promise.all([
-        dispatch(loadUser(params.id)),
-    ]);
-};
 
 Profile.propTypes = {
     user: React.PropTypes.object,
