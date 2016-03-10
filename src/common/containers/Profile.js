@@ -21,12 +21,6 @@ class Profile extends React.Component {
     }
 }
 
-Profile.fetchData = function fetchData(dispatch, params) {
-    return Promise.all([
-        dispatch(loadUser(params.id)),
-    ]);
-};
-
 Profile.propTypes = {
     user: React.PropTypes.object,
     users: React.PropTypes.instanceOf(Immutable.Map),

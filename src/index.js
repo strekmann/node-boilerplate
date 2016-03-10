@@ -22,6 +22,8 @@ import log from './server/lib/logger';
 import { User } from './server/models';
 import './server/lib/db';
 
+import * as profileAPI from './server/api/profile';
+
 const app = express();
 const httpServer = http.createServer(app);
 const port = config.get('express.port') || 3000;
@@ -156,6 +158,37 @@ app.use('/api/1/profile', api.profile);
 
 /** Static stuff **/
 app.use(serveStatic(path.join(__dirname, '..', 'dist', 'public')));
+
+/** Initial store data **/
+app.use((req, res, next) => {
+    res.store = {};
+    res.store.viewer = {};
+    res.store.viewer.formErrors = [];
+
+    // Using JSON stringify and parse to make sure server data is similar to client data.
+    if (req.user) {
+        res.store.viewer.id = req.user.id;
+        res.store.users = {};
+        res.store.users[req.user.id] = JSON.parse(JSON.stringify(req.user));
+    }
+    next();
+});
+
+app.get('/profile/:id', (req, res, next) => {
+    profileAPI.getUser(req)
+    .then((user) => {
+        if (user) {
+            res.store.user = {};
+            res.store.user.id = user.id;
+            res.store.users = res.store.users || {};
+            res.store.users[user.id] = JSON.parse(JSON.stringify(user));
+        }
+        next();
+    })
+    .catch((err) => {
+        next(err);
+    });
+});
 
 /** Universal app endpoint **/
 app.get('*', universal);

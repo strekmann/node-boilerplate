@@ -37,20 +37,8 @@ function renderFullPage(renderedContent, initialState, head = {
 }
 
 export default function render(req, res, next) {
-    const viewer = {};
-    const users = {};
-    if (req.user) {
-        viewer.id = req.user.id;
-        viewer.formErrors = [];
-
-        users[req.user.id] = req.user.toObject();
-    }
-
     const history = createMemoryHistory();
-    const initialState = Immutable.Map({
-        viewer: Immutable.fromJS(viewer),
-        users: Immutable.fromJS(users),
-    });
+    const initialState = Immutable.fromJS(res.store);
 
     const router = syncHistory(history);
     const middleware = [thunk, router];
@@ -68,35 +56,18 @@ export default function render(req, res, next) {
             res.redirect(302, redirectLocation.pathname + redirectLocation.search);
         }
         else if (renderProps) {
-            // Collect all async promises from components
-            const promises = renderProps.components.map((component) => {
-                if (typeof component.fetchData !== 'function') {
-                    return false;
-                }
-                return component.fetchData(store.dispatch, renderProps.params);
-            });
+            const renderedContent = renderToString(
+                <Provider store={store}>
+                    <RouterContext {...renderProps} />
+                </Provider>
+            );
 
-            // Then render when all promises are resolved
-            Promise.all(promises).then(() => {
-                const renderedContent = renderToString(
-                    <Provider store={store}>
-                        <RouterContext {...renderProps} />
-                    </Provider>
-                );
-
-                const renderedPage = renderFullPage(renderedContent, store.getState(), {
-                    title: headconfig.title,
-                    meta: headconfig.meta,
-                    link: headconfig.link,
-                });
-                res.send(renderedPage);
-            })
-            .catch((promiseErr) => {
-                if (promiseErr.status === 404) {
-                    return next();
-                }
-                return next(promiseErr);
+            const renderedPage = renderFullPage(renderedContent, store.getState(), {
+                title: headconfig.title,
+                meta: headconfig.meta,
+                link: headconfig.link,
             });
+            res.send(renderedPage);
         }
         else {
             return next();
