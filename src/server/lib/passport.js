@@ -19,7 +19,7 @@ passport.deserializeUser((userId, done) => {
         if (!user) {
             return done(null, false);
         }
-        done(null, user);
+        return done(null, user);
     });
 });
 
@@ -39,7 +39,7 @@ passport.passportLocal = new LocalStrategy(
                 });
             }
 
-            user.authenticate(password, (authErr, ok) => {
+            return user.authenticate(password, (authErr, ok) => {
                 if (authErr) { return done(authErr); }
                 if (ok) {
                     return done(null, user);
@@ -70,7 +70,7 @@ if (config.auth.google) {
                     email: profile._json.email,
                     google_id: profile.id,
                 });
-                user.save((saveErr) => {
+                return user.save((saveErr) => {
                     if (saveErr) {
                         return done('Could not create user', null);
                     }

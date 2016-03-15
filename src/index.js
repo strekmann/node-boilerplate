@@ -140,14 +140,14 @@ app.post('/auth/register', (req, res, next) => {
     user.name = name;
     user.email = email;
     user.password = password;
-    user.save((err, createdUser) => {
+    return user.save((err, createdUser) => {
         if (err) { return next(err); }
 
         // let the new user be logged in
-        req.logIn(createdUser, (err) => {
+        return req.logIn(createdUser, (err) => {
             if (err) { return next(err); }
 
-            res.json({ user: createdUser });
+            return res.json({ user: createdUser });
         });
     });
 });

@@ -31,7 +31,7 @@ router.route('/account')
         user.username = req.body.user.username;
         user.name = req.body.user.name;
         user.email = req.body.user.email;
-        user.save((saveErr) => {
+        return user.save((saveErr) => {
             if (saveErr) { return next(saveErr); }
 
             return res.json({ user: user.toObject() });

@@ -53,7 +53,7 @@ export default function render(req, res, next) {
             // res.status(500).send(err.message);
         }
         else if (redirectLocation) {
-            res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+            return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
         }
         else if (renderProps) {
             const renderedContent = renderToString(
@@ -67,10 +67,8 @@ export default function render(req, res, next) {
                 meta: headconfig.meta,
                 link: headconfig.link,
             });
-            res.send(renderedPage);
+            return res.send(renderedPage);
         }
-        else {
-            return next();
-        }
+        return next();
     });
 }

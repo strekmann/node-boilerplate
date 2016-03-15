@@ -7,5 +7,5 @@ module.exports.ensureAuthenticated = (req, res, next) => {
     //   login page.
     if (req.isAuthenticated()) { return next(); }
     req.session.returnTo = req.url;
-    res.redirect('/');
+    return res.redirect('/');
 };
