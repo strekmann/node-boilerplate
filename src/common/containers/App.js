@@ -14,7 +14,7 @@ class App extends React.Component {
                     users={this.props.users}
                 />
                 {this.props.children}
-                <Footer id={this.props.viewer.get('id')}/>
+                <Footer id={this.props.viewer.get('id')} />
             </div>
         );
     }

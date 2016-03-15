@@ -3,9 +3,7 @@ import {
     UPDATE_LOCATION,
 } from 'react-router-redux';
 
-let initialState;
-
-initialState = Immutable.fromJS({
+const initialState = Immutable.fromJS({
     location: undefined,
 });
 

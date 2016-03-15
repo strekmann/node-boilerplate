@@ -1,7 +1,6 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { loadUser } from '../actions/user';
 import Immutable from 'immutable';
 
 class Profile extends React.Component {

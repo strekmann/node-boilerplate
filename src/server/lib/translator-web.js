@@ -1,3 +1,5 @@
+/* eslint "prefer-rest-params": 0 */
+
 module.exports = function translator() {
     function format() {
         const args = [];

@@ -1,3 +1,4 @@
+/* eslint "prefer-rest-params": 0 */
 /* eslint "no-console": 0 */
 
 import util from 'util';

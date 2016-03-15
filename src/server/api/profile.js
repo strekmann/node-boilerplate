@@ -17,7 +17,7 @@ router.route('/:id')
             });
         }
         else {
-            res.json({user});
+            res.json({ user });
         }
     })
     .catch((err) => {
