@@ -22,6 +22,9 @@ import log from './server/lib/logger';
 import { User } from './server/models';
 import './server/lib/db';
 
+import graphqlHTTP from 'express-graphql';
+import schema from './server/api/schema';
+
 import * as profileAPI from './server/api/profile';
 
 const app = express();
@@ -88,11 +91,17 @@ const socketOptions = {
 };
 io.use(passportSocketIO.authorize(socketOptions));
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use('/gql', graphqlHTTP(req => ({
+    schema,
+    rootValue: { viewer: req.user },
+    pretty: process.env.NODE_ENV !== 'production',
+})));
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 /** Socket.io routes **/
 socketRoutes(io);
