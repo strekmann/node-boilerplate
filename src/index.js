@@ -98,6 +98,7 @@ app.use('/gql', graphqlHTTP(req => ({
     schema,
     rootValue: { viewer: req.user },
     pretty: process.env.NODE_ENV !== 'production',
+    graphiql: process.env.NODE_ENV !== 'production',
 })));
 
 app.use(bodyParser.urlencoded({ extended: true }));

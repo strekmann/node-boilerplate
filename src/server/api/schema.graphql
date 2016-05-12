@@ -1,0 +1,40 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Mutation {
+  updateUser(input: UpdateUserInput!): UpdateUserPayload
+}
+
+interface Node {
+  id: ID!
+}
+
+type Query {
+  node(id: ID!): Node
+  viewer: User
+  user(username: String!): User
+  users: [User]
+}
+
+input UpdateUserInput {
+  userid: ID!
+  email: String!
+  clientMutationId: String!
+}
+
+type UpdateUserPayload {
+  user: User
+  clientMutationId: String!
+}
+
+type User implements Node {
+  id: ID!
+  username: String
+  name: String
+  email: String
+  is_active: Boolean
+  is_admin: Boolean
+  created: String
+}
