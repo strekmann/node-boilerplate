@@ -18,7 +18,12 @@
     "watch": "gulp",
     "lint": "gulp lint",
     "schema": "babel-node ./setup/build-schema.js",
-    "nodemon": "nodemon src/dev.js | bunyan -o short"
+    "nodemon": "nodemon --exec ./node_modules/.bin/babel-node -- src/dev.js | bunyan -o short"
+  },
+  "metadata": {
+    "graphql": {
+      "schema": "./src/server/api/schema.json"
+    }
   },
   "dependencies": {
     "async": "^1.5.2",
@@ -38,9 +43,12 @@
     "express-validator": "^2.3.0",
     "graphql": "^0.5.0",
     "graphql-relay": "^0.4.1",
+    "helmet": "^2.0.0",
     "history": "^2.0.0-rc2",
     "immutable": "^3.7.6",
     "isomorphic-fetch": "^2.2.1",
+    "isomorphic-relay": "^0.7.0-beta.0",
+    "isomorphic-relay-router": "^0.8.0-beta.0",
     "lodash": "^4.0.1",
     "moment": "^2.8.4",
     "mongoose": "^4.4.5",
@@ -48,11 +56,12 @@
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
     "passport.socketio": "^3.6.1",
-    "react": "^0.14.6",
+    "react": "^15.0.0",
     "react-bootstrap": "^0.28.2",
-    "react-dom": "^0.14.6",
+    "react-dom": "^15.0.0",
     "react-helmet": "^2.3.1",
     "react-redux": "^4.0.6",
+    "react-relay": "^0.8.1",
     "react-router": "^2.0.0-rc5",
     "react-router-bootstrap": "^0.20.1",
     "react-router-redux": "^3.0.0",
@@ -62,11 +71,13 @@
     "redux-logger": "^2.5.0",
     "redux-socket.io": "^1.0.0",
     "redux-thunk": "^1.0.3",
+    "relay-local-schema": "^0.5.0",
     "serve-static": "^1.10.2",
     "socket.io": "^1.4.5",
     "socket.io-client": "^1.4.5"
   },
   "devDependencies": {
+    "babel-cli": "^6.8.0",
     "babel-core": "^6.4.5",
     "babel-eslint": "^6.0.0",
     "babel-loader": "^6.2.1",
@@ -75,6 +86,8 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.4.3",
+    "babel-relay-plugin": "^0.8.1",
+    "babel-relay-plugin-loader": "^0.8.1",
     "bootstrap-sass": "^3.3.5",
     "chai": "^3.5.0",
     "cheerio": "^0.20.0",
@@ -84,7 +97,9 @@
     "font-awesome": "^4.3.0",
     "gulp": "^3.9.1",
     "gulp-eslint": "^2.0.0",
+    "gulp-graphql": "^0.2.0",
     "gulp-sass": "^2.1.1",
+    "gulp-shell": "^0.5.2",
     "gulp-util": "^3.0.7",
     "mocha": "^2.4.4",
     "passport-stub": "^1.0.1",

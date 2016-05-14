@@ -1,18 +1,15 @@
-import React from 'react';
-import { renderToString } from 'react-dom/server';
-import Immutable from 'immutable';
-import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import { RouterContext, match, createMemoryHistory } from 'react-router';
-import { syncHistory } from 'react-router-redux';
-import reducers from '../common/reducers';
-import createRoutes from '../common/routes';
+import ReactDOMServer from 'react-dom/server';
+import Router from 'isomorphic-relay-router';
+import RelayLocalSchema from 'relay-local-schema';
+import Helmet from 'react-helmet';
+import { match } from 'react-router';
+import routes from '../common/routes';
 import headconfig from '../common/components/Meta';
+import schema from './api/schema';
 import 'cookie-parser';
 
 function renderFullPage(renderedContent, initialState, head = {
-    title: '<title>React Redux</title>',
+    title: '<title>React Relay</title>',
     meta: '<meta name="viewport" content="width=device-width, initial-scale=1" />',
     link: '<link rel="stylesheet" href="/css/styles.css"/>',
 }) {
@@ -37,15 +34,6 @@ function renderFullPage(renderedContent, initialState, head = {
 }
 
 export default function render(req, res, next) {
-    const history = createMemoryHistory();
-    const initialState = Immutable.fromJS(res.store);
-
-    const router = syncHistory(history);
-    const middleware = [thunk, router];
-
-    const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
-    const store = createStoreWithMiddleware(reducers, initialState);
-    const routes = createRoutes(store);
 
     match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
         if (err) {
@@ -56,19 +44,21 @@ export default function render(req, res, next) {
             return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
         }
         else if (renderProps) {
-            const renderedContent = renderToString(
-                <Provider store={store}>
-                    <RouterContext {...renderProps} />
-                </Provider>
-            );
-
-            const renderedPage = renderFullPage(renderedContent, store.getState(), {
-                title: headconfig.title,
-                meta: headconfig.meta,
-                link: headconfig.link,
+            const networkLayer = new RelayLocalSchema.NetworkLayer({
+                schema,
+                rootValue: req.user,
+                onError: (errors, request) => next(new Error(errors)),
             });
-            return res.send(renderedPage);
+            Router.prepareData(renderProps, networkLayer).then(({ data, props }) => {
+                const renderedContent = ReactDOMServer.renderToString(Router.render(props));
+                //const helmet = Helmet.rewind();
+
+                const renderedPage = renderFullPage(renderedContent, data);
+                return res.send(renderedPage);
+            }, next);
         }
-        return next();
+        else {
+            return next();
+        }
     });
 }

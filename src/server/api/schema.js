@@ -70,10 +70,7 @@ const queryType = new GraphQLObjectType({
         node: nodeField,
         viewer: {
             type: userType,
-            resolve: (root) => {
-                console.log(root);
-                return User.findById('5703e10d7c8e5c030ed31cc9').exec();
-            },
+            resolve: ({ viewer }) => viewer,
         },
         user: {
             type: userType,

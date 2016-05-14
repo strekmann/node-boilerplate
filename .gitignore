@@ -9,3 +9,5 @@
 *.log
 /config/production.js
 /config/development.js
+schema.json
+schema.graphql

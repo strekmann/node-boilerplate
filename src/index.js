@@ -94,7 +94,7 @@ io.use(passportSocketIO.authorize(socketOptions));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/gql', graphqlHTTP(req => ({
+app.use('/graphql', graphqlHTTP(req => ({
     schema,
     rootValue: { viewer: req.user },
     pretty: process.env.NODE_ENV !== 'production',
