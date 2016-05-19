@@ -18,7 +18,7 @@
     "watch": "gulp",
     "lint": "gulp lint",
     "schema": "babel-node ./setup/build-schema.js",
-    "nodemon": "nodemon --exec ./node_modules/.bin/babel-node -- src/dev.js | bunyan -o short"
+    "nodemon": "nodemon src/dev.js | bunyan -o short"
   },
   "metadata": {
     "graphql": {
