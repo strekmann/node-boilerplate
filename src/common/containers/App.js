@@ -2,22 +2,18 @@ import React from 'react';
 import Relay from 'react-relay';
 
 class App extends React.Component {
-
+    static propTypes = {
+        viewer: React.PropTypes.object,
+    }
     render() {
         return (
             <div>
+                {this.props.viewer ? this.props.viewer.name : null}
                 {this.props.children}
             </div>
         );
     }
 }
-
-App.propTypes = {
-    children: React.PropTypes.element,
-    viewer: React.PropTypes.object,
-    socket: React.PropTypes.object,
-    users: React.PropTypes.object,
-};
 
 export default Relay.createContainer(App, {
     fragments: {

@@ -1,10 +1,10 @@
 import ReactDOMServer from 'react-dom/server';
 import Router from 'isomorphic-relay-router';
 import RelayLocalSchema from 'relay-local-schema';
-import Helmet from 'react-helmet';
+// import Helmet from 'react-helmet';
 import { match } from 'react-router';
 import routes from '../common/routes';
-import headconfig from '../common/components/Meta';
+// import headconfig from '../common/components/Meta';
 import schema from './api/schema';
 import 'cookie-parser';
 
@@ -34,7 +34,6 @@ function renderFullPage(renderedContent, initialState, head = {
 }
 
 export default function render(req, res, next) {
-
     match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
         if (err) {
             return next(err);
@@ -46,19 +45,22 @@ export default function render(req, res, next) {
         else if (renderProps) {
             const networkLayer = new RelayLocalSchema.NetworkLayer({
                 schema,
-                rootValue: req.user,
+                rootValue: { viewer: req.user },
                 onError: (errors, request) => next(new Error(errors)),
             });
-            Router.prepareData(renderProps, networkLayer).then(({ data, props }) => {
-                const renderedContent = ReactDOMServer.renderToString(Router.render(props));
-                //const helmet = Helmet.rewind();
+            return Router.prepareData(renderProps, networkLayer).then(({ data, props }) => {
+                try {
+                    const renderedContent = ReactDOMServer.renderToString(Router.render(props));
+                    // const helmet = Helmet.rewind();
 
-                const renderedPage = renderFullPage(renderedContent, data);
-                return res.send(renderedPage);
+                    const renderedPage = renderFullPage(renderedContent, data);
+                    return res.send(renderedPage);
+                }
+                catch (err) {
+                    return next(err);
+                }
             }, next);
         }
-        else {
-            return next();
-        }
+        return next();
     });
 }
