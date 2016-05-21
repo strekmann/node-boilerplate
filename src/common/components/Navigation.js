@@ -12,10 +12,9 @@ class Navigation extends React.Component {
     */
 
     render() {
-        const viewerid = this.props.viewer.get('id');
         let userItem;
 
-        if (!viewerid) {
+        if (!this.props.viewer) {
             userItem = (
                 <LinkContainer to="/login">
                     <NavItem>
@@ -28,7 +27,7 @@ class Navigation extends React.Component {
             userItem = (
                 <LinkContainer to="/account">
                     <NavItem>
-                        {this.props.users.getIn([viewerid, 'name'])}
+                        {this.props.viewer.name}
                     </NavItem>
                 </LinkContainer>
             );
@@ -42,9 +41,7 @@ class Navigation extends React.Component {
                 </Navbar.Header>
                 <Navbar.Collapse eventKey={0}>
                     <Nav navbar pullRight>
-                        <Navbar.Text>
-                            <Label bsStyle="primary">{this.props.socket.get('usercount')}</Label>
-                        </Navbar.Text> {userItem}
+                        {userItem}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

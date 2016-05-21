@@ -1,23 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import Relay from 'react-relay';
 import { Link } from 'react-router';
 import { Grid, Row, Col, Input, Button } from 'react-bootstrap';
 
-import { loginUser } from '../actions/viewer';
-
 class Login extends React.Component {
-    constructor(props) {
-        super(props);
-        this.onLogin = this.onLogin.bind(this);
-    }
-    onLogin(e) {
-        e.preventDefault();
-        this.props.dispatch(loginUser({
-            email: this.refs.email.getValue(),
-            password: this.refs.password.getValue(),
-        }));
-    }
-
     render() {
         return (
             <Grid>
@@ -27,20 +13,19 @@ class Login extends React.Component {
                         <fieldset>
                             <Button href="/auth/google">Google login</Button>
                         </fieldset>
-                        <form onSubmit={this.onLogin}>
+                        <form action="/auth/login" method="post">
                             <fieldset>
                                 <h2>Login using email</h2>
                                 <Input
                                     type="email"
-                                    ref="email"
+                                    name="email"
                                     placeholder="email"
                                 />
                                 <Input
                                     type="password"
-                                    ref="password"
+                                    name="password"
                                     placeholder="password"
                                 />
-                                <p>Hint: email: example@ninja.com password: ninja</p>
                                 <Button type="submit" bsStyle="primary">Login</Button>
                                 {" or "}
                                 <Link to="/register">Register</Link>
@@ -54,13 +39,16 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-    user: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
+    viewer: React.PropTypes.object,
 };
 
-function select(state) {
-    return {
-        viewer: state.get('viewer'),
-    };
-}
-export default connect(select)(Login);
+export default Relay.createContainer(Login, {
+    fragments: {
+        viewer: () => Relay.QL`
+        fragment on User {
+            name,
+            email,
+        }
+        `,
+    },
+});

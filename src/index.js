@@ -121,6 +121,12 @@ app.get('/auth/google/callback',
             delete req.session.returnTo;
             res.redirect(url);
         });
+
+app.get('/auth/logout', (req, res, next) => {
+    req.logout();
+    res.redirect('/');
+});
+
 app.post('/auth/login', passport.authenticate('local'), (req, res, next) => {
     res.format({
         html: () => {
@@ -132,10 +138,6 @@ app.post('/auth/login', passport.authenticate('local'), (req, res, next) => {
     });
 });
 
-app.get('/auth/logout', (req, res, next) => {
-    req.logout();
-    res.redirect('/');
-});
 app.post('/auth/register', (req, res, next) => {
     const name = req.body.name.trim();
     const email = req.body.email.trim();
@@ -157,7 +159,10 @@ app.post('/auth/register', (req, res, next) => {
         return req.logIn(createdUser, (err) => {
             if (err) { return next(err); }
 
-            return res.json({ user: createdUser });
+            return res.format({
+                html: () => res.redirect('/'),
+                json: () => res.json({ user: createdUser }),
+            });
         });
     });
 });

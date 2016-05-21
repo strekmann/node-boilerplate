@@ -1,47 +1,31 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import Relay from 'react-relay';
 import { Grid, Row, Col, Input, Button } from 'react-bootstrap';
 
-import { registerUser } from '../actions/viewer';
-
 class Register extends React.Component {
-    constructor(props) {
-        super(props);
-        this.onRegister = this.onRegister.bind(this);
-    }
-
-    onRegister(e) {
-        e.preventDefault();
-        this.props.dispatch(registerUser({
-            name: this.refs.name.getValue(),
-            email: this.refs.email.getValue(),
-            password: this.refs.password.getValue(),
-        }));
-    }
-
     render() {
         return (
             <Grid>
                 <Row>
                     <Col xs={12}>
                         <h1>Register</h1>
-                        <form onSubmit={this.onRegister}>
+                        <form action="/auth/register" method="post">
                             <Input
                                 required
                                 label={'Name'}
-                                ref="name"
+                                name="name"
                                 type="text"
                             />
                             <Input
                                 required
                                 label={'Email'}
-                                ref="email"
+                                name="email"
                                 type="email"
                             />
                             <Input
                                 required
                                 label={'Password'}
-                                ref="password"
+                                name="password"
                                 type="password"
                             />
                             <Button type="submit" bsStyle="primary">{'Lagre'}</Button>
@@ -53,13 +37,13 @@ class Register extends React.Component {
     }
 }
 
-Register.propTypes = {
-    dispatch: React.PropTypes.func,
-};
-
-function select(state) {
-    return {
-        viewer: state.get('viewer'),
-    };
-}
-export default connect(select)(Register);
+export default Relay.createContainer(Register, {
+    fragments: {
+        viewer: () => Relay.QL`
+        fragment on User {
+            name,
+            email,
+        }
+        `,
+    },
+});
