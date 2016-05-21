@@ -1,8 +1,8 @@
 import React from 'react';
+import Relay from 'react-relay';
 import Immutable from 'immutable';
 import moment from 'moment';
 import translator from '../../server/lib/translator';
-import { connect } from 'react-redux';
 import { saveUser } from '../actions/user';
 import { Grid, Row, Col, Button, Input, Alert, FormControls } from 'react-bootstrap';
 
@@ -10,31 +10,23 @@ class Account extends React.Component {
     constructor(props) {
         super(props);
         this.saveUser = this.saveUser.bind(this);
-        this.setUsername = this.setUsername.bind(this);
         this.setName = this.setName.bind(this);
         this.setEmail = this.setEmail.bind(this);
         this.state = {
-            username: props.users.getIn([props.viewer.get('id'), 'username']),
-            name: props.users.getIn([props.viewer.get('id'), 'name']),
-            email: props.users.getIn([props.viewer.get('id'), 'email']),
+            name: props.viewer.name,
+            email: props.viewer.email,
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        const viewer = this.props.users.get(this.props.viewer.get('id'));
-        const nextViewer = nextProps.users.get(nextProps.viewer.get('id'));
+        const viewer = this.props.viewer;
+        const nextViewer = nextProps.users.get(nextProps.viewer);
         if (viewer !== nextViewer) {
             this.setState({
-                username: nextViewer.get('username'),
-                name: nextViewer.get('name'),
-                email: nextViewer.get('email'),
+                name: nextViewer.name,
+                email: nextViewer.email,
             });
         }
-    }
-
-    // action events
-    setUsername() {
-        this.setState({ username: this.refs.username.getValue() });
     }
 
     setName() {
@@ -48,7 +40,6 @@ class Account extends React.Component {
     saveUser(e) {
         e.preventDefault();
         this.props.dispatch(saveUser({
-            username: this.refs.username.getValue(),
             name: this.refs.name.getValue(),
             email: this.refs.email.getValue(),
         }));
@@ -57,11 +48,10 @@ class Account extends React.Component {
     render() {
         const __ = translator(this.props.lang);
         const viewer = this.props.viewer;
-        const formErrors = this.props.viewer.get('formErrors');
-        const errorMessage = this.props.viewer.get('errorMessage');
-        const isSaving = this.props.viewer.get('isSaving');
+        const errorMessage = this.props.viewer.errorMessage;
+        const isSaving = this.props.viewer.isSaving;
 
-        const viewerid = this.props.viewer.get('id');
+        const viewerid = this.props.viewer.id;
 
         let alert;
         if (errorMessage) {
@@ -70,7 +60,7 @@ class Account extends React.Component {
             </Alert>);
         }
 
-        const userCreated = moment(viewer.get('created')).format('llll');
+        const userCreated = moment(viewer.created).format('llll');
 
         return (
             <div>
@@ -89,26 +79,12 @@ class Account extends React.Component {
                                     wrapperClassName="col-md-9" value={viewerid}
                                 />
                                 <Input
-                                    label={__('Username')}
-                                    labelClassName="col-md-3"
-                                    wrapperClassName="col-md-9"
-                                    type="text"
-                                    placeholder={__('Username')}
-                                    value={this.state.username}
-                                    bsStyle={formErrors.get('username') ? 'error' : null}
-                                    help={formErrors.get('username')}
-                                    onChange={this.setUsername}
-                                    ref="username"
-                                />
-                                <Input
                                     label={__('Name')}
                                     labelClassName="col-md-3"
                                     wrapperClassName="col-md-9"
                                     type="text"
                                     placeholder={__('Name')}
                                     value={this.state.name}
-                                    bsStyle={formErrors.get('name') ? 'error' : null}
-                                    help={formErrors.get('name')}
                                     onChange={this.setName}
                                     ref="name"
                                 />
@@ -119,8 +95,6 @@ class Account extends React.Component {
                                     type="text"
                                     placeholder={__('Email')}
                                     value={this.state.email}
-                                    bsStyle={formErrors.get('email') ? 'error' : null}
-                                    help={formErrors.get('email')}
                                     onChange={this.setEmail}
                                     ref="email"
                                 />
@@ -128,14 +102,14 @@ class Account extends React.Component {
                                     label={__('Active')}
                                     wrapperClassName="col-md-9 col-md-offset-3"
                                     type="checkbox"
-                                    checked={this.props.users.getIn([viewerid, 'is_active'])}
+                                    checked={this.props.viewer.is_active}
                                     disabled
                                 />
                                 <Input
                                     label={__('Admin')}
                                     wrapperClassName="col-md-9 col-md-offset-3"
                                     type="checkbox"
-                                    checked={this.props.users.getIn([viewerid, 'is_admin'])}
+                                    checked={this.props.viewer.is_admin}
                                     disabled
                                 />
                                 <FormControls.Static
@@ -174,11 +148,17 @@ Account.propTypes = {
     lang: React.PropTypes.string,
 };
 
-function select(state) {
-    return {
-        viewer: state.get('viewer'),
-        users: state.get('users'),
-    };
-}
-
-export default connect(select)(Account);
+export default Relay.createContainer(Account, {
+    fragments: {
+        viewer: () => Relay.QL`
+        fragment on User {
+            id,
+            name,
+            email,
+            is_active,
+            is_admin,
+            created,
+        }
+        `,
+    },
+});
