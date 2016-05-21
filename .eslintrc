@@ -1,4 +1,5 @@
 {
+    "parser": "babel-eslint",
     "extends": "airbnb",
     "rules": {
         "indent": [ 2, 4, {"SwitchCase": 1} ],
@@ -11,8 +12,11 @@
         "new-cap": [1, { "capIsNewExceptions": ["ImmutableStore", "List", "Map"] }],
         "comma-dangle": 1,
         "no-unused-expressions": 1,
+        "react/jsx-indent": [1, 4],
+        "react/prefer-stateless-function": 0,
         "react/sort-comp": 1,
         "prefer-const": 1,
         "max-len": 1,
+        "no-underscore-dangle": ["error", { "allow": ["_id", "__INITIAL_STATE__", "_json", "_header", "__"] }],
     },
 }

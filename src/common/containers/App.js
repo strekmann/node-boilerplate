@@ -4,7 +4,9 @@ import Relay from 'react-relay';
 class App extends React.Component {
     static propTypes = {
         viewer: React.PropTypes.object,
+        children: React.PropTypes.element,
     }
+
     render() {
         return (
             <div>
