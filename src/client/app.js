@@ -1,41 +1,20 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Immutable from 'immutable';
-import { createStore, applyMiddleware } from 'redux';
-import createSocketIoMiddleware from 'redux-socket.io';
-import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import { Router, browserHistory } from 'react-router';
-import createRoutes from '../common/routes';
-import reducers from '../common/reducers';
-import io from 'socket.io-client';
-import createLogger from 'redux-logger';
-import { syncHistory } from 'react-router-redux';
+import Relay from 'react-relay';
+import IsomorphicRelay from 'isomorphic-relay';
+import IsomorphicRouter from 'isomorphic-relay-router';
+import { match, Router, browserHistory } from 'react-router';
+import routes from '../common/routes';
 
-const initialState = Immutable.fromJS(window.__INITIAL_STATE__);
-const socket = io({ path: '/s' });
-const socketMiddleware = createSocketIoMiddleware(socket, 'socket/');
-const middleware = [socketMiddleware, thunk];
+const environment = new Relay.Environment();
+environment.injectNetworkLayer(new Relay.DefaultNetworkLayer('/graphql', {
+    credentials: 'same-origin',
+}));
+IsomorphicRelay.injectPreparedData(environment, window.__INITIAL_STATE__);
 
-const router = syncHistory(browserHistory);
-if (process.env.NODE_ENV === 'development') {
-    middleware.push(router, createLogger({
-        logger: console,
-        stateTransformer: state => state && state.toJS(),
-    }));
-}
-else {
-    middleware.push(router);
-}
-
-const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
-const store = createStoreWithMiddleware(reducers, initialState);
-const routes = createRoutes(store);
-
-ReactDOM.render(
-    <Provider store={store}>
-        <Router history={browserHistory}>{routes}</Router>
-    </Provider>,
-    document.getElementById('app')
-);
+match({ routes, history: browserHistory }, (error, redirectLocation, renderProps) => {
+    IsomorphicRouter.prepareInitialRender(environment, renderProps).then(props => {
+        ReactDOM.render(<Router {...props} />, document.getElementById('app'));
+    });
+});

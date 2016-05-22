@@ -54,7 +54,6 @@ const userType = new GraphQLObjectType({
     description: 'A person',
     fields: {
         id: globalIdField('User'),
-        username: { type: GraphQLString },
         name: { type: GraphQLString },
         email: { type: GraphQLString },
         is_active: { type: GraphQLBoolean },
@@ -96,14 +95,14 @@ const mutationUserUpdate = mutationWithClientMutationId({
         email: { type: new GraphQLNonNull(GraphQLString) },
     },
     outputFields: {
-        user: {
+        viewer: {
             type: userType,
             resolve: (payload) => payload,
         },
     },
     mutateAndGetPayload: ({ userid, email }, context) => {
-        let id = fromGlobalId(userid).id;
-        return User.findByIdAndUpdate(id, { email: email }, { new: true }).exec()
+        const id = fromGlobalId(userid).id;
+        return User.findByIdAndUpdate(id, { email: email }, { new: true }).exec();
     },
 });
 

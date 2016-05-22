@@ -1,9 +1,8 @@
 import React from 'react';
 import Relay from 'react-relay';
-import Immutable from 'immutable';
 import moment from 'moment';
 import translator from '../../server/lib/translator';
-import { saveUser } from '../actions/user';
+import UserUpdateMutation from '../mutations/userUpdate';
 import { Grid, Row, Col, Button, Input, Alert, FormControls } from 'react-bootstrap';
 
 class Account extends React.Component {
@@ -39,10 +38,7 @@ class Account extends React.Component {
 
     saveUser(e) {
         e.preventDefault();
-        this.props.dispatch(saveUser({
-            name: this.refs.name.getValue(),
-            email: this.refs.email.getValue(),
-        }));
+        Relay.Store.commitUpdate(new UserUpdateMutation({ viewer: this.props.viewer }));
     }
 
     render() {
@@ -60,7 +56,8 @@ class Account extends React.Component {
             </Alert>);
         }
 
-        const userCreated = moment(viewer.created).format('llll');
+        // const userCreated = moment(viewer.created).format('llll');
+        const userCreated = viewer.created;
 
         return (
             <div>
@@ -143,8 +140,6 @@ class Account extends React.Component {
 
 Account.propTypes = {
     viewer: React.PropTypes.object,
-    users: React.PropTypes.instanceOf(Immutable.Map),
-    dispatch: React.PropTypes.func,
     lang: React.PropTypes.string,
 };
 
@@ -158,6 +153,7 @@ export default Relay.createContainer(Account, {
             is_active,
             is_admin,
             created,
+            ${UserUpdateMutation.getFragment('viewer')},
         }
         `,
     },
