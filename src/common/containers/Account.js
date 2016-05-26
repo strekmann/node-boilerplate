@@ -6,6 +6,10 @@ import UserUpdateMutation from '../mutations/userUpdate';
 import { Grid, Row, Col, Button, Input, Alert, FormControls } from 'react-bootstrap';
 
 class Account extends React.Component {
+    static contextTypes = {
+        relay: Relay.PropTypes.Environment,
+    };
+
     constructor(props) {
         super(props);
         this.saveUser = this.saveUser.bind(this);
@@ -38,7 +42,7 @@ class Account extends React.Component {
 
     saveUser(e) {
         e.preventDefault();
-        Relay.Store.commitUpdate(new UserUpdateMutation({ viewer: this.props.viewer }));
+        this.context.relay.commitUpdate(new UserUpdateMutation({ viewer: this.props.viewer, email: this.state.email }));
     }
 
     render() {
