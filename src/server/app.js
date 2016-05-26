@@ -50,6 +50,7 @@ export default function render(req, res, next) {
             });
             return Router.prepareData(renderProps, networkLayer).then(({ data, props }) => {
                 try {
+                    global.navigator = { userAgent: req.headers['user-agent'] };
                     const renderedContent = ReactDOMServer.renderToString(Router.render(props));
                     // const helmet = Helmet.rewind();
 
