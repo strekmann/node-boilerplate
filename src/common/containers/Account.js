@@ -60,8 +60,7 @@ class Account extends React.Component {
             </Alert>);
         }
 
-        // const userCreated = moment(viewer.created).format('llll');
-        const userCreated = viewer.created;
+        const userCreated = moment(viewer.created).format('llll');
 
         return (
             <div>

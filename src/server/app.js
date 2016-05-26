@@ -45,7 +45,7 @@ export default function render(req, res, next) {
         else if (renderProps) {
             const networkLayer = new RelayLocalSchema.NetworkLayer({
                 schema,
-                rootValue: { viewer: req.user },
+                rootValue: { viewer: JSON.parse(JSON.stringify(req.user)) },
                 onError: (errors, request) => next(new Error(errors)),
             });
             return Router.prepareData(renderProps, networkLayer).then(({ data, props }) => {
