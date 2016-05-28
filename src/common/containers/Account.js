@@ -28,6 +28,7 @@ class Account extends React.Component {
             this.setState({
                 name: nextViewer.name,
                 email: nextViewer.email,
+                updated: null,
             });
         }
     }
@@ -42,7 +43,7 @@ class Account extends React.Component {
 
     saveUser(e) {
         e.preventDefault();
-        this.context.relay.commitUpdate(new UserUpdateMutation({ viewer: this.props.viewer, email: this.state.email }));
+        this.context.relay.commitUpdate(new UserUpdateMutation({ viewer: this.props.viewer, email: this.state.email }), {onSuccess: () => { this.setState({ updated: moment() }); }});
     }
 
     render() {
@@ -57,6 +58,11 @@ class Account extends React.Component {
         if (errorMessage) {
             alert = (<Alert bsStyle="danger">
                 <strong>{errorMessage}</strong>
+            </Alert>);
+        }
+        else if (this.state.updated) {
+            alert = (<Alert bsStyle="success">
+                <strong>Oppdatert {this.state.updated.format('llll')}</strong>
             </Alert>);
         }
 
