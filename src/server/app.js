@@ -43,9 +43,13 @@ export default function render(req, res, next) {
             return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
         }
         else if (renderProps) {
+            let rootValue = {};
+            if (req.user) {
+                rootValue = { viewer: JSON.parse(JSON.stringify(req.user)) };
+            }
             const networkLayer = new RelayLocalSchema.NetworkLayer({
                 schema,
-                rootValue: { viewer: JSON.parse(JSON.stringify(req.user || {})) },
+                rootValue,
                 onError: (errors, request) => next(new Error(errors)),
             });
             return Router.prepareData(renderProps, networkLayer).then(({ data, props }) => {
