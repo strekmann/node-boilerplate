@@ -9,9 +9,6 @@ import {
 } from 'graphql';
 
 import {
-  connectionArgs,
-  connectionDefinitions,
-  connectionFromArray,
   fromGlobalId,
   globalIdField,
   mutationWithClientMutationId,
@@ -26,26 +23,22 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     (globalId) => {
         const { type, id } = fromGlobalId(globalId);
         if (type === 'User') {
-            return User.findById(id).exec().then((user) => {
-                console.log("USERDTO");
-                return new UserDTO(user.toObject());
-            });
-        } else if (type === 'Widget') {
+            return User.findById(id).exec().then((user) => new UserDTO(user.toObject()));
+        }
+        else if (type === 'Widget') {
             // pass
             return null;
-        } else {
-            return null;
         }
+        return null;
     },
     (obj) => {
-        console.log(obj);
         if (obj instanceof UserDTO) {
             return userType;
-        } else if (obj instanceof Widget)  {
-            return widgetType;
-        } else {
-            return null;
         }
+        else if (obj instanceof Widget)  {
+            return widgetType;
+        }
+        return null;
     }
 );
 
@@ -83,7 +76,7 @@ const queryType = new GraphQLObjectType({
         },
         users: {
             type: new GraphQLList(userType),
-            resolve: (root) => User.find({}).exec(),
+            resolve: ({ viewer }) => User.find({}).exec(),
         },
     },
 });
@@ -100,9 +93,9 @@ const mutationUserUpdate = mutationWithClientMutationId({
             resolve: (payload) => payload,
         },
     },
-    mutateAndGetPayload: ({ userid, email }, context) => {
+    mutateAndGetPayload: ({ userid, email }) => {
         const id = fromGlobalId(userid).id;
-        return User.findByIdAndUpdate(id, { email: email }, { new: true }).exec();
+        return User.findByIdAndUpdate(id, { email }, { new: true }).exec();
     },
 });
 
