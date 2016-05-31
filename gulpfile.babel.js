@@ -83,7 +83,7 @@ gulp.task("lint", function () {
 
 gulp.task("sass", function () {
     return gulp.src("src/client/scss/styles.scss")
-    .pipe(sass({ includePaths: ["node_modules/bootstrap-sass/assets/stylesheets", "node_modules/font-awesome/scss"] }))
+    .pipe(sass({ includePaths: ["node_modules/normalize-scss/sass", "node_modules/font-awesome/scss"] }))
     .pipe(gulp.dest("dist/public/css"));
 });
 

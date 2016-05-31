@@ -99,6 +99,7 @@
     "gulp-shell": "^0.5.2",
     "gulp-util": "^3.0.7",
     "mocha": "^2.4.4",
+    "normalize-scss": "^5.0.3",
     "passport-stub": "^1.0.1",
     "supertest": "",
     "webpack": "^1.10.0",

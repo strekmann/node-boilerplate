@@ -3,7 +3,11 @@ import Relay from 'react-relay';
 import moment from 'moment';
 import translator from '../../server/lib/translator';
 import UserUpdateMutation from '../mutations/userUpdate';
-import { Grid, Row, Col, Button, Input, Alert, FormControls } from 'react-bootstrap';
+
+//import { Grid, Row, Col, Button, Input, Alert, FormControls } from 'react-bootstrap';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import theme from '../theme';
+import { RaisedButton, TextField, Checkbox } from 'material-ui';
 
 class Account extends React.Component {
     static contextTypes = {
@@ -15,10 +19,12 @@ class Account extends React.Component {
         this.saveUser = this.saveUser.bind(this);
         this.setName = this.setName.bind(this);
         this.setEmail = this.setEmail.bind(this);
-        this.state = {
-            name: props.viewer.name,
-            email: props.viewer.email,
-        };
+        if (props.viewer){
+            this.state = {
+                name: props.viewer.name,
+                email: props.viewer.email,
+            };
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -49,6 +55,13 @@ class Account extends React.Component {
     render() {
         const __ = translator(this.props.lang);
         const viewer = this.props.viewer;
+
+        if (!viewer) {
+            return (
+                <pre>Not authorized</pre>
+            );
+        }
+
         const errorMessage = this.props.viewer.errorMessage;
         const isSaving = this.props.viewer.isSaving;
 
@@ -56,92 +69,58 @@ class Account extends React.Component {
 
         let alert;
         if (errorMessage) {
-            alert = (<Alert bsStyle="danger">
-                <strong>{errorMessage}</strong>
-            </Alert>);
+            alert = (<strong>{errorMessage}</strong>);
         }
         else if (this.state.updated) {
-            alert = (<Alert bsStyle="success">
-                <strong>Oppdatert {this.state.updated.format('llll')}</strong>
-            </Alert>);
+            alert = (<strong>Oppdatert {this.state.updated.format('llll')}</strong>);
         }
 
         const userCreated = moment(viewer.created).format('llll');
 
         return (
             <div>
-                <Grid>
-                    <Row>
-                        <Col xs={12} md={10} mdOffset={1} lg={8} lgOffset={2}>
-                            <h1>{__('User information')}</h1>
-                            {alert}
-                            <form
-                                className="form-horizontal"
-                                onSubmit={!isSaving ? this.saveUser : null}
-                            >
-                                <FormControls.Static
-                                    label="ID"
-                                    labelClassName="col-md-3"
-                                    wrapperClassName="col-md-9" value={viewerid}
-                                />
-                                <Input
-                                    label={__('Name')}
-                                    labelClassName="col-md-3"
-                                    wrapperClassName="col-md-9"
-                                    type="text"
-                                    placeholder={__('Name')}
-                                    value={this.state.name}
-                                    onChange={this.setName}
-                                    ref="name"
-                                />
-                                <Input
-                                    label={__('Email')}
-                                    labelClassName="col-md-3"
-                                    wrapperClassName="col-md-9"
-                                    type="text"
-                                    placeholder={__('Email')}
-                                    value={this.state.email}
-                                    onChange={this.setEmail}
-                                    ref="email"
-                                />
-                                <Input
-                                    label={__('Active')}
-                                    wrapperClassName="col-md-9 col-md-offset-3"
-                                    type="checkbox"
-                                    checked={this.props.viewer.is_active}
-                                    disabled
-                                />
-                                <Input
-                                    label={__('Admin')}
-                                    wrapperClassName="col-md-9 col-md-offset-3"
-                                    type="checkbox"
-                                    checked={this.props.viewer.is_admin}
-                                    disabled
-                                />
-                                <FormControls.Static
-                                    label={__('Created')}
-                                    labelClassName="col-md-3"
-                                    wrapperClassName="col-md-9"
-                                    value={userCreated}
-                                />
-                                <Row>
-                                    <Col md={9} mdOffset={3}>
-                                        <Button
-                                            type="submit"
-                                            bsStyle="primary"
-                                            disabled={isSaving}
-                                        >
-                                            {isSaving ?
-                                                <i className="fa fa-spinner fa-spin fa-lg"></i>
-                                                : __('Save')
-                                            }
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </form>
-                        </Col>
-                    </Row>
-                </Grid>
+                <h1>{__('User information')}</h1>
+                {alert}
+                <form
+                    className="form-horizontal"
+                    onSubmit={!isSaving ? this.saveUser : null}
+                >
+                    <TextField
+                        id="name"
+                        floatingLabelText={__('Name')}
+                        value={this.state.name}
+                        onChange={this.setName}
+                        ref="name"
+                    />
+                    <TextField
+                        id="email"
+                        floatingLabelText={__('Email')}
+                        value={this.state.email}
+                        onChange={this.setEmail}
+                        ref="email"
+                    />
+                    <Checkbox
+                        label={__('Active')}
+                        checked={this.props.viewer.is_active}
+                        disabled
+                    />
+                    <Checkbox
+                        label={__('Admin')}
+                        checked={this.props.viewer.is_admin}
+                        disabled
+                    />
+                    {userCreated}
+                    <RaisedButton
+                        type="submit"
+                        primary
+                        disabled={isSaving}
+                    >
+                        {isSaving ?
+                            <i className="fa fa-spinner fa-spin fa-lg"></i>
+                            : __('Save')
+                        }
+                    </RaisedButton>
+                </form>
             </div>
         );
     }
